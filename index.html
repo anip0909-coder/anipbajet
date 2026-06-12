@@ -379,6 +379,34 @@
                 </div>
             </div>
 
+            <!-- Category Metric Cards (6 Grid) -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div class="bg-amber-50 dark:bg-amber-950/20 p-4 rounded-2xl border border-amber-200 dark:border-amber-900/50">
+                    <span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-1 block">Komitmen</span>
+                    <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-komitmen">RM 0.00</h3>
+                </div>
+                <div class="bg-emerald-50 dark:bg-emerald-950/20 p-4 rounded-2xl border border-emerald-200 dark:border-emerald-900/50">
+                    <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-1 block">Keperluan</span>
+                    <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-keperluan">RM 0.00</h3>
+                </div>
+                <div class="bg-rose-50 dark:bg-rose-950/20 p-4 rounded-2xl border border-rose-200 dark:border-rose-900/50">
+                    <span class="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider mb-1 block">Kehendak</span>
+                    <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-kehendak">RM 0.00</h3>
+                </div>
+                <div class="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-2xl border border-blue-200 dark:border-blue-900/50">
+                    <span class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1 block">Simpanan</span>
+                    <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-simpanan">RM 0.00</h3>
+                </div>
+                <div class="bg-purple-50 dark:bg-purple-950/20 p-4 rounded-2xl border border-purple-200 dark:border-purple-900/50">
+                    <span class="text-[10px] font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider mb-1 block">Utiliti</span>
+                    <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-utiliti">RM 0.00</h3>
+                </div>
+                <div class="bg-slate-100 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
+                    <span class="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 block">Lain-lain</span>
+                    <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-lain">RM 0.00</h3>
+                </div>
+            </div>
+
             <!-- Budget Table -->
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
                 <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
@@ -454,10 +482,41 @@
                 </div>
             </div>
 
+            <!-- Income Metric Cards (3 Grid) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-gradient-to-br from-blue-50 to-white dark:from-blue-900/20 dark:to-slate-900 p-5 rounded-2xl border border-blue-100 dark:border-blue-800/30 flex items-center gap-4">
+                    <div class="h-10 w-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-sack-dollar"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pendapatan Kasar</span>
+                        <h3 class="text-xl font-black text-slate-900 dark:text-white" id="inc-card-kasar">RM 0.00</h3>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-rose-50 to-white dark:from-rose-900/20 dark:to-slate-900 p-5 rounded-2xl border border-rose-100 dark:border-rose-800/30 flex items-center gap-4">
+                    <div class="h-10 w-10 rounded-xl bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Jumlah Potongan</span>
+                        <h3 class="text-xl font-black text-slate-900 dark:text-white" id="inc-card-potongan">RM 0.00</h3>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-900/20 dark:to-slate-900 p-5 rounded-2xl border border-emerald-100 dark:border-emerald-800/30 flex items-center gap-4">
+                    <div class="h-10 w-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-hand-holding-dollar"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pendapatan Bersih</span>
+                        <h3 class="text-xl font-black text-slate-900 dark:text-white" id="inc-card-bersih">RM 0.00</h3>
+                    </div>
+                </div>
+            </div>
+
             <!-- Income Breakdown Table -->
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
                 <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
-                    <h3 class="font-bold text-slate-900 dark:text-white">Jadual Terperinci Elaun & Gaji Pokok</h3>
+                    <h3 class="font-bold text-slate-900 dark:text-white">Jadual Terperinci Pendapatan</h3>
                     <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300" id="inc-record-count">Menunjukkan 0 rekod</span>
                 </div>
                 
@@ -466,12 +525,9 @@
                         <thead>
                             <tr class="bg-slate-50/70 dark:bg-slate-800/40 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
                                 <th class="py-4 px-4">Bulan/Tahun</th>
-                                <th class="py-4 px-4 text-right">Gaji Pokok (RM)</th>
-                                <th class="py-4 px-4 text-right">E. Sara Hidup (RM)</th>
-                                <th class="py-4 px-4 text-right">E. Perumahan (RM)</th>
-                                <th class="py-4 px-4 text-right">E. Khidmat Awam (RM)</th>
-                                <th class="py-4 px-4 text-right">E. Pegun (RM)</th>
-                                <th class="py-4 px-4 text-right font-black text-slate-900 dark:text-white bg-slate-100/40 dark:bg-slate-800/20">Jumlah Kasar (RM)</th>
+                                <th class="py-4 px-4 text-right">Pendapatan Kasar (RM)</th>
+                                <th class="py-4 px-4 text-right">Potongan (RM)</th>
+                                <th class="py-4 px-4 text-right font-black text-slate-900 dark:text-white bg-slate-100/40 dark:bg-slate-800/20">Pendapatan Bersih (RM)</th>
                                 <th class="py-4 px-4 text-center">Tindakan</th>
                             </tr>
                         </thead>
@@ -626,24 +682,12 @@
 
                 <div class="space-y-3.5">
                     <div>
-                        <label for="income-gaji" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Gaji Pokok (RM)</label>
-                        <input type="number" id="income-gaji" step="0.01" required placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                        <label for="income-kasar" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Pendapatan Kasar (RM)</label>
+                        <input type="number" id="income-kasar" step="0.01" required placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
                     </div>
                     <div>
-                        <label for="income-sara-hidup" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Elaun Sara Hidup (COLA) (RM)</label>
-                        <input type="number" id="income-sara-hidup" step="0.01" required placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-                    <div>
-                        <label for="income-perumahan" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Elaun Perumahan (RM)</label>
-                        <input type="number" id="income-perumahan" step="0.01" required placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-                    <div>
-                        <label for="income-khidmat-awam" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Elaun Perkhidmatan Awam (RM)</label>
-                        <input type="number" id="income-khidmat-awam" step="0.01" required placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-                    <div>
-                        <label for="income-pegun" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Elaun Pegun (RM)</label>
-                        <input type="number" id="income-pegun" step="0.01" required placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                        <label for="income-potongan" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Potongan (RM)</label>
+                        <input type="number" id="income-potongan" step="0.01" required placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
                     </div>
                 </div>
 
@@ -692,8 +736,8 @@
         ];
 
         const defaultIncomeItems = [
-            { id: 1, bulan: "Januari", tahun: 2026, gajiPokok: 4500, elaunSaraHidup: 300, elaunPerumahan: 450, elaunPerkhidmatanAwam: 300, elaunPegun: 150 },
-            { id: 2, bulan: "Februari", tahun: 2026, gajiPokok: 4500, elaunSaraHidup: 300, elaunPerumahan: 450, elaunPerkhidmatanAwam: 300, elaunPegun: 150 }
+            { id: 1, bulan: "Januari", tahun: 2026, pendapatanKasar: 5500, potongan: 550 },
+            { id: 2, bulan: "Februari", tahun: 2026, pendapatanKasar: 5500, potongan: 550 }
         ];
 
         // GLOBAL APPLICATION STATE variables
@@ -860,22 +904,15 @@
                 if (kasar > 0 && !processedIncomeMonths.has(incomeKey)) {
                     processedIncomeMonths.add(incomeKey);
                     
-                    // Deconstruct Gross into structured mock allowance components for Tab 3 compatibility
-                    const gajiPokok = Math.round(kasar * 0.70);
-                    const elaunSaraHidup = Math.round(kasar * 0.10);
-                    const elaunPerumahan = Math.round(kasar * 0.10);
-                    const elaunPerkhidmatanAwam = Math.round(kasar * 0.05);
-                    const elaunPegun = Math.round(kasar * 0.05);
+                    const bersih = parseFloat(r[bersihIdx] ? r[bersihIdx].trim().replace(/[^\d.]/g, '') : '0') || 0;
+                    const potongan = kasar > bersih ? kasar - bersih : 0;
 
                     incomeList.push({
                         id: 1000 + i,
                         bulan,
                         tahun,
-                        gajiPokok,
-                        elaunSaraHidup,
-                        elaunPerumahan,
-                        elaunPerkhidmatanAwam,
-                        elaunPegun
+                        pendapatanKasar: kasar,
+                        potongan: potongan
                     });
                 }
             }
@@ -1039,7 +1076,7 @@
             // Income calculation
             let totalIncome = 0;
             filteredIncome.forEach(inc => {
-                totalIncome += (inc.gajiPokok + inc.elaunSaraHidup + inc.elaunPerumahan + inc.elaunPerkhidmatanAwam + inc.elaunPegun);
+                totalIncome += (inc.pendapatanKasar - inc.potongan);
             });
 
             // Total Commitments (Anggaran Komitmen)
@@ -1160,6 +1197,27 @@
                 return matchCategory && matchBulan && matchTahun;
             });
 
+            // Calculate Category Metrics (Anggaran Kos)
+            const catTotals = {
+                'Komitmen': 0, 'Keperluan': 0, 'Kehendak': 0, 
+                'Simpanan': 0, 'Utiliti': 0, 'Lain-lain': 0
+            };
+            
+            filtered.forEach(item => {
+                if (catTotals[item.kategori] !== undefined) {
+                    catTotals[item.kategori] += item.anggaranKos;
+                } else {
+                    catTotals['Lain-lain'] += item.anggaranKos;
+                }
+            });
+
+            document.getElementById('cat-card-komitmen').innerText = `RM ${catTotals['Komitmen'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+            document.getElementById('cat-card-keperluan').innerText = `RM ${catTotals['Keperluan'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+            document.getElementById('cat-card-kehendak').innerText = `RM ${catTotals['Kehendak'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+            document.getElementById('cat-card-simpanan').innerText = `RM ${catTotals['Simpanan'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+            document.getElementById('cat-card-utiliti').innerText = `RM ${catTotals['Utiliti'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+            document.getElementById('cat-card-lain').innerText = `RM ${catTotals['Lain-lain'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+
             document.getElementById('cat-item-count').innerText = `Menunjukkan ${filtered.length} rekod`;
 
             const tbody = document.getElementById('budget-table-body');
@@ -1223,6 +1281,20 @@
                 return matchBulan && matchTahun;
             });
 
+            // Calculate Metrics
+            let totalKasar = 0;
+            let totalPotongan = 0;
+            
+            filtered.forEach(item => {
+                totalKasar += item.pendapatanKasar;
+                totalPotongan += item.potongan;
+            });
+            let totalBersih = totalKasar - totalPotongan;
+
+            document.getElementById('inc-card-kasar').innerText = `RM ${totalKasar.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+            document.getElementById('inc-card-potongan').innerText = `RM ${totalPotongan.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+            document.getElementById('inc-card-bersih').innerText = `RM ${totalBersih.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+
             document.getElementById('inc-record-count').innerText = `Menunjukkan ${filtered.length} rekod`;
 
             const tbody = document.getElementById('income-table-body');
@@ -1231,7 +1303,7 @@
             if (filtered.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="8" class="py-12 text-center text-slate-400 dark:text-slate-500 text-sm">
+                        <td colspan="5" class="py-12 text-center text-slate-400 dark:text-slate-500 text-sm">
                             <i class="fa-solid fa-hand-holding-dollar block text-3xl mb-2 text-slate-300 dark:text-slate-700"></i>
                             Tiada rekod pendapatan ditemui bagi bulan ${filterBulan} tahun ${filterTahun}
                         </td>
@@ -1240,17 +1312,14 @@
             }
 
             filtered.forEach(item => {
-                const totalGross = item.gajiPokok + item.elaunSaraHidup + item.elaunPerumahan + item.elaunPerkhidmatanAwam + item.elaunPegun;
+                const bersih = item.pendapatanKasar - item.potongan;
                 
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-all border-b border-slate-100 dark:border-slate-800">
                         <td class="py-4 px-4 font-bold text-slate-900 dark:text-white">${item.bulan} ${item.tahun}</td>
-                        <td class="py-4 px-4 text-right font-semibold">RM ${item.gajiPokok.toFixed(2)}</td>
-                        <td class="py-4 px-4 text-right">RM ${item.elaunSaraHidup.toFixed(2)}</td>
-                        <td class="py-4 px-4 text-right">RM ${item.elaunPerumahan.toFixed(2)}</td>
-                        <td class="py-4 px-4 text-right">RM ${item.elaunPerkhidmatanAwam.toFixed(2)}</td>
-                        <td class="py-4 px-4 text-right">RM ${item.elaunPegun.toFixed(2)}</td>
-                        <td class="py-4 px-4 text-right font-black text-emerald-600 dark:text-emerald-400 bg-slate-100/30 dark:bg-slate-800/10">RM ${totalGross.toFixed(2)}</td>
+                        <td class="py-4 px-4 text-right font-semibold">RM ${item.pendapatanKasar.toFixed(2)}</td>
+                        <td class="py-4 px-4 text-right text-rose-500">RM ${item.potongan.toFixed(2)}</td>
+                        <td class="py-4 px-4 text-right font-black text-emerald-600 dark:text-emerald-400 bg-slate-100/30 dark:bg-slate-800/10">RM ${bersih.toFixed(2)}</td>
                         <td class="py-4 px-4 text-center">
                             <div class="flex items-center justify-center gap-1.5">
                                 <button onclick="editIncomeItem(${item.id})" class="h-8 w-8 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 dark:bg-blue-950/30 dark:hover:bg-blue-950/50 dark:text-blue-400 transition-colors" title="Kemas kini pendapatan">
@@ -1371,11 +1440,8 @@
                     document.getElementById('income-id').value = item.id;
                     document.getElementById('income-bulan').value = item.bulan;
                     document.getElementById('income-tahun').value = item.tahun;
-                    document.getElementById('income-gaji').value = item.gajiPokok;
-                    document.getElementById('income-sara-hidup').value = item.elaunSaraHidup;
-                    document.getElementById('income-perumahan').value = item.elaunPerumahan;
-                    document.getElementById('income-khidmat-awam').value = item.elaunPerkhidmatanAwam;
-                    document.getElementById('income-pegun').value = item.elaunPegun;
+                    document.getElementById('income-kasar').value = item.pendapatanKasar;
+                    document.getElementById('income-potongan').value = item.potongan;
                 }
             } else {
                 title.innerText = "Daftar Pendapatan Bulanan Baru";
@@ -1393,17 +1459,14 @@
             const id = document.getElementById('income-id').value;
             const bulan = document.getElementById('income-bulan').value;
             const tahun = parseInt(document.getElementById('income-tahun').value, 10);
-            const gajiPokok = parseFloat(document.getElementById('income-gaji').value) || 0;
-            const elaunSaraHidup = parseFloat(document.getElementById('income-sara-hidup').value) || 0;
-            const elaunPerumahan = parseFloat(document.getElementById('income-perumahan').value) || 0;
-            const elaunPerkhidmatanAwam = parseFloat(document.getElementById('income-khidmat-awam').value) || 0;
-            const elaunPegun = parseFloat(document.getElementById('income-pegun').value) || 0;
+            const pendapatanKasar = parseFloat(document.getElementById('income-kasar').value) || 0;
+            const potongan = parseFloat(document.getElementById('income-potongan').value) || 0;
 
             if (id) {
                 // Edit mode
                 const index = incomeDatabase.findIndex(i => i.id === parseInt(id, 10));
                 if (index !== -1) {
-                    incomeDatabase[index] = { id: parseInt(id, 10), bulan, tahun, gajiPokok, elaunSaraHidup, elaunPerumahan, elaunPerkhidmatanAwam, elaunPegun };
+                    incomeDatabase[index] = { id: parseInt(id, 10), bulan, tahun, pendapatanKasar, potongan };
                     showToast("Pendapatan Dikemas Kini", "Rekod pendapatan bulanan telah dikemaskini.", "success");
                 }
             } else {
@@ -1419,11 +1482,8 @@
                     id: Date.now(),
                     bulan,
                     tahun,
-                    gajiPokok,
-                    elaunSaraHidup,
-                    elaunPerumahan,
-                    elaunPerkhidmatanAwam,
-                    elaunPegun
+                    pendapatanKasar,
+                    potongan
                 };
                 incomeDatabase.push(newRecord);
                 showToast("Pendapatan Disimpan", "Daftar kemasukan pendapatan bulanan berjaya dibuat.", "success");
