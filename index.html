@@ -1123,10 +1123,13 @@
 
         // RENDER SECOND TAB CONTENT
         function renderCategoryView() {
-            const selectedCategory = document.getElementById('cat-filter').value;
-            
-            const filtered = budgetDatabase.filter(item => {
-                return selectedCategory === 'Semua' || item.kategori === selectedCategory;
+            const filterBulan = document.getElementById('inc-filter-bulan').value;
+            const filterTahun = document.getElementById('inc-filter-tahun').value;
+
+            const filtered = incomeDatabase.filter(item => {
+                const matchBulan = filterBulan === 'Semua' || item.bulan === filterBulan;
+                const matchTahun = filterTahun === 'Semua' || String(item.tahun) === filterTahun;
+                return matchBulan && matchTahun;
             });
 
             document.getElementById('cat-item-count').innerText = `Menunjukkan ${filtered.length} rekod`;
