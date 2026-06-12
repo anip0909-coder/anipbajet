@@ -721,6 +721,9 @@
     <!-- JAVASCRIPT LOGIC SECTION -->
     <script>
         
+        // URL WEB APP GOOGLE APPS SCRIPT (Sila tampal Web App URL anda dari Apps Script di sini)
+        const APPSCRIPT_WEB_APP_URL = "YOUR_APPSCRIPT_WEB_APP_URL"; 
+        
         // DEFAULT SEED DATA (Used if Google Sheet cannot be loaded or is offline)
         const defaultBudgetItems = [
             { id: 1, bulan: "Januari", tahun: 2026, kategori: "Komitmen", namaItem: "Ansuran Rumah", anggaranKos: 1200, status: "Selesai", jumlahSebenar: 1200 },
@@ -746,6 +749,7 @@
         let currentTab = 'dashboard';
         let categoryChartInstance = null;
         let isGoogleSheetConnected = false;
+        let isSyncing = false; // Flag to prevent multiple simultaneous syncs
 
         // CONSTANTS & CONFIGURATION
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=914475172";
@@ -869,6 +873,8 @@
                 const r = rows[i];
                 if (r.length < headers.length) continue;
                 
+                const sheetRowNumber = i + 1; // Baris sebenar dalam Google Sheet (kerana baris 1 adalah Header)
+
                 const bulan = r[bulanIdx] ? r[bulanIdx].trim() : 'Januari';
                 const tahun = r[tahunIdx] ? parseInt(r[tahunIdx].trim(), 10) || 2026 : 2026;
                 const kategori = r[kategoriIdx] ? r[kategoriIdx].trim() : 'Lain-lain';
@@ -888,7 +894,8 @@
                 // Build budget model
                 if (namaItem || kategori) {
                     budgetList.push({
-                        id: i, // temporary mapping id
+                        id: sheetRowNumber, // Gunakan sheet row sebagai rujukan utama ID
+                        sheetRow: sheetRowNumber,
                         bulan,
                         tahun,
                         kategori,
@@ -908,7 +915,8 @@
                     const potongan = kasar > bersih ? kasar - bersih : 0;
 
                     incomeList.push({
-                        id: 1000 + i,
+                        id: sheetRowNumber + 100000, // ID rawak untuk membezakan dari bajet
+                        sheetRow: sheetRowNumber,
                         bulan,
                         tahun,
                         pendapatanKasar: kasar,
@@ -920,7 +928,40 @@
             return { budget: budgetList, income: incomeList };
         }
 
-        
+        // ==============================
+        // FUNGSI PUSH KE APPS SCRIPT (AUTO SYNC)
+        // ==============================
+        async function pushDataToSheet(action, payload) {
+            if (!APPSCRIPT_WEB_APP_URL || APPSCRIPT_WEB_APP_URL === "YOUR_APPSCRIPT_WEB_APP_URL") {
+                console.warn("URL Apps Script tiada. Disimpan ke storan tempatan sahaja.");
+                return true; 
+            }
+
+            try {
+                showToast("Menyegerak...", "Menghantar data terus ke Google Sheet...", "info");
+                
+                // Mesti menggunakan stringify dan biarkan default 'text/plain' supaya tidak ada isu CORS preflight
+                const response = await fetch(APPSCRIPT_WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action, payload })
+                });
+
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    showToast("Berjaya", "Data Google Sheet berjaya dikemas kini secara terus.", "success");
+                    return true;
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                console.error("Gagal menyegerak ke Google Sheet:", error);
+                showToast("Ralat Rangkaian", "Gagal mengemas kini Sheet. Disimpan setempat (Local).", "error");
+                return false;
+            }
+        }
+
+
         // SWITCH BETWEEN TABS VISUALLY & TRIGGER REDRAW
         function switchTab(tabId) {
             currentTab = tabId;
@@ -1368,8 +1409,15 @@
             document.getElementById('modal-budget').classList.add('hidden');
         }
 
-        function saveBudgetForm(event) {
+        async function saveBudgetForm(event) {
             event.preventDefault();
+            
+            // UI Feedback state
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            const originalBtnHtml = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
+
             const id = document.getElementById('budget-id').value;
             const bulan = document.getElementById('budget-bulan').value;
             const tahun = parseInt(document.getElementById('budget-tahun').value, 10);
@@ -1379,32 +1427,47 @@
             const jumlahSebenar = parseFloat(document.getElementById('budget-sebenar').value) || 0;
             const status = document.getElementById('budget-status').value;
 
-            if (id) {
+            // Dapatkan rujukan sheetRow jika item wujud
+            const existingItem = id ? budgetDatabase.find(i => i.id === parseInt(id, 10)) : null;
+            const sheetRow = existingItem ? existingItem.sheetRow : null;
+
+            let successPush = false;
+
+            if (id && existingItem) {
                 // Update existing record
-                const index = budgetDatabase.findIndex(i => i.id === parseInt(id, 10));
-                if (index !== -1) {
-                    budgetDatabase[index] = { ...budgetDatabase[index], bulan, tahun, kategori, namaItem, anggaranKos, status, jumlahSebenar };
-                    showToast("Rekod Dikemas Kini", "Maklumat perbelanjaan telah berjaya disunting.", "success");
+                budgetDatabase[budgetDatabase.indexOf(existingItem)] = { ...existingItem, bulan, tahun, kategori, namaItem, anggaranKos, status, jumlahSebenar };
+                
+                // Hantar update ke AppScript jika wujud row di Google Sheet
+                if (sheetRow) {
+                    successPush = await pushDataToSheet("UPDATE_BUDGET", {
+                        sheetRow, bulan, tahun, kategori, namaItem, anggaranKos, status, jumlahSebenar
+                    });
                 }
             } else {
                 // Insert new record
                 const newRecord = {
                     id: Date.now(),
-                    bulan,
-                    tahun,
-                    kategori,
-                    namaItem,
-                    anggaranKos,
-                    status,
-                    jumlahSebenar
+                    sheetRow: null,
+                    bulan, tahun, kategori, namaItem, anggaranKos, status, jumlahSebenar
                 };
                 budgetDatabase.push(newRecord);
-                showToast("Rekod Disimpan", "Item bajet baru telah ditambahkan ke pangkalan data.", "success");
+                
+                // Hantar row baru ke AppScript
+                successPush = await pushDataToSheet("ADD_BUDGET", {
+                    bulan, tahun, kategori, namaItem, anggaranKos, status, jumlahSebenar
+                });
             }
 
             saveToLocalStorage();
             closeBudgetModal();
             refreshAllViews();
+
+            // Kembalikan keadaan butang UI
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnHtml;
+
+            // Refresh terus data dari Sheet supaya kita dapat nombor "sheetRow" yang baru secara automatik
+            if(successPush) setTimeout(syncWithGoogleSheet, 1500);
         }
 
         function editBudgetItem(id) {
@@ -1415,8 +1478,14 @@
             showConfirmDialog(
                 "Padam Rekod Bajet?",
                 "Adakah anda pasti mahu memadam item pengeluaran ini secara kekal?",
-                () => {
-                    budgetDatabase = budgetDatabase.filter(item => item.id !== id);
+                async () => {
+                    const item = budgetDatabase.find(i => i.id === id);
+                    if (item && item.sheetRow) {
+                        await pushDataToSheet("DELETE_ROW", { sheetRow: item.sheetRow });
+                        setTimeout(syncWithGoogleSheet, 1500); // Reload the sheet database
+                    }
+
+                    budgetDatabase = budgetDatabase.filter(i => i.id !== id);
                     saveToLocalStorage();
                     refreshAllViews();
                     showToast("Rekod Dipadam", "Item perbelanjaan telah berjaya dikeluarkan.", "error");
@@ -1454,24 +1523,38 @@
             document.getElementById('modal-income').classList.add('hidden');
         }
 
-        function saveIncomeForm(event) {
+        async function saveIncomeForm(event) {
             event.preventDefault();
+            
+            // UI Feedback state
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            const originalBtnHtml = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
+
             const id = document.getElementById('income-id').value;
             const bulan = document.getElementById('income-bulan').value;
             const tahun = parseInt(document.getElementById('income-tahun').value, 10);
             const pendapatanKasar = parseFloat(document.getElementById('income-kasar').value) || 0;
             const potongan = parseFloat(document.getElementById('income-potongan').value) || 0;
+            const pendapatanBersih = pendapatanKasar - potongan;
 
-            if (id) {
+            const existingItem = id ? incomeDatabase.find(i => i.id === parseInt(id, 10)) : null;
+            const sheetRow = existingItem ? existingItem.sheetRow : null;
+
+            let successPush = false;
+
+            if (id && existingItem) {
                 // Edit mode
-                const index = incomeDatabase.findIndex(i => i.id === parseInt(id, 10));
-                if (index !== -1) {
-                    incomeDatabase[index] = { id: parseInt(id, 10), bulan, tahun, pendapatanKasar, potongan };
-                    showToast("Pendapatan Dikemas Kini", "Rekod pendapatan bulanan telah dikemaskini.", "success");
+                incomeDatabase[incomeDatabase.indexOf(existingItem)] = { ...existingItem, bulan, tahun, pendapatanKasar, potongan };
+                
+                if (sheetRow) {
+                    successPush = await pushDataToSheet("UPDATE_INCOME", {
+                        sheetRow, bulan, tahun, pendapatanKasar, pendapatanBersih
+                    });
                 }
             } else {
                 // Add mode
-                // Avoid redundant entries of exact Month & Year for data sanity
                 const exists = incomeDatabase.some(i => i.bulan === bulan && i.tahun === tahun);
                 if(exists) {
                     showToast("Ralat Pertindihan Data", "Rekod bagi bulan dan tahun ini telah wujud. Anda hanya perlu menyunting rekod sedia ada.", "error");
@@ -1480,18 +1563,25 @@
 
                 const newRecord = {
                     id: Date.now(),
-                    bulan,
-                    tahun,
-                    pendapatanKasar,
-                    potongan
+                    sheetRow: null,
+                    bulan, tahun, pendapatanKasar, potongan
                 };
                 incomeDatabase.push(newRecord);
-                showToast("Pendapatan Disimpan", "Daftar kemasukan pendapatan bulanan berjaya dibuat.", "success");
+                
+                successPush = await pushDataToSheet("ADD_INCOME", {
+                    bulan, tahun, pendapatanKasar, pendapatanBersih
+                });
             }
 
             saveToLocalStorage();
             closeIncomeModal();
             refreshAllViews();
+
+            // Kembalikan keadaan butang UI
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnHtml;
+
+            if(successPush) setTimeout(syncWithGoogleSheet, 1500);
         }
 
         function editIncomeItem(id) {
@@ -1502,8 +1592,14 @@
             showConfirmDialog(
                 "Padam Rekod Pendapatan?",
                 "Adakah anda pasti mahu memadam rekod pendapatan bulan ini secara mutlak?",
-                () => {
-                    incomeDatabase = incomeDatabase.filter(item => item.id !== id);
+                async () => {
+                    const item = incomeDatabase.find(i => i.id === id);
+                    if (item && item.sheetRow) {
+                        await pushDataToSheet("DELETE_ROW", { sheetRow: item.sheetRow });
+                        setTimeout(syncWithGoogleSheet, 1500); // Reload the sheet database
+                    }
+
+                    incomeDatabase = incomeDatabase.filter(i => i.id !== id);
                     saveToLocalStorage();
                     refreshAllViews();
                     showToast("Rekod Padam", "Pendapatan berjaya dibuang daripada sistem.", "error");
