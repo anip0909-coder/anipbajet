@@ -340,6 +340,32 @@
                 </div>
                 
                 <div class="flex flex-wrap items-center gap-3">
+                    <div class="w-full sm:w-36">
+                        <label for="cat-filter-bulan" class="sr-only">Tapis Bulan</label>
+                        <select id="cat-filter-bulan" onchange="renderCategoryView()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                            <option value="Semua">Semua Bulan</option>
+                            <option value="Januari">Januari</option>
+                            <option value="Februari">Februari</option>
+                            <option value="Mac">Mac</option>
+                            <option value="April">April</option>
+                            <option value="Mei">Mei</option>
+                            <option value="Jun">Jun</option>
+                            <option value="Julai">Julai</option>
+                            <option value="Ogos">Ogos</option>
+                            <option value="September">September</option>
+                            <option value="Oktober">Oktober</option>
+                            <option value="November">November</option>
+                            <option value="Disember">Disember</option>
+                        </select>
+                    </div>
+                    <div class="w-full sm:w-32">
+                        <label for="cat-filter-tahun" class="sr-only">Tapis Tahun</label>
+                        <select id="cat-filter-tahun" onchange="renderCategoryView()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                            <option value="Semua">Semua Tahun</option>
+                            <option value="2026">2026</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </div>
                     <div class="w-full sm:w-44">
                         <label for="cat-filter" class="sr-only">Tapis Kategori</label>
                         <select id="cat-filter" onchange="renderCategoryView()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
@@ -1123,13 +1149,15 @@
 
         // RENDER SECOND TAB CONTENT
         function renderCategoryView() {
-            const filterBulan = document.getElementById('inc-filter-bulan').value;
-            const filterTahun = document.getElementById('inc-filter-tahun').value;
-
-            const filtered = incomeDatabase.filter(item => {
+            const selectedCategory = document.getElementById('cat-filter').value;
+            const filterBulan = document.getElementById('cat-filter-bulan').value;
+            const filterTahun = document.getElementById('cat-filter-tahun').value;
+            
+            const filtered = budgetDatabase.filter(item => {
+                const matchCategory = selectedCategory === 'Semua' || item.kategori === selectedCategory;
                 const matchBulan = filterBulan === 'Semua' || item.bulan === filterBulan;
                 const matchTahun = filterTahun === 'Semua' || String(item.tahun) === filterTahun;
-                return matchBulan && matchTahun;
+                return matchCategory && matchBulan && matchTahun;
             });
 
             document.getElementById('cat-item-count').innerText = `Menunjukkan ${filtered.length} rekod`;
