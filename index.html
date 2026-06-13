@@ -597,9 +597,9 @@
                         </select>
                     </div>
                     <div class="w-full sm:w-44">
-                        <label for="simp-filter-kategori" class="sr-only">Tapis Kategori</label>
-                        <select id="simp-filter-kategori" onchange="renderSimpananView()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                            <option value="Semua">Semua Kategori</option>
+                        <label for="simp-filter-namaItem" class="sr-only">Tapis Nama Item</label>
+                        <select id="simp-filter-namaItem" onchange="renderSimpananView()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                            <option value="Semua">Semua Item</option>
                             <!-- Dynamic list injected here -->
                         </select>
                     </div>
@@ -1530,15 +1530,15 @@
         }
 
         function populateSimpananCategoryFilterDropdown() {
-            const selectEl = document.getElementById('simp-filter-kategori');
+            const selectEl = document.getElementById('simp-filter-namaItem');
             if (!selectEl) return;
             const currentSelection = selectEl.value || 'Semua';
-            const uniqueCats = [...new Set(simpananDatabase.map(item => item.kategori))].filter(Boolean);
+            const uniqueItems = [...new Set(simpananDatabase.map(item => item.namaItem))].filter(Boolean);
             
-            selectEl.innerHTML = '<option value="Semua">Semua Kategori</option>';
-            uniqueCats.forEach(cat => {
-                const isSelected = cat === currentSelection ? 'selected' : '';
-                selectEl.innerHTML += `<option value="${cat}" ${isSelected}>${cat}</option>`;
+            selectEl.innerHTML = '<option value="Semua">Semua Item</option>';
+            uniqueItems.forEach(item => {
+                const isSelected = item === currentSelection ? 'selected' : '';
+                selectEl.innerHTML += `<option value="${item}" ${isSelected}>${item}</option>`;
             });
         }
 
@@ -1700,13 +1700,13 @@
         function renderSimpananView() {
             const filterBulan = document.getElementById('simp-filter-bulan').value;
             const filterTahun = document.getElementById('simp-filter-tahun').value;
-            const filterKategori = document.getElementById('simp-filter-kategori') ? document.getElementById('simp-filter-kategori').value : 'Semua';
+            const filterNamaItem = document.getElementById('simp-filter-namaItem') ? document.getElementById('simp-filter-namaItem').value : 'Semua';
 
             const filtered = simpananDatabase.filter(item => {
                 const matchBulan = filterBulan === 'Semua' || item.bulan === filterBulan;
                 const matchTahun = filterTahun === 'Semua' || String(item.tahun) === filterTahun;
-                const matchKategori = filterKategori === 'Semua' || item.kategori === filterKategori;
-                return matchBulan && matchTahun && matchKategori;
+                const matchNamaItem = filterNamaItem === 'Semua' || item.namaItem === filterNamaItem;
+                return matchBulan && matchTahun && matchNamaItem;
             });
 
             let totalJumlah = 0;
