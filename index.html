@@ -135,7 +135,7 @@
                     <span>Pendapatan</span>
                 </button>
                 <button onclick="switchTab('simpanan')" id="tab-simpanan" class="tab-transition flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
-                    <i class="fa-solid fa-piggy-bank"></i>
+                    <i class="fa-solid fa-building-columns"></i>
                     <span>Simpanan</span>
                 </button>
             </nav>
@@ -384,7 +384,7 @@
             </div>
 
             <!-- Category Metric Cards (6 Grid) -->
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 <div class="bg-amber-50 dark:bg-amber-950/20 p-4 rounded-2xl border border-amber-200 dark:border-amber-900/50">
                     <span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-1 block">Komitmen</span>
                     <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-komitmen">RM 0.00</h3>
@@ -412,6 +412,14 @@
                 <div class="bg-slate-100 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
                     <span class="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 block">Lain-lain</span>
                     <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-lain">RM 0.00</h3>
+                </div>
+                <div class="bg-cyan-50 dark:bg-cyan-950/20 p-4 rounded-2xl border border-cyan-200 dark:border-cyan-900/50">
+                    <span class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider mb-1 block">Kenderaan</span>
+                    <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-kenderaan">RM 0.00</h3>
+                </div>
+                <div class="bg-slate-800 dark:bg-slate-800 p-4 rounded-2xl border border-slate-700 dark:border-slate-700 shadow-sm">
+                    <span class="text-[10px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider mb-1 block">Jumlah Sebenar (Semua)</span>
+                    <h3 class="text-lg font-black text-white" id="cat-card-sebenar">RM 0.00</h3>
                 </div>
             </div>
 
@@ -553,7 +561,7 @@
             <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div class="flex items-center gap-3">
                     <div class="p-2 bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 rounded-lg">
-                        <i class="fa-solid fa-piggy-bank"></i>
+                        <i class="fa-solid fa-building-columns"></i>
                     </div>
                     <div>
                         <h2 class="font-bold text-slate-900 dark:text-slate-100">Pengurusan Simpanan</h2>
@@ -586,6 +594,13 @@
                             <option value="Semua">Semua Tahun</option>
                             <option value="2026">2026</option>
                             <option value="2025">2025</option>
+                        </select>
+                    </div>
+                    <div class="w-full sm:w-44">
+                        <label for="simp-filter-kategori" class="sr-only">Tapis Kategori</label>
+                        <select id="simp-filter-kategori" onchange="renderSimpananView()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                            <option value="Semua">Semua Kategori</option>
+                            <!-- Dynamic list injected here -->
                         </select>
                     </div>
                     <button onclick="openSimpananModal('add')" class="w-full sm:w-auto px-4 py-2 text-sm bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-primary-600/10 flex items-center justify-center gap-2">
@@ -703,8 +718,8 @@
                         <option value="Komitmen">Komitmen</option>
                         <option value="Keperluan">Keperluan</option>
                         <option value="Kehendak">Kehendak</option>
-                        <option value="Kenderaan">Kenderaan</option>
                         <option value="Hutang">Hutang</option>
+                        <option value="Kenderaan">Kenderaan</option>
                         <option value="Simpanan">Simpanan</option>
                         <option value="Utiliti">Utiliti</option>
                         <option value="Lain-lain">Lain-lain</option>
@@ -961,6 +976,7 @@
             'Keperluan': '#10b981', // Emerald
             'Kehendak': '#f43f5e',  // Rose
             'Hutang': '#dc2626',    // Red
+            'Kenderaan': '#06b6d4', // Cyan
             'Simpanan': '#3b82f6',  // Blue
             'Utiliti': '#8b5cf6',   // Purple
             'Lain-lain': '#64748b'  // Slate
@@ -1278,6 +1294,7 @@
             renderDashboard();
             renderCategoryView();
             renderIncomeView();
+            populateSimpananCategoryFilterDropdown();
             renderSimpananView();
             populateCategoryFilterDropdown();
         }
@@ -1502,13 +1519,26 @@
         
         // POPULATE DINAMIK CATEGORY FILTER DROPDOWNS ON PRE-LOAD
         function populateCategoryFilterDropdown() {
-            const uniqueCats = ['Komitmen', 'Keperluan', 'Kehendak', 'Hutang', 'Simpanan', 'Utiliti', 'Lain-lain'];
+            const uniqueCats = ['Komitmen', 'Keperluan', 'Kehendak', 'Hutang', 'Kenderaan', 'Simpanan', 'Utiliti', 'Lain-lain'];
             const selectEl = document.getElementById('cat-filter');
             
             // Re-render select options dynamically
             selectEl.innerHTML = '<option value="Semua">Semua Kategori</option>';
             uniqueCats.forEach(cat => {
                 selectEl.innerHTML += `<option value="${cat}">${cat}</option>`;
+            });
+        }
+
+        function populateSimpananCategoryFilterDropdown() {
+            const selectEl = document.getElementById('simp-filter-kategori');
+            if (!selectEl) return;
+            const currentSelection = selectEl.value || 'Semua';
+            const uniqueCats = [...new Set(simpananDatabase.map(item => item.kategori))].filter(Boolean);
+            
+            selectEl.innerHTML = '<option value="Semua">Semua Kategori</option>';
+            uniqueCats.forEach(cat => {
+                const isSelected = cat === currentSelection ? 'selected' : '';
+                selectEl.innerHTML += `<option value="${cat}" ${isSelected}>${cat}</option>`;
             });
         }
 
@@ -1528,8 +1558,9 @@
             // Calculate Category Metrics (Anggaran Kos)
             const catTotals = {
                 'Komitmen': 0, 'Keperluan': 0, 'Kehendak': 0, 
-                'Hutang': 0, 'Simpanan': 0, 'Utiliti': 0, 'Lain-lain': 0
+                'Hutang': 0, 'Kenderaan': 0, 'Simpanan': 0, 'Utiliti': 0, 'Lain-lain': 0
             };
+            let totalSebenarKeseluruhan = 0;
             
             filtered.forEach(item => {
                 if (catTotals[item.kategori] !== undefined) {
@@ -1537,15 +1568,18 @@
                 } else {
                     catTotals['Lain-lain'] += item.anggaranKos;
                 }
+                totalSebenarKeseluruhan += item.jumlahSebenar;
             });
 
             document.getElementById('cat-card-komitmen').innerText = `RM ${catTotals['Komitmen'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('cat-card-keperluan').innerText = `RM ${catTotals['Keperluan'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('cat-card-kehendak').innerText = `RM ${catTotals['Kehendak'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('cat-card-hutang').innerText = `RM ${catTotals['Hutang'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+            document.getElementById('cat-card-kenderaan').innerText = `RM ${catTotals['Kenderaan'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('cat-card-simpanan').innerText = `RM ${catTotals['Simpanan'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('cat-card-utiliti').innerText = `RM ${catTotals['Utiliti'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('cat-card-lain').innerText = `RM ${catTotals['Lain-lain'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+            document.getElementById('cat-card-sebenar').innerText = `RM ${totalSebenarKeseluruhan.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
 
             document.getElementById('cat-item-count').innerText = `Menunjukkan ${filtered.length} rekod`;
 
@@ -1666,11 +1700,13 @@
         function renderSimpananView() {
             const filterBulan = document.getElementById('simp-filter-bulan').value;
             const filterTahun = document.getElementById('simp-filter-tahun').value;
+            const filterKategori = document.getElementById('simp-filter-kategori') ? document.getElementById('simp-filter-kategori').value : 'Semua';
 
             const filtered = simpananDatabase.filter(item => {
                 const matchBulan = filterBulan === 'Semua' || item.bulan === filterBulan;
                 const matchTahun = filterTahun === 'Semua' || String(item.tahun) === filterTahun;
-                return matchBulan && matchTahun;
+                const matchKategori = filterKategori === 'Semua' || item.kategori === filterKategori;
+                return matchBulan && matchTahun && matchKategori;
             });
 
             let totalJumlah = 0;
@@ -1692,7 +1728,7 @@
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="8" class="py-12 text-center text-slate-400 dark:text-slate-500 text-sm">
-                            <i class="fa-solid fa-piggy-bank block text-3xl mb-2 text-slate-300 dark:text-slate-700"></i>
+                            <i class="fa-solid fa-building-columns block text-3xl mb-2 text-slate-300 dark:text-slate-700"></i>
                             Tiada rekod simpanan ditemui.
                         </td>
                     </tr>`;
