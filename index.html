@@ -5,6 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UrusDuit - Dashboard Pengurusan Kewangan</title>
     
+    <!-- ==================== PWA META TAGS ==================== -->
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Theme Color (Android Chrome toolbar color) -->
+    <meta name="theme-color" content="#16a34a" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0b1329" media="(prefers-color-scheme: dark)">
+    
+    <!-- iOS / Safari PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="UrusDuit">
+    <link rel="apple-touch-icon" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="icons/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="icons/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128x128.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512x512.png">
+    
+    <!-- Windows / Microsoft Tiles -->
+    <meta name="msapplication-TileColor" content="#16a34a">
+    <meta name="msapplication-TileImage" content="icons/icon-144x144.png">
+    <meta name="msapplication-tap-highlight" content="no">
+    
+    <!-- Mobile Optimization -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="HandheldFriendly" content="true">
+    
+    <!-- SEO / Open Graph -->
+    <meta name="description" content="UrusDuit - Aplikasi pengurusan dan rekod kewangan peribadi anda.">
+    <meta property="og:title" content="UrusDuit - Dashboard Kewangan">
+    <meta property="og:description" content="Urus dan rekod kewangan peribadi dengan mudah.">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-96x96.png">
+    <link rel="shortcut icon" href="icons/icon-96x96.png">
+    <!-- ========================================================= -->
+
     <!-- Google Fonts & Font Awesome Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -80,6 +122,31 @@
     
     <!-- TOAST NOTIFICATION SYSTEM -->
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm"></div>
+
+    <!-- ==================== PWA INSTALL BANNER ==================== -->
+    <div id="pwa-install-banner" class="hidden fixed bottom-0 left-0 right-0 z-50 p-3 sm:p-4">
+        <div class="max-w-lg mx-auto bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl shadow-black/20 p-4 flex items-center gap-4 glass-panel">
+            <!-- App Icon -->
+            <div class="h-14 w-14 rounded-2xl bg-gradient-to-tr from-primary-600 to-emerald-400 flex items-center justify-center text-white shadow-lg shadow-primary-500/30 shrink-0">
+                <i class="fa-solid fa-wallet text-2xl"></i>
+            </div>
+            <!-- Text -->
+            <div class="flex-grow min-w-0">
+                <h4 class="font-bold text-slate-900 dark:text-white text-sm">Pasang UrusDuit</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400 truncate">Tambah ke skrin utama untuk akses lebih pantas</p>
+            </div>
+            <!-- Buttons -->
+            <div class="flex items-center gap-2 shrink-0">
+                <button id="pwa-install-dismiss" class="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <button id="pwa-install-btn" class="px-4 py-2 text-xs font-bold bg-primary-600 hover:bg-primary-700 text-white rounded-xl transition-all shadow-md shadow-primary-600/20 flex items-center gap-1.5">
+                    <i class="fa-solid fa-download"></i> Pasang
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================ -->
 
     <!-- MAIN NAVBAR -->
     <header class="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 glass-panel">
@@ -2153,6 +2220,85 @@
         
         // --- COLD SYSTEM INITIALIZATION ---
         window.onload = function() {
+            // ==================== PWA: Service Worker Registration ====================
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js', { scope: './' })
+                    .then((registration) => {
+                        console.log('[PWA] Service Worker berjaya didaftarkan:', registration.scope);
+                        
+                        // Semak update SW tersedia
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    showToast('Kemaskini Tersedia', 'Versi baru UrusDuit tersedia. Muat semula untuk kemaskini.', 'info');
+                                }
+                            });
+                        });
+                    })
+                    .catch((error) => {
+                        console.error('[PWA] Service Worker gagal didaftarkan:', error);
+                    });
+                    
+                // Dengar mesej dari Service Worker
+                navigator.serviceWorker.addEventListener('message', (event) => {
+                    if (event.data && event.data.type === 'BACKGROUND_SYNC') {
+                        showToast('Segerak Data', event.data.message, 'info');
+                    }
+                });
+            }
+            
+            // ==================== PWA: Install Prompt (Android) ====================
+            let deferredPrompt;
+            const installBanner = document.getElementById('pwa-install-banner');
+            const installBtn = document.getElementById('pwa-install-btn');
+            const installDismiss = document.getElementById('pwa-install-dismiss');
+            
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                // Tunjuk banner selepas 3 saat
+                setTimeout(() => {
+                    if (installBanner) installBanner.classList.remove('hidden');
+                }, 3000);
+            });
+            
+            if (installBtn) {
+                installBtn.addEventListener('click', async () => {
+                    if (installBanner) installBanner.classList.add('hidden');
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        console.log(`[PWA] Pengguna ${outcome === 'accepted' ? 'terima' : 'tolak'} pemasangan.`);
+                        if (outcome === 'accepted') {
+                            showToast('App Dipasang! 🎉', 'UrusDuit telah berjaya dipasang pada peranti anda.', 'success');
+                        }
+                        deferredPrompt = null;
+                    }
+                });
+            }
+            
+            if (installDismiss) {
+                installDismiss.addEventListener('click', () => {
+                    if (installBanner) installBanner.classList.add('hidden');
+                    // Jangan tunjuk lagi untuk 7 hari
+                    localStorage.setItem('pwa-install-dismissed', Date.now() + 7 * 24 * 60 * 60 * 1000);
+                });
+            }
+            
+            // Semak jika sudah dismiss sebelum ini
+            const dismissedUntil = localStorage.getItem('pwa-install-dismissed');
+            if (dismissedUntil && Date.now() < parseInt(dismissedUntil)) {
+                if (installBanner) installBanner.classList.add('hidden');
+            }
+            
+            // Detect jika sudah dipasang sebagai PWA standalone
+            if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+                console.log('[PWA] App berjalan dalam mod standalone (dipasang).');
+                // Sembunyikan banner install jika sudah dipasang
+                if (installBanner) installBanner.classList.add('hidden');
+            }
+            // ====================================================================
             // Dark Mode / Light Mode Local Preference Handlers
             const themeToggleBtn = document.getElementById('theme-toggle');
             
