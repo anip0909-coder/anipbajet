@@ -134,6 +134,10 @@
                     <i class="fa-solid fa-coins"></i>
                     <span>Pendapatan</span>
                 </button>
+                <button onclick="switchTab('simpanan')" id="tab-simpanan" class="tab-transition flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
+                    <i class="fa-solid fa-piggy-bank"></i>
+                    <span>Simpanan</span>
+                </button>
             </nav>
 
             <!-- Reset Data Warning Banner / Button -->
@@ -380,7 +384,7 @@
             </div>
 
             <!-- Category Metric Cards (6 Grid) -->
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
                 <div class="bg-amber-50 dark:bg-amber-950/20 p-4 rounded-2xl border border-amber-200 dark:border-amber-900/50">
                     <span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-1 block">Komitmen</span>
                     <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-komitmen">RM 0.00</h3>
@@ -392,6 +396,10 @@
                 <div class="bg-rose-50 dark:bg-rose-950/20 p-4 rounded-2xl border border-rose-200 dark:border-rose-900/50">
                     <span class="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider mb-1 block">Kehendak</span>
                     <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-kehendak">RM 0.00</h3>
+                </div>
+                <div class="bg-red-50 dark:bg-red-950/20 p-4 rounded-2xl border border-red-200 dark:border-red-900/50">
+                    <span class="text-[10px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider mb-1 block">Hutang</span>
+                    <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-hutang">RM 0.00</h3>
                 </div>
                 <div class="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-2xl border border-blue-200 dark:border-blue-900/50">
                     <span class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1 block">Simpanan</span>
@@ -538,6 +546,104 @@
                 </div>
             </div>
         </section>
+
+        <!-- ==================== TAB 4: SIMPANAN MANAGEMENT ==================== -->
+        <section id="pane-simpanan" class="tab-pane hidden space-y-6">
+            <!-- Filter & Add Bar -->
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 rounded-lg">
+                        <i class="fa-solid fa-piggy-bank"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-slate-900 dark:text-slate-100">Pengurusan Simpanan</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Rekod aliran simpanan masuk dan keluar anda.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3">
+                    <div class="w-full sm:w-40">
+                        <label for="simp-filter-bulan" class="sr-only">Bulan</label>
+                        <select id="simp-filter-bulan" onchange="renderSimpananView()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                            <option value="Semua">Semua Bulan</option>
+                            <option value="Januari">Januari</option>
+                            <option value="Februari">Februari</option>
+                            <option value="Mac">Mac</option>
+                            <option value="April">April</option>
+                            <option value="Mei">Mei</option>
+                            <option value="Jun">Jun</option>
+                            <option value="Julai">Julai</option>
+                            <option value="Ogos">Ogos</option>
+                            <option value="September">September</option>
+                            <option value="Oktober">Oktober</option>
+                            <option value="November">November</option>
+                            <option value="Disember">Disember</option>
+                        </select>
+                    </div>
+                    <div class="w-full sm:w-32">
+                        <label for="simp-filter-tahun" class="sr-only">Tahun</label>
+                        <select id="simp-filter-tahun" onchange="renderSimpananView()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                            <option value="Semua">Semua Tahun</option>
+                            <option value="2026">2026</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </div>
+                    <button onclick="openSimpananModal('add')" class="w-full sm:w-auto px-4 py-2 text-sm bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-primary-600/10 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Tambah Simpanan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Simpanan Metric Cards (2 Grid) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-900/20 dark:to-slate-900 p-5 rounded-2xl border border-emerald-100 dark:border-emerald-800/30 flex items-center gap-4">
+                    <div class="h-10 w-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-vault"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Jumlah Simpanan Semasa</span>
+                        <h3 class="text-xl font-black text-slate-900 dark:text-white" id="simp-card-jumlah">RM 0.00</h3>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-rose-50 to-white dark:from-rose-900/20 dark:to-slate-900 p-5 rounded-2xl border border-rose-100 dark:border-rose-800/30 flex items-center gap-4">
+                    <div class="h-10 w-10 rounded-xl bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Simpanan Keluar</span>
+                        <h3 class="text-xl font-black text-slate-900 dark:text-white" id="simp-card-keluar">RM 0.00</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simpanan Table -->
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
+                    <h3 class="font-bold text-slate-900 dark:text-white">Jadual Simpanan Terperinci</h3>
+                    <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300" id="simp-record-count">Menunjukkan 0 rekod</span>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50/70 dark:bg-slate-800/40 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
+                                <th class="py-4 px-4">Bulan/Tahun</th>
+                                <th class="py-4 px-4">Kategori / Item</th>
+                                <th class="py-4 px-4 text-right">Anggaran (RM)</th>
+                                <th class="py-4 px-4 text-center">Status</th>
+                                <th class="py-4 px-4 text-right">Masuk (RM)</th>
+                                <th class="py-4 px-4 text-right">Keluar (RM)</th>
+                                <th class="py-4 px-4 text-right font-black text-slate-900 dark:text-white bg-slate-100/40 dark:bg-slate-800/20">Jumlah (RM)</th>
+                                <th class="py-4 px-4 text-center">Tindakan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="simpanan-table-body" class="divide-y divide-slate-100 dark:divide-slate-800 text-sm text-slate-700 dark:text-slate-300">
+                            <!-- Dynamic Simpanan rows injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- FOOTER SECTION -->
@@ -597,9 +703,9 @@
                         <option value="Komitmen">Komitmen</option>
                         <option value="Keperluan">Keperluan</option>
                         <option value="Kehendak">Kehendak</option>
+                        <option value="Hutang">Hutang</option>
                         <option value="Simpanan">Simpanan</option>
                         <option value="Utiliti">Utiliti</option>
-                        <option value="Hutang">Hutang</option>
                         <option value="Lain-lain">Lain-lain</option>
                     </select>
                 </div>
@@ -703,6 +809,94 @@
         </div>
     </div>
 
+    <!-- MODAL SIMPANAN RECORD (ADD / EDIT) -->
+    <div id="modal-simpanan" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xl animate-in fade-in zoom-in duration-200">
+            <!-- Modal Header -->
+            <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                <h3 class="font-extrabold text-lg text-slate-900 dark:text-white" id="modal-simpanan-title">Urus Rekod Simpanan</h3>
+                <button onclick="closeSimpananModal()" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <!-- Modal Form Body -->
+            <form id="form-simpanan" onsubmit="saveSimpananForm(event)" class="p-6 space-y-4">
+                <input type="hidden" id="simpanan-id">
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="simp-bulan" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Bulan</label>
+                        <select id="simp-bulan" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                            <option value="Januari">Januari</option>
+                            <option value="Februari">Februari</option>
+                            <option value="Mac">Mac</option>
+                            <option value="April">April</option>
+                            <option value="Mei">Mei</option>
+                            <option value="Jun">Jun</option>
+                            <option value="Julai">Julai</option>
+                            <option value="Ogos">Ogos</option>
+                            <option value="September">September</option>
+                            <option value="Oktober">Oktober</option>
+                            <option value="November">November</option>
+                            <option value="Disember">Disember</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="simp-tahun" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Tahun</label>
+                        <select id="simp-tahun" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                            <option value="2026">2026</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="simp-kategori" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Kategori</label>
+                        <input type="text" id="simp-kategori" required placeholder="Cth: Kecemasan" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                    </div>
+                    <div>
+                        <label for="simp-namaItem" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Nama Item</label>
+                        <input type="text" id="simp-namaItem" required placeholder="Cth: ASB / Tabung Haji" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="simp-anggaran" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Anggaran (RM)</label>
+                        <input type="number" id="simp-anggaran" step="0.01" required placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                    </div>
+                    <div>
+                        <label for="simp-status" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Status</label>
+                        <select id="simp-status" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                            <option value="Simpan">Simpan</option>
+                            <option value="Tidak">Tidak</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="simp-masuk" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Simpan Masuk (RM)</label>
+                        <input type="number" id="simp-masuk" step="0.01" required placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                    </div>
+                    <div>
+                        <label for="simp-keluar" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Simpanan Keluar (RM)</label>
+                        <input type="number" id="simp-keluar" step="0.01" required placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-3">
+                    <button type="button" onclick="closeSimpananModal()" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-400 transition-colors">Batal</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl text-sm font-semibold bg-primary-600 hover:bg-primary-700 text-white shadow-md shadow-primary-600/10 transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i> Simpan Rekod
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- CUSTOM CONFIRMATION DIALOG (No alert / confirm window popups) -->
     <div id="modal-confirm" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm hidden">
         <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-sm w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl animate-in fade-in zoom-in duration-200 text-center">
@@ -744,9 +938,15 @@
             { id: 2, bulan: "Februari", tahun: 2026, pendapatanKasar: 5500, potongan: 550 }
         ];
 
+        const defaultSimpananItems = [
+            { id: 1, bulan: "Januari", tahun: 2026, kategori: "Kecemasan", namaItem: "Tabung Haji", anggaran: 300, status: "Simpan", masuk: 300, keluar: 0, jumlah: 300 },
+            { id: 2, bulan: "Februari", tahun: 2026, kategori: "Percutian", namaItem: "ASB", anggaran: 200, status: "Simpan", masuk: 200, keluar: 50, jumlah: 150 }
+        ];
+
         // GLOBAL APPLICATION STATE variables
         let budgetDatabase = [];
         let incomeDatabase = [];
+        let simpananDatabase = [];
         let currentTab = 'dashboard';
         let categoryChartInstance = null;
         let isGoogleSheetConnected = false;
@@ -754,10 +954,12 @@
 
         // CONSTANTS & CONFIGURATION
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=914475172";
+        const SIMPANAN_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=611554426";
         const CATEGORY_COLORS = {
             'Komitmen': '#f59e0b',  // Amber
             'Keperluan': '#10b981', // Emerald
             'Kehendak': '#f43f5e',  // Rose
+            'Hutang': '#dc2626',    // Red
             'Simpanan': '#3b82f6',  // Blue
             'Utiliti': '#8b5cf6',   // Purple
             'Lain-lain': '#64748b'  // Slate
@@ -778,18 +980,25 @@
             statusText.innerText = "Menghubung ke Google Sheet...";
             
             try {
-                // Fetch direct published CSV output
-                const response = await fetch(GOOGLE_SHEET_CSV_URL);
-                if (!response.ok) throw new Error("CORS or Connection Error from Google Spreadsheet.");
+                // Fetch direct published CSV output for both sheets
+                const [budgetResponse, simpResponse] = await Promise.all([
+                    fetch(GOOGLE_SHEET_CSV_URL),
+                    fetch(SIMPANAN_CSV_URL).catch(() => null) // Allow simp to fail gracefully if not published yet
+                ]);
                 
-                const csvText = await response.text();
+                if (!budgetResponse.ok) throw new Error("CORS or Connection Error from Google Spreadsheet.");
                 
-                // Parse CSV rows dynamically into database structure
-                const parsed = parseGoogleSheetCSV(csvText);
+                const budgetCsvText = await budgetResponse.text();
+                const parsed = parseGoogleSheetCSV(budgetCsvText);
+
+                if(simpResponse && simpResponse.ok) {
+                    const simpCsvText = await simpResponse.text();
+                    simpananDatabase = parseSimpananCSV(simpCsvText);
+                }
+                
                 if(parsed.budget.length > 0) {
                     budgetDatabase = parsed.budget;
                     
-                    // Only overwrite income database if new records parsed from the sheet
                     if (parsed.income.length > 0) {
                         incomeDatabase = parsed.income;
                     }
@@ -929,6 +1138,76 @@
             return { budget: budgetList, income: incomeList };
         }
 
+        // CSV PARSER ENGINE for Simpanan Tab
+        function parseSimpananCSV(csvText) {
+            const rows = [];
+            let row = [""];
+            let insideQuote = false;
+            
+            for (let i = 0; i < csvText.length; i++) {
+                const char = csvText[i];
+                const nextChar = csvText[i + 1];
+                
+                if (char === '"') {
+                    if (insideQuote && nextChar === '"') {
+                        row[row.length - 1] += '"';
+                        i++; 
+                    } else {
+                        insideQuote = !insideQuote;
+                    }
+                } else if (char === ',' && !insideQuote) {
+                    row.push("");
+                } else if ((char === '\r' || char === '\n') && !insideQuote) {
+                    if (char === '\r' && nextChar === '\n') { i++; }
+                    rows.push(row);
+                    row = [""];
+                } else {
+                    row[row.length - 1] += char;
+                }
+            }
+            if (row.length > 1 || row[0] !== "") { rows.push(row); }
+            
+            const simpList = [];
+            if (rows.length < 2) return simpList;
+            
+            const headers = rows[0].map(h => h.toLowerCase().trim());
+            const bIdx = headers.findIndex(h => h.includes('bulan'));
+            const tIdx = headers.findIndex(h => h.includes('tahun'));
+            const kIdx = headers.findIndex(h => h.includes('kategori'));
+            const nIdx = headers.findIndex(h => h.includes('nama item') || h.includes('nama'));
+            const aIdx = headers.findIndex(h => h.includes('anggaran'));
+            const sIdx = headers.findIndex(h => h.includes('status'));
+            const mIdx = headers.findIndex(h => h.includes('masuk'));
+            const outIdx = headers.findIndex(h => h.includes('keluar'));
+            const jIdx = headers.findIndex(h => h.includes('jumlah'));
+
+            for (let i = 1; i < rows.length; i++) {
+                const r = rows[i];
+                if (r.length < Math.max(bIdx, tIdx, aIdx)) continue;
+                
+                const sheetRowNumber = i + 1;
+                const namaItem = nIdx >= 0 && r[nIdx] ? r[nIdx].trim() : '';
+                const kategori = kIdx >= 0 && r[kIdx] ? r[kIdx].trim() : '';
+
+                if (namaItem || kategori) {
+                    simpList.push({
+                        id: sheetRowNumber + 200000,
+                        sheetRow: sheetRowNumber,
+                        bulan: bIdx >= 0 && r[bIdx] ? r[bIdx].trim() : 'Januari',
+                        tahun: tIdx >= 0 && r[tIdx] ? parseInt(r[tIdx].trim(), 10) || 2026 : 2026,
+                        kategori: kategori,
+                        namaItem: namaItem,
+                        anggaran: aIdx >= 0 ? parseFloat((r[aIdx] || '').replace(/[^\d.]/g, '')) || 0 : 0,
+                        status: sIdx >= 0 && r[sIdx] ? r[sIdx].trim() : 'Tidak',
+                        masuk: mIdx >= 0 ? parseFloat((r[mIdx] || '').replace(/[^\d.]/g, '')) || 0 : 0,
+                        keluar: outIdx >= 0 ? parseFloat((r[outIdx] || '').replace(/[^\d.]/g, '')) || 0 : 0,
+                        jumlah: jIdx >= 0 ? parseFloat((r[jIdx] || '').replace(/[^\d.]/g, '')) || 0 : 0
+                    });
+                }
+            }
+            return simpList;
+        }
+
         // ==============================
         // FUNGSI PUSH KE APPS SCRIPT (AUTO SYNC)
         // ==============================
@@ -968,7 +1247,7 @@
             currentTab = tabId;
             
             // Adjust visual tab button states
-            const tabs = ['dashboard', 'category', 'income'];
+            const tabs = ['dashboard', 'category', 'income', 'simpanan'];
             tabs.forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
                 if (t === tabId) {
@@ -990,6 +1269,7 @@
             if (tabId === 'dashboard') renderDashboard();
             if (tabId === 'category') renderCategoryView();
             if (tabId === 'income') renderIncomeView();
+            if (tabId === 'simpanan') renderSimpananView();
         }
 
         // REFRESH ALL TABS DATA AT ONCE
@@ -997,6 +1277,7 @@
             renderDashboard();
             renderCategoryView();
             renderIncomeView();
+            renderSimpananView();
             populateCategoryFilterDropdown();
         }
 
@@ -1004,13 +1285,16 @@
         function loadDatabase() {
             const storedBudget = localStorage.getItem('bajet');
             const storedIncome = localStorage.getItem('pendapatan');
+            const storedSimpanan = localStorage.getItem('simpanan');
             
             if (storedBudget && storedIncome) {
                 budgetDatabase = JSON.parse(storedBudget);
                 incomeDatabase = JSON.parse(storedIncome);
+                simpananDatabase = storedSimpanan ? JSON.parse(storedSimpanan) : [...defaultSimpananItems];
             } else {
                 budgetDatabase = [...defaultBudgetItems];
                 incomeDatabase = [...defaultIncomeItems];
+                simpananDatabase = [...defaultSimpananItems];
                 saveToLocalStorage();
             }
             
@@ -1020,6 +1304,7 @@
         function saveToLocalStorage() {
             localStorage.setItem('bajet', JSON.stringify(budgetDatabase));
             localStorage.setItem('pendapatan', JSON.stringify(incomeDatabase));
+            localStorage.setItem('simpanan', JSON.stringify(simpananDatabase));
         }
 
         // CONFIRM RESET SYSTEM BACK TO DEFAULT PRELOADED WORKSPACE
@@ -1216,7 +1501,7 @@
         
         // POPULATE DINAMIK CATEGORY FILTER DROPDOWNS ON PRE-LOAD
         function populateCategoryFilterDropdown() {
-            const uniqueCats = ['Komitmen', 'Keperluan', 'Kehendak', 'Simpanan', 'Utiliti', 'Lain-lain'];
+            const uniqueCats = ['Komitmen', 'Keperluan', 'Kehendak', 'Hutang', 'Simpanan', 'Utiliti', 'Lain-lain'];
             const selectEl = document.getElementById('cat-filter');
             
             // Re-render select options dynamically
@@ -1242,7 +1527,7 @@
             // Calculate Category Metrics (Anggaran Kos)
             const catTotals = {
                 'Komitmen': 0, 'Keperluan': 0, 'Kehendak': 0, 
-                'Simpanan': 0, 'Utiliti': 0, 'Lain-lain': 0
+                'Hutang': 0, 'Simpanan': 0, 'Utiliti': 0, 'Lain-lain': 0
             };
             
             filtered.forEach(item => {
@@ -1256,6 +1541,7 @@
             document.getElementById('cat-card-komitmen').innerText = `RM ${catTotals['Komitmen'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('cat-card-keperluan').innerText = `RM ${catTotals['Keperluan'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('cat-card-kehendak').innerText = `RM ${catTotals['Kehendak'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+            document.getElementById('cat-card-hutang').innerText = `RM ${catTotals['Hutang'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('cat-card-simpanan').innerText = `RM ${catTotals['Simpanan'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('cat-card-utiliti').innerText = `RM ${catTotals['Utiliti'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('cat-card-lain').innerText = `RM ${catTotals['Lain-lain'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
@@ -1311,8 +1597,7 @@
             });
         }
 
-        
-        // RENDER THIRD TAB CONTENT
+        // RENDER THIRD TAB CONTENT (INCOME)
         function renderIncomeView() {
             const filterBulan = document.getElementById('inc-filter-bulan').value;
             const filterTahun = document.getElementById('inc-filter-tahun').value;
@@ -1368,6 +1653,74 @@
                                     <i class="fa-solid fa-pen-to-square text-xs"></i>
                                 </button>
                                 <button onclick="deleteIncomeItem(${item.id})" class="h-8 w-8 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 dark:bg-rose-950/30 dark:hover:bg-rose-950/50 dark:text-rose-400 transition-colors" title="Padam pendapatan">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        // RENDER FOURTH TAB CONTENT (SIMPANAN)
+        function renderSimpananView() {
+            const filterBulan = document.getElementById('simp-filter-bulan').value;
+            const filterTahun = document.getElementById('simp-filter-tahun').value;
+
+            const filtered = simpananDatabase.filter(item => {
+                const matchBulan = filterBulan === 'Semua' || item.bulan === filterBulan;
+                const matchTahun = filterTahun === 'Semua' || String(item.tahun) === filterTahun;
+                return matchBulan && matchTahun;
+            });
+
+            let totalJumlah = 0;
+            let totalKeluar = 0;
+            
+            filtered.forEach(item => {
+                totalJumlah += item.jumlah;
+                totalKeluar += item.keluar;
+            });
+
+            document.getElementById('simp-card-jumlah').innerText = `RM ${totalJumlah.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+            document.getElementById('simp-card-keluar').innerText = `RM ${totalKeluar.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+            document.getElementById('simp-record-count').innerText = `Menunjukkan ${filtered.length} rekod`;
+
+            const tbody = document.getElementById('simpanan-table-body');
+            tbody.innerHTML = '';
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="py-12 text-center text-slate-400 dark:text-slate-500 text-sm">
+                            <i class="fa-solid fa-piggy-bank block text-3xl mb-2 text-slate-300 dark:text-slate-700"></i>
+                            Tiada rekod simpanan ditemui.
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const statusBadge = item.status === 'Simpan' 
+                    ? `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800 dark:bg-blue-950/40 dark:text-blue-400">Simpan</span>`
+                    : `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-400">Tidak</span>`;
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-all border-b border-slate-100 dark:border-slate-800">
+                        <td class="py-4 px-4 font-bold text-slate-900 dark:text-white">${item.bulan} ${item.tahun}</td>
+                        <td class="py-4 px-4">
+                            <div class="text-xs font-bold text-slate-500 dark:text-slate-400">${item.kategori}</div>
+                            <div class="font-semibold text-slate-900 dark:text-slate-200">${item.namaItem}</div>
+                        </td>
+                        <td class="py-4 px-4 text-right font-medium text-slate-500">RM ${item.anggaran.toFixed(2)}</td>
+                        <td class="py-4 px-4 text-center">${statusBadge}</td>
+                        <td class="py-4 px-4 text-right font-semibold text-emerald-600 dark:text-emerald-400">RM ${item.masuk.toFixed(2)}</td>
+                        <td class="py-4 px-4 text-right font-semibold text-rose-500">RM ${item.keluar.toFixed(2)}</td>
+                        <td class="py-4 px-4 text-right font-black text-slate-900 dark:text-white bg-slate-100/30 dark:bg-slate-800/10">RM ${item.jumlah.toFixed(2)}</td>
+                        <td class="py-4 px-4 text-center">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <button onclick="editSimpananItem(${item.id})" class="h-8 w-8 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 dark:bg-blue-950/30 dark:hover:bg-blue-950/50 dark:text-blue-400 transition-colors" title="Kemas kini simpanan">
+                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                </button>
+                                <button onclick="deleteSimpananItem(${item.id})" class="h-8 w-8 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 dark:bg-rose-950/30 dark:hover:bg-rose-950/50 dark:text-rose-400 transition-colors" title="Padam simpanan">
                                     <i class="fa-solid fa-trash-can text-xs"></i>
                                 </button>
                             </div>
@@ -1482,7 +1835,7 @@
                 async () => {
                     const item = budgetDatabase.find(i => i.id === id);
                     if (item && item.sheetRow) {
-                        await pushDataToSheet("DELETE_ROW", { sheetRow: item.sheetRow });
+                        await pushDataToSheet("DELETE_ROW", { sheetType: 'budget', sheetRow: item.sheetRow });
                         setTimeout(syncWithGoogleSheet, 1500); // Reload the sheet database
                     }
 
@@ -1596,7 +1949,7 @@
                 async () => {
                     const item = incomeDatabase.find(i => i.id === id);
                     if (item && item.sheetRow) {
-                        await pushDataToSheet("DELETE_ROW", { sheetRow: item.sheetRow });
+                        await pushDataToSheet("DELETE_ROW", { sheetType: 'budget', sheetRow: item.sheetRow });
                         setTimeout(syncWithGoogleSheet, 1500); // Reload the sheet database
                     }
 
@@ -1604,6 +1957,110 @@
                     saveToLocalStorage();
                     refreshAllViews();
                     showToast("Rekod Padam", "Pendapatan berjaya dibuang daripada sistem.", "error");
+                }
+            );
+        }
+
+        // --- SIMPANAN RECORD MODAL MANAGEMENT ---
+        function openSimpananModal(action, id = null) {
+            const modal = document.getElementById('modal-simpanan');
+            const title = document.getElementById('modal-simpanan-title');
+            const form = document.getElementById('form-simpanan');
+            
+            form.reset();
+            document.getElementById('simpanan-id').value = '';
+            
+            if (action === 'edit' && id !== null) {
+                title.innerText = "Kemas Kini Simpanan";
+                const item = simpananDatabase.find(i => i.id === id);
+                if (item) {
+                    document.getElementById('simpanan-id').value = item.id;
+                    document.getElementById('simp-bulan').value = item.bulan;
+                    document.getElementById('simp-tahun').value = item.tahun;
+                    document.getElementById('simp-kategori').value = item.kategori;
+                    document.getElementById('simp-namaItem').value = item.namaItem;
+                    document.getElementById('simp-anggaran').value = item.anggaran;
+                    document.getElementById('simp-status').value = item.status;
+                    document.getElementById('simp-masuk').value = item.masuk;
+                    document.getElementById('simp-keluar').value = item.keluar;
+                }
+            } else {
+                title.innerText = "Daftar Simpanan Baru";
+            }
+            
+            modal.classList.remove('hidden');
+        }
+
+        function closeSimpananModal() {
+            document.getElementById('modal-simpanan').classList.add('hidden');
+        }
+
+        async function saveSimpananForm(event) {
+            event.preventDefault();
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            const originalBtnHtml = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
+
+            const id = document.getElementById('simpanan-id').value;
+            const payloadData = {
+                bulan: document.getElementById('simp-bulan').value,
+                tahun: parseInt(document.getElementById('simp-tahun').value, 10),
+                kategori: document.getElementById('simp-kategori').value,
+                namaItem: document.getElementById('simp-namaItem').value,
+                anggaran: parseFloat(document.getElementById('simp-anggaran').value) || 0,
+                status: document.getElementById('simp-status').value,
+                masuk: parseFloat(document.getElementById('simp-masuk').value) || 0,
+                keluar: parseFloat(document.getElementById('simp-keluar').value) || 0,
+            };
+            payloadData.jumlah = payloadData.masuk - payloadData.keluar;
+
+            const existingItem = id ? simpananDatabase.find(i => i.id === parseInt(id, 10)) : null;
+            let successPush = false;
+
+            if (id && existingItem) {
+                simpananDatabase[simpananDatabase.indexOf(existingItem)] = { ...existingItem, ...payloadData };
+                if (existingItem.sheetRow) {
+                    payloadData.sheetRow = existingItem.sheetRow;
+                    successPush = await pushDataToSheet("UPDATE_SIMPANAN", payloadData);
+                }
+            } else {
+                simpananDatabase.push({
+                    id: Date.now(),
+                    sheetRow: null,
+                    ...payloadData
+                });
+                successPush = await pushDataToSheet("ADD_SIMPANAN", payloadData);
+            }
+
+            saveToLocalStorage();
+            closeSimpananModal();
+            refreshAllViews();
+
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnHtml;
+
+            if(successPush) setTimeout(syncWithGoogleSheet, 1500);
+        }
+
+        function editSimpananItem(id) {
+            openSimpananModal('edit', id);
+        }
+
+        function deleteSimpananItem(id) {
+            showConfirmDialog(
+                "Padam Rekod Simpanan?",
+                "Adakah anda pasti mahu memadam rekod simpanan ini?",
+                async () => {
+                    const item = simpananDatabase.find(i => i.id === id);
+                    if (item && item.sheetRow) {
+                        await pushDataToSheet("DELETE_ROW", { sheetType: 'simpanan', sheetRow: item.sheetRow });
+                        setTimeout(syncWithGoogleSheet, 1500);
+                    }
+                    simpananDatabase = simpananDatabase.filter(i => i.id !== id);
+                    saveToLocalStorage();
+                    refreshAllViews();
+                    showToast("Rekod Padam", "Rekod simpanan telah berjaya dipadam.", "error");
                 }
             );
         }
