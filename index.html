@@ -5,48 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UrusDuit - Dashboard Pengurusan Kewangan</title>
     
-    <!-- ==================== PWA META TAGS ==================== -->
-    <!-- Web App Manifest -->
-    <link rel="manifest" href="manifest.json">
-    
-    <!-- Theme Color (Android Chrome toolbar color) -->
-    <meta name="theme-color" content="#16a34a" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#0b1329" media="(prefers-color-scheme: dark)">
-    
-    <!-- iOS / Safari PWA Support -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="UrusDuit">
-    <link rel="apple-touch-icon" href="icons/icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="icons/icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="96x96" href="icons/icon-96x96.png">
-    <link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128x128.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
-    <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512x512.png">
-    
-    <!-- Windows / Microsoft Tiles -->
-    <meta name="msapplication-TileColor" content="#16a34a">
-    <meta name="msapplication-TileImage" content="icons/icon-144x144.png">
-    <meta name="msapplication-tap-highlight" content="no">
-    
-    <!-- Mobile Optimization -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="HandheldFriendly" content="true">
-    
-    <!-- SEO / Open Graph -->
-    <meta name="description" content="UrusDuit - Aplikasi pengurusan dan rekod kewangan peribadi anda.">
-    <meta property="og:title" content="UrusDuit - Dashboard Kewangan">
-    <meta property="og:description" content="Urus dan rekod kewangan peribadi dengan mudah.">
-    <meta property="og:type" content="website">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-96x96.png">
-    <link rel="shortcut icon" href="icons/icon-96x96.png">
-    <!-- ========================================================= -->
-
     <!-- Google Fonts & Font Awesome Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -122,31 +80,6 @@
     
     <!-- TOAST NOTIFICATION SYSTEM -->
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm"></div>
-
-    <!-- ==================== PWA INSTALL BANNER ==================== -->
-    <div id="pwa-install-banner" class="hidden fixed bottom-0 left-0 right-0 z-50 p-3 sm:p-4">
-        <div class="max-w-lg mx-auto bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl shadow-black/20 p-4 flex items-center gap-4 glass-panel">
-            <!-- App Icon -->
-            <div class="h-14 w-14 rounded-2xl bg-gradient-to-tr from-primary-600 to-emerald-400 flex items-center justify-center text-white shadow-lg shadow-primary-500/30 shrink-0">
-                <i class="fa-solid fa-wallet text-2xl"></i>
-            </div>
-            <!-- Text -->
-            <div class="flex-grow min-w-0">
-                <h4 class="font-bold text-slate-900 dark:text-white text-sm">Pasang UrusDuit</h4>
-                <p class="text-xs text-slate-500 dark:text-slate-400 truncate">Tambah ke skrin utama untuk akses lebih pantas</p>
-            </div>
-            <!-- Buttons -->
-            <div class="flex items-center gap-2 shrink-0">
-                <button id="pwa-install-dismiss" class="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-                <button id="pwa-install-btn" class="px-4 py-2 text-xs font-bold bg-primary-600 hover:bg-primary-700 text-white rounded-xl transition-all shadow-md shadow-primary-600/20 flex items-center gap-1.5">
-                    <i class="fa-solid fa-download"></i> Pasang
-                </button>
-            </div>
-        </div>
-    </div>
-    <!-- ============================================================ -->
 
     <!-- MAIN NAVBAR -->
     <header class="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 glass-panel">
@@ -451,7 +384,7 @@
             </div>
 
             <!-- Category Metric Cards (6 Grid) -->
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4">
                 <div class="bg-amber-50 dark:bg-amber-950/20 p-4 rounded-2xl border border-amber-200 dark:border-amber-900/50">
                     <span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-1 block">Komitmen</span>
                     <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-komitmen">RM 0.00</h3>
@@ -468,6 +401,10 @@
                     <span class="text-[10px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider mb-1 block">Hutang</span>
                     <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-hutang">RM 0.00</h3>
                 </div>
+                <div class="bg-cyan-50 dark:bg-cyan-950/20 p-4 rounded-2xl border border-cyan-200 dark:border-cyan-900/50">
+                    <span class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider mb-1 block">Kenderaan</span>
+                    <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-kenderaan">RM 0.00</h3>
+                </div>
                 <div class="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-2xl border border-blue-200 dark:border-blue-900/50">
                     <span class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1 block">Simpanan</span>
                     <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-simpanan">RM 0.00</h3>
@@ -480,11 +417,11 @@
                     <span class="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 block">Lain-lain</span>
                     <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-lain">RM 0.00</h3>
                 </div>
-                <div class="bg-cyan-50 dark:bg-cyan-950/20 p-4 rounded-2xl border border-cyan-200 dark:border-cyan-900/50">
-                    <span class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider mb-1 block">Kenderaan</span>
-                    <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-kenderaan">RM 0.00</h3>
+                <div class="bg-slate-800 dark:bg-slate-800 p-4 rounded-2xl border border-slate-700 dark:border-slate-700 shadow-sm col-span-1 md:col-span-1">
+                    <span class="text-[10px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider mb-1 block">Anggaran Kos (Semua)</span>
+                    <h3 class="text-lg font-black text-white" id="cat-card-anggaran-keseluruhan">RM 0.00</h3>
                 </div>
-                <div class="bg-slate-800 dark:bg-slate-800 p-4 rounded-2xl border border-slate-700 dark:border-slate-700 shadow-sm">
+                <div class="bg-slate-800 dark:bg-slate-800 p-4 rounded-2xl border border-slate-700 dark:border-slate-700 shadow-sm col-span-1 md:col-span-1">
                     <span class="text-[10px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider mb-1 block">Jumlah Sebenar (Semua)</span>
                     <h3 class="text-lg font-black text-white" id="cat-card-sebenar">RM 0.00</h3>
                 </div>
@@ -1000,7 +937,7 @@
     <script>
         
         // URL WEB APP GOOGLE APPS SCRIPT (Sila tampal Web App URL anda dari Apps Script di sini)
-        const APPSCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwvxkP_HQPrD3pyr8Th5QNqEJIQjLVWbQAg-YCmcg3Cc8VYMTwwLk4w2DPjjW7S_8_V/exec"; 
+        const APPSCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwAfLdzKbhXQ_yBsUt9Jve5hLoIEi6ZdbSkIqkP0Zj9xJguydwXtTTChM1RINTFOYsL/exec"; 
         
         // DEFAULT SEED DATA (Used if Google Sheet cannot be loaded or is offline)
         const defaultBudgetItems = [
@@ -1185,8 +1122,8 @@
                 const jumlahSebenar = parseFloat(r[sebenarIdx] ? r[sebenarIdx].trim().replace(/[^\d.]/g, '') : '0') || 0;
                 const kasar = parseFloat(r[kasarIdx] ? r[kasarIdx].trim().replace(/[^\d.]/g, '') : '0') || 0;
 
-                // Build budget model
-                if (namaItem || kategori) {
+                // Build budget model (Abaikan item "Pendapatan" dari jadual Kategori)
+                if ((namaItem || kategori) && kategori !== 'Pendapatan') {
                     budgetList.push({
                         id: sheetRowNumber, // Gunakan sheet row sebagai rujukan utama ID
                         sheetRow: sheetRowNumber,
@@ -1201,7 +1138,7 @@
                 }
 
                 // Parse Income properties proportionally from total Gross Income row inside Google Sheet if direct split is not present
-                const incomeKey = `${bulan}-${tahun}`;
+                const incomeKey = `${bulan}-${tahun}-${sheetRowNumber}`; // Guna sheetRowNumber sebagai identifier unik
                 if (kasar > 0 && !processedIncomeMonths.has(incomeKey)) {
                     processedIncomeMonths.add(incomeKey);
                     
@@ -1628,6 +1565,7 @@
                 'Hutang': 0, 'Kenderaan': 0, 'Simpanan': 0, 'Utiliti': 0, 'Lain-lain': 0
             };
             let totalSebenarKeseluruhan = 0;
+            let totalAnggaranKeseluruhan = 0;
             
             filtered.forEach(item => {
                 if (catTotals[item.kategori] !== undefined) {
@@ -1636,6 +1574,7 @@
                     catTotals['Lain-lain'] += item.anggaranKos;
                 }
                 totalSebenarKeseluruhan += item.jumlahSebenar;
+                totalAnggaranKeseluruhan += item.anggaranKos;
             });
 
             document.getElementById('cat-card-komitmen').innerText = `RM ${catTotals['Komitmen'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
@@ -1646,6 +1585,7 @@
             document.getElementById('cat-card-simpanan').innerText = `RM ${catTotals['Simpanan'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('cat-card-utiliti').innerText = `RM ${catTotals['Utiliti'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('cat-card-lain').innerText = `RM ${catTotals['Lain-lain'].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+            document.getElementById('cat-card-anggaran-keseluruhan').innerText = `RM ${totalAnggaranKeseluruhan.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('cat-card-sebenar').innerText = `RM ${totalSebenarKeseluruhan.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
 
             document.getElementById('cat-item-count').innerText = `Menunjukkan ${filtered.length} rekod`;
@@ -1769,6 +1709,7 @@
             const filterTahun = document.getElementById('simp-filter-tahun').value;
             const filterNamaItem = document.getElementById('simp-filter-namaItem') ? document.getElementById('simp-filter-namaItem').value : 'Semua';
 
+            // Dapatkan senarai simpanan yang ditapis berdasarkan tahun dan bulan SEMASA
             const filtered = simpananDatabase.filter(item => {
                 const matchBulan = filterBulan === 'Semua' || item.bulan === filterBulan;
                 const matchTahun = filterTahun === 'Semua' || String(item.tahun) === filterTahun;
@@ -1776,16 +1717,58 @@
                 return matchBulan && matchTahun && matchNamaItem;
             });
 
-            let totalJumlah = 0;
-            let totalKeluar = 0;
+            // Susun fungsi untuk dapatkan bulan sebelumnya (contoh Januari -> Disember tahun lepas)
+            const bulanList = ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"];
+            let bulanSebelum = null;
+            let tahunSebelum = null;
+
+            if (filterBulan !== 'Semua' && filterTahun !== 'Semua') {
+                const indeksBulanSemasa = bulanList.indexOf(filterBulan);
+                if (indeksBulanSemasa === 0) { // Januari
+                    bulanSebelum = "Disember";
+                    tahunSebelum = (parseInt(filterTahun) - 1).toString();
+                } else if (indeksBulanSemasa > 0) {
+                    bulanSebelum = bulanList[indeksBulanSemasa - 1];
+                    tahunSebelum = filterTahun;
+                }
+            }
+
+            // Kira jumlah simpanan bulan sebelumnya (carry forward)
+            let bakiBawaKeHadapan = 0;
+            if (bulanSebelum && tahunSebelum) {
+                const simpananBulanSebelum = simpananDatabase.filter(item => {
+                    return item.bulan === bulanSebelum && String(item.tahun) === tahunSebelum;
+                });
+                simpananBulanSebelum.forEach(item => {
+                    bakiBawaKeHadapan += item.jumlah;
+                });
+            }
+
+            // Kira masuk, keluar dan jumlah untuk bulan SEMASA
+            let totalMasukBulanIni = 0;
+            let totalKeluarBulanIni = 0;
             
             filtered.forEach(item => {
-                totalJumlah += item.jumlah;
-                totalKeluar += item.keluar;
+                totalMasukBulanIni += item.masuk;
+                totalKeluarBulanIni += item.keluar;
             });
 
-            document.getElementById('simp-card-jumlah').innerText = `RM ${totalJumlah.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
-            document.getElementById('simp-card-keluar').innerText = `RM ${totalKeluar.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+            // Jumlah simpanan semasa = Baki Bawa Ke Hadapan + (Total Masuk Bulan Ini - Total Keluar Bulan Ini)
+            // Jika filter diset pada "Semua", maka ia adalah jumlah mutlak semua bulan
+            let totalJumlahSemasa = 0;
+            if (filterBulan !== 'Semua') {
+                totalJumlahSemasa = bakiBawaKeHadapan + totalMasukBulanIni - totalKeluarBulanIni;
+            } else {
+                 simpananDatabase.forEach(item => {
+                     totalJumlahSemasa += item.jumlah;
+                 });
+                 // Jika filter "Semua", total keluar paparkan semua rekod
+                 totalKeluarBulanIni = simpananDatabase.reduce((sum, item) => sum + item.keluar, 0);
+            }
+
+            document.getElementById('simp-card-jumlah').innerText = `RM ${totalJumlahSemasa.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+            // Simpanan Keluar memaparkan nilai bagi bulan ditapis.
+            document.getElementById('simp-card-keluar').innerText = `RM ${totalKeluarBulanIni.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('simp-record-count').innerText = `Menunjukkan ${filtered.length} rekod`;
 
             const tbody = document.getElementById('simpanan-table-body');
@@ -1800,6 +1783,18 @@
                         </td>
                     </tr>`;
                 return;
+            }
+
+            // Baris Baki Bawa Ke Hadapan (Hanya tunjuk jika ada penapis spesifik bulan & ada nilai baki)
+            if (filterBulan !== 'Semua' && bakiBawaKeHadapan > 0) {
+                 tbody.innerHTML += `
+                    <tr class="bg-blue-50/50 dark:bg-blue-900/10 border-b border-blue-100 dark:border-blue-900/30">
+                        <td class="py-3 px-4 font-semibold text-slate-500 italic" colspan="4">Baki Bawa Ke Hadapan (${bulanSebelum} ${tahunSebelum})</td>
+                        <td class="py-3 px-4 text-right"></td>
+                        <td class="py-3 px-4 text-right"></td>
+                        <td class="py-3 px-4 text-right font-bold text-blue-600 dark:text-blue-400">RM ${bakiBawaKeHadapan.toFixed(2)}</td>
+                        <td></td>
+                    </tr>`;
             }
 
             filtered.forEach(item => {
@@ -2220,85 +2215,6 @@
         
         // --- COLD SYSTEM INITIALIZATION ---
         window.onload = function() {
-            // ==================== PWA: Service Worker Registration ====================
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('./sw.js', { scope: './' })
-                    .then((registration) => {
-                        console.log('[PWA] Service Worker berjaya didaftarkan:', registration.scope);
-                        
-                        // Semak update SW tersedia
-                        registration.addEventListener('updatefound', () => {
-                            const newWorker = registration.installing;
-                            newWorker.addEventListener('statechange', () => {
-                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    showToast('Kemaskini Tersedia', 'Versi baru UrusDuit tersedia. Muat semula untuk kemaskini.', 'info');
-                                }
-                            });
-                        });
-                    })
-                    .catch((error) => {
-                        console.error('[PWA] Service Worker gagal didaftarkan:', error);
-                    });
-                    
-                // Dengar mesej dari Service Worker
-                navigator.serviceWorker.addEventListener('message', (event) => {
-                    if (event.data && event.data.type === 'BACKGROUND_SYNC') {
-                        showToast('Segerak Data', event.data.message, 'info');
-                    }
-                });
-            }
-            
-            // ==================== PWA: Install Prompt (Android) ====================
-            let deferredPrompt;
-            const installBanner = document.getElementById('pwa-install-banner');
-            const installBtn = document.getElementById('pwa-install-btn');
-            const installDismiss = document.getElementById('pwa-install-dismiss');
-            
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                // Tunjuk banner selepas 3 saat
-                setTimeout(() => {
-                    if (installBanner) installBanner.classList.remove('hidden');
-                }, 3000);
-            });
-            
-            if (installBtn) {
-                installBtn.addEventListener('click', async () => {
-                    if (installBanner) installBanner.classList.add('hidden');
-                    if (deferredPrompt) {
-                        deferredPrompt.prompt();
-                        const { outcome } = await deferredPrompt.userChoice;
-                        console.log(`[PWA] Pengguna ${outcome === 'accepted' ? 'terima' : 'tolak'} pemasangan.`);
-                        if (outcome === 'accepted') {
-                            showToast('App Dipasang! 🎉', 'UrusDuit telah berjaya dipasang pada peranti anda.', 'success');
-                        }
-                        deferredPrompt = null;
-                    }
-                });
-            }
-            
-            if (installDismiss) {
-                installDismiss.addEventListener('click', () => {
-                    if (installBanner) installBanner.classList.add('hidden');
-                    // Jangan tunjuk lagi untuk 7 hari
-                    localStorage.setItem('pwa-install-dismissed', Date.now() + 7 * 24 * 60 * 60 * 1000);
-                });
-            }
-            
-            // Semak jika sudah dismiss sebelum ini
-            const dismissedUntil = localStorage.getItem('pwa-install-dismissed');
-            if (dismissedUntil && Date.now() < parseInt(dismissedUntil)) {
-                if (installBanner) installBanner.classList.add('hidden');
-            }
-            
-            // Detect jika sudah dipasang sebagai PWA standalone
-            if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-                console.log('[PWA] App berjalan dalam mod standalone (dipasang).');
-                // Sembunyikan banner install jika sudah dipasang
-                if (installBanner) installBanner.classList.add('hidden');
-            }
-            // ====================================================================
             // Dark Mode / Light Mode Local Preference Handlers
             const themeToggleBtn = document.getElementById('theme-toggle');
             
