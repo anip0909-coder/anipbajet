@@ -937,7 +937,7 @@
     <script>
         
         // URL WEB APP GOOGLE APPS SCRIPT (Sila tampal Web App URL anda dari Apps Script di sini)
-        const APPSCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwAfLdzKbhXQ_yBsUt9Jve5hLoIEi6ZdbSkIqkP0Zj9xJguydwXtTTChM1RINTFOYsL/exec"; 
+        const APPSCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwvxkP_HQPrD3pyr8Th5QNqEJIQjLVWbQAg-YCmcg3Cc8VYMTwwLk4w2DPjjW7S_8_V/exec"; 
         
         // DEFAULT SEED DATA (Used if Google Sheet cannot be loaded or is offline)
         const defaultBudgetItems = [
@@ -1138,7 +1138,7 @@
                 }
 
                 // Parse Income properties proportionally from total Gross Income row inside Google Sheet if direct split is not present
-                const incomeKey = `${bulan}-${tahun}-${sheetRowNumber}`; // Guna sheetRowNumber sebagai identifier unik
+                const incomeKey = `${bulan}-${tahun}`; // Memastikan hanya SATU rekod bulanan sahaja diparsing
                 if (kasar > 0 && !processedIncomeMonths.has(incomeKey)) {
                     processedIncomeMonths.add(incomeKey);
                     
@@ -1644,10 +1644,17 @@
             const filterBulan = document.getElementById('inc-filter-bulan').value;
             const filterTahun = document.getElementById('inc-filter-tahun').value;
 
-            const filtered = incomeDatabase.filter(item => {
+            let filtered = incomeDatabase.filter(item => {
                 const matchBulan = filterBulan === 'Semua' || item.bulan === filterBulan;
                 const matchTahun = filterTahun === 'Semua' || String(item.tahun) === filterTahun;
                 return matchBulan && matchTahun;
+            });
+
+            // Susun ikut turutan bulan (Januari hingga Disember)
+            const monthOrder = { "Januari": 1, "Februari": 2, "Mac": 3, "April": 4, "Mei": 5, "Jun": 6, "Julai": 7, "Ogos": 8, "September": 9, "Oktober": 10, "November": 11, "Disember": 12 };
+            filtered.sort((a, b) => {
+                if (a.tahun !== b.tahun) return b.tahun - a.tahun; // Tahun terkini di atas
+                return monthOrder[a.bulan] - monthOrder[b.bulan]; // Bulan Jan -> Dis
             });
 
             // Calculate Metrics
