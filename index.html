@@ -77,7 +77,6 @@
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
 
-    
     <!-- TOAST NOTIFICATION SYSTEM -->
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm"></div>
 
@@ -104,7 +103,7 @@
                 </div>
 
                 <button onclick="syncWithGoogleSheet()" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary-500 hover:text-white dark:hover:bg-primary-600 transition-colors" title="Muat Semula Google Sheet">
-                    <i class="fa-solid fa-rotate animate-hover-spin" id="sync-icon"></i>
+                    <i class="fa-solid fa-rotate" id="sync-icon"></i>
                 </button>
 
                 <!-- Theme Toggle Button -->
@@ -218,7 +217,7 @@
                         </div>
                     </div>
                     <h3 class="text-2xl font-black text-slate-900 dark:text-white" id="card-total-income">RM 0.00</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" id="card-total-income-sub">Gaji Kasar & Semua Elaun</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" id="card-total-income-sub">Baki Bersih Diterima</p>
                 </div>
 
                 <!-- Commitments Card -->
@@ -374,7 +373,6 @@
                         <label for="cat-filter" class="sr-only">Tapis Kategori</label>
                         <select id="cat-filter" onchange="renderCategoryView()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
                             <option value="Semua">Semua Kategori</option>
-                            <!-- Dynamic category list injected here -->
                         </select>
                     </div>
                     <button onclick="openBudgetModal('add')" class="w-full sm:w-auto px-4 py-2 text-sm bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-primary-600/10 flex items-center justify-center gap-2">
@@ -383,7 +381,7 @@
                 </div>
             </div>
 
-            <!-- Category Metric Cards (6 Grid) -->
+            <!-- Category Metric Cards (10 Grid) -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4">
                 <div class="bg-amber-50 dark:bg-amber-950/20 p-4 rounded-2xl border border-amber-200 dark:border-amber-900/50">
                     <span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-1 block">Komitmen</span>
@@ -465,7 +463,7 @@
                     </div>
                     <div>
                         <h2 class="font-bold text-slate-900 dark:text-slate-100">Pengurusan Pendapatan (Income)</h2>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Rekod gaji pokok dan pecahan pelbagai elaun rasmi anda.</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Rekod pendapatan bulanan dan jumlah potongan peribadi anda.</p>
                     </div>
                 </div>
 
@@ -604,7 +602,6 @@
                         <label for="simp-filter-namaItem" class="sr-only">Tapis Nama Item</label>
                         <select id="simp-filter-namaItem" onchange="renderSimpananView()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
                             <option value="Semua">Semua Item</option>
-                            <!-- Dynamic list injected here -->
                         </select>
                     </div>
                     <button onclick="openSimpananModal('add')" class="w-full sm:w-auto px-4 py-2 text-sm bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-primary-600/10 flex items-center justify-center gap-2">
@@ -754,7 +751,6 @@
                     </select>
                 </div>
 
-                <!-- Footer button action inside Form -->
                 <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-3">
                     <button type="button" onclick="closeBudgetModal()" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-400 transition-colors">Batal</button>
                     <button type="submit" class="px-5 py-2 rounded-xl text-sm font-semibold bg-primary-600 hover:bg-primary-700 text-white shadow-md shadow-primary-600/10 transition-all flex items-center gap-2">
@@ -818,7 +814,6 @@
                     </div>
                 </div>
 
-                <!-- Footer button action inside Form -->
                 <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-3">
                     <button type="button" onclick="closeIncomeModal()" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-400 transition-colors">Batal</button>
                     <button type="submit" class="px-5 py-2 rounded-xl text-sm font-semibold bg-primary-600 hover:bg-primary-700 text-white shadow-md shadow-primary-600/10 transition-all flex items-center gap-2">
@@ -932,12 +927,10 @@
         </div>
     </div>
 
-
     <!-- JAVASCRIPT LOGIC SECTION -->
     <script>
-        
         // URL WEB APP GOOGLE APPS SCRIPT (Sila tampal Web App URL anda dari Apps Script di sini)
-        const APPSCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwvxkP_HQPrD3pyr8Th5QNqEJIQjLVWbQAg-YCmcg3Cc8VYMTwwLk4w2DPjjW7S_8_V/exec"; 
+        const APPSCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwAfLdzKbhXQ_yBsUt9Jve5hLoIEi6ZdbSkIqkP0Zj9xJguydwXtTTChM1RINTFOYsL/exec"; 
         
         // DEFAULT SEED DATA (Used if Google Sheet cannot be loaded or is offline)
         const defaultBudgetItems = [
@@ -954,8 +947,8 @@
         ];
 
         const defaultIncomeItems = [
-            { id: 1, bulan: "Januari", tahun: 2026, pendapatanKasar: 5500, potongan: 550 },
-            { id: 2, bulan: "Februari", tahun: 2026, pendapatanKasar: 5500, potongan: 550 }
+            { id: 1, bulan: "Januari", tahun: 2026, pendapatanKasar: 5500, potongan: 550, pendapatanBersih: 4950 },
+            { id: 2, bulan: "Februari", tahun: 2026, pendapatanKasar: 5500, potongan: 550, pendapatanBersih: 4950 }
         ];
 
         const defaultSimpananItems = [
@@ -970,11 +963,12 @@
         let currentTab = 'dashboard';
         let categoryChartInstance = null;
         let isGoogleSheetConnected = false;
-        let isSyncing = false; // Flag to prevent multiple simultaneous syncs
 
-        // CONSTANTS & CONFIGURATION
+        // CONSTANTS & CONFIGURATION (Updated with exact GIDs)
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=914475172";
+        const INCOME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=142125272";
         const SIMPANAN_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=611554426";
+        
         const CATEGORY_COLORS = {
             'Komitmen': '#f59e0b',  // Amber
             'Keperluan': '#10b981', // Emerald
@@ -986,7 +980,6 @@
             'Lain-lain': '#64748b'  // Slate
         };
 
-        
         // FETCH DATA FROM GOOGLE SHEETS
         async function syncWithGoogleSheet() {
             const syncIcon = document.getElementById('sync-icon');
@@ -1001,39 +994,35 @@
             statusText.innerText = "Menghubung ke Google Sheet...";
             
             try {
-                // Fetch direct published CSV output for both sheets
-                const [budgetResponse, simpResponse] = await Promise.all([
+                // Fetch direct published CSV output for all three sheets
+                const [budgetResponse, simpResponse, incResponse] = await Promise.all([
                     fetch(GOOGLE_SHEET_CSV_URL),
-                    fetch(SIMPANAN_CSV_URL).catch(() => null) // Allow simp to fail gracefully if not published yet
+                    fetch(SIMPANAN_CSV_URL).catch(() => null),
+                    fetch(INCOME_CSV_URL).catch(() => null)
                 ]);
                 
                 if (!budgetResponse.ok) throw new Error("CORS or Connection Error from Google Spreadsheet.");
                 
                 const budgetCsvText = await budgetResponse.text();
-                const parsed = parseGoogleSheetCSV(budgetCsvText);
+                budgetDatabase = parseGoogleSheetCSV(budgetCsvText);
 
-                if(simpResponse && simpResponse.ok) {
+                if (simpResponse && simpResponse.ok) {
                     const simpCsvText = await simpResponse.text();
                     simpananDatabase = parseSimpananCSV(simpCsvText);
                 }
                 
-                if(parsed.budget.length > 0) {
-                    budgetDatabase = parsed.budget;
-                    
-                    if (parsed.income.length > 0) {
-                        incomeDatabase = parsed.income;
-                    }
-                    
-                    // Commit to localStorage
-                    saveToLocalStorage();
-                    
-                    isGoogleSheetConnected = true;
-                    statusDot.className = "h-2.5 w-2.5 rounded-full bg-emerald-500";
-                    statusText.innerText = "Google Sheet Terhubung!";
-                    showToast("Sambungan Berjaya!", "Data telah berjaya dimuat turun daripada Google Sheet anda.", "success");
-                } else {
-                    throw new Error("No usable data parsed.");
+                if (incResponse && incResponse.ok) {
+                    const incCsvText = await incResponse.text();
+                    incomeDatabase = parseIncomeCSV(incCsvText);
                 }
+                
+                // Commit to localStorage
+                saveToLocalStorage();
+                
+                isGoogleSheetConnected = true;
+                statusDot.className = "h-2.5 w-2.5 rounded-full bg-emerald-500";
+                statusText.innerText = "Google Sheet Terhubung!";
+                showToast("Sambungan Berjaya!", "Data telah berjaya dimuat turun daripada Google Sheet anda.", "success");
             } catch (error) {
                 console.warn("Using fallback local database due to CORS or connection issue:", error);
                 isGoogleSheetConnected = false;
@@ -1046,8 +1035,8 @@
             }
         }
 
-        // CSV PARSER ENGINE Custom-made for Google Spreadsheet Format
-        function parseGoogleSheetCSV(csvText) {
+        // Shared CSV parsing logic
+        function parseCSVToArray(csvText) {
             const rows = [];
             let row = [""];
             let insideQuote = false;
@@ -1078,33 +1067,31 @@
             if (row.length > 1 || row[0] !== "") {
                 rows.push(row);
             }
-            
+            return rows;
+        }
+
+        // CSV PARSER ENGINE specifically for Budget tab (GID 914475172)
+        function parseGoogleSheetCSV(csvText) {
+            const rows = parseCSVToArray(csvText);
             const budgetList = [];
-            const incomeList = [];
             
-            if (rows.length < 2) return { budget: [], income: [] };
+            if (rows.length < 2) return [];
             
             const headers = rows[0].map(h => h.trim());
             
-            // Find critical header index
             const bulanIdx = headers.findIndex(h => h.toLowerCase().includes('bulan'));
             const tahunIdx = headers.findIndex(h => h.toLowerCase().includes('tahun'));
             const kategoriIdx = headers.findIndex(h => h.toLowerCase().includes('kategori'));
             const namaItemIdx = headers.findIndex(h => h.toLowerCase().includes('nama item') || h.toLowerCase().includes('namaitem'));
-            const anggaranIdx = headers.findIndex(h => h.toLowerCase().includes('anggaran kos') || h.toLowerCase().includes('anggaran'));
+            const anggaranIdx = headers.findIndex(h => h.toLowerCase().includes('anggaran'));
             const statusIdx = headers.findIndex(h => h.toLowerCase().includes('status'));
-            const sebenarIdx = headers.findIndex(h => h.toLowerCase().includes('jumlah sebenar') || h.toLowerCase().includes('sebenar'));
-            const kasarIdx = headers.findIndex(h => h.toLowerCase().includes('pendapatan kasar') || h.toLowerCase().includes('kasar'));
-            const bersihIdx = headers.findIndex(h => h.toLowerCase().includes('pendapatan bersih') || h.toLowerCase().includes('bersih'));
-
-            // Track unique incomes to prevent duplicates from row mapping
-            const processedIncomeMonths = new Set();
+            const sebenarIdx = headers.findIndex(h => h.toLowerCase().includes('sebenar') || h.toLowerCase().includes('jumlah sebenar'));
 
             for (let i = 1; i < rows.length; i++) {
                 const r = rows[i];
                 if (r.length < headers.length) continue;
                 
-                const sheetRowNumber = i + 1; // Baris sebenar dalam Google Sheet (kerana baris 1 adalah Header)
+                const sheetRowNumber = i + 1;
 
                 const bulan = r[bulanIdx] ? r[bulanIdx].trim() : 'Januari';
                 const tahun = r[tahunIdx] ? parseInt(r[tahunIdx].trim(), 10) || 2026 : 2026;
@@ -1112,20 +1099,17 @@
                 const namaItem = r[namaItemIdx] ? r[namaItemIdx].trim() : '';
                 const anggaranKos = parseFloat(r[anggaranIdx] ? r[anggaranIdx].trim().replace(/[^\d.]/g, '') : '0') || 0;
                 
-                // Map status "Selesai" vs "Belum"
                 let statusVal = r[statusIdx] ? r[statusIdx].trim() : 'Belum';
                 let status = statusVal;
-                if(statusVal.toLowerCase() === 'paid' || statusVal.toLowerCase() === 'complete') {
+                if(statusVal.toLowerCase() === 'paid' || statusVal.toLowerCase() === 'complete' || statusVal.toLowerCase() === 'selesai') {
                     status = 'Selesai';
                 }
                 
                 const jumlahSebenar = parseFloat(r[sebenarIdx] ? r[sebenarIdx].trim().replace(/[^\d.]/g, '') : '0') || 0;
-                const kasar = parseFloat(r[kasarIdx] ? r[kasarIdx].trim().replace(/[^\d.]/g, '') : '0') || 0;
 
-                // Build budget model (Abaikan item "Pendapatan" dari jadual Kategori)
-                if ((namaItem || kategori) && kategori !== 'Pendapatan') {
+                if (namaItem || kategori) {
                     budgetList.push({
-                        id: sheetRowNumber, // Gunakan sheet row sebagai rujukan utama ID
+                        id: sheetRowNumber,
                         sheetRow: sheetRowNumber,
                         bulan,
                         tahun,
@@ -1136,60 +1120,56 @@
                         jumlahSebenar
                     });
                 }
+            }
+            return budgetList;
+        }
 
-                // Parse Income properties proportionally from total Gross Income row inside Google Sheet if direct split is not present
-                const incomeKey = `${bulan}-${tahun}`; // Memastikan hanya SATU rekod bulanan sahaja diparsing
-                if (kasar > 0 && !processedIncomeMonths.has(incomeKey)) {
-                    processedIncomeMonths.add(incomeKey);
-                    
-                    const bersih = parseFloat(r[bersihIdx] ? r[bersihIdx].trim().replace(/[^\d.]/g, '') : '0') || 0;
-                    const potongan = kasar > bersih ? kasar - bersih : 0;
+        // CSV PARSER ENGINE specifically for Income tab (GID 142125272)
+        function parseIncomeCSV(csvText) {
+            const rows = parseCSVToArray(csvText);
+            const incomeList = [];
+            
+            if (rows.length < 2) return [];
+            
+            const headers = rows[0].map(h => h.trim());
+            const bulanIdx = headers.findIndex(h => h.toLowerCase().includes('bulan'));
+            const tahunIdx = headers.findIndex(h => h.toLowerCase().includes('tahun'));
+            const kasarIdx = headers.findIndex(h => h.toLowerCase().includes('kasar'));
+            const potonganIdx = headers.findIndex(h => h.toLowerCase().includes('potongan'));
+            const bersihIdx = headers.findIndex(h => h.toLowerCase().includes('bersih'));
 
+            for (let i = 1; i < rows.length; i++) {
+                const r = rows[i];
+                if (r.length < headers.length) continue;
+                
+                const sheetRowNumber = i + 1;
+                const bulan = r[bulanIdx] ? r[bulanIdx].trim() : 'Januari';
+                const tahun = r[tahunIdx] ? parseInt(r[tahunIdx].trim(), 10) || 2026 : 2026;
+                
+                const kasar = parseFloat(r[kasarIdx] ? r[kasarIdx].trim().replace(/[^\d.]/g, '') : '0') || 0;
+                const potongan = parseFloat(r[potonganIdx] ? r[potonganIdx].trim().replace(/[^\d.]/g, '') : '0') || 0;
+                const bersih = parseFloat(r[bersihIdx] ? r[bersihIdx].trim().replace(/[^\d.]/g, '') : '0') || (kasar - potongan);
+
+                if (kasar > 0) {
                     incomeList.push({
-                        id: sheetRowNumber + 100000, // ID rawak untuk membezakan dari bajet
+                        id: sheetRowNumber + 100000, 
                         sheetRow: sheetRowNumber,
                         bulan,
                         tahun,
                         pendapatanKasar: kasar,
-                        potongan: potongan
+                        potongan: potongan,
+                        pendapatanBersih: bersih
                     });
                 }
             }
-            
-            return { budget: budgetList, income: incomeList };
+            return incomeList;
         }
 
-        // CSV PARSER ENGINE for Simpanan Tab
+        // CSV PARSER ENGINE specifically for Simpanan Tab (GID 611554426)
         function parseSimpananCSV(csvText) {
-            const rows = [];
-            let row = [""];
-            let insideQuote = false;
-            
-            for (let i = 0; i < csvText.length; i++) {
-                const char = csvText[i];
-                const nextChar = csvText[i + 1];
-                
-                if (char === '"') {
-                    if (insideQuote && nextChar === '"') {
-                        row[row.length - 1] += '"';
-                        i++; 
-                    } else {
-                        insideQuote = !insideQuote;
-                    }
-                } else if (char === ',' && !insideQuote) {
-                    row.push("");
-                } else if ((char === '\r' || char === '\n') && !insideQuote) {
-                    if (char === '\r' && nextChar === '\n') { i++; }
-                    rows.push(row);
-                    row = [""];
-                } else {
-                    row[row.length - 1] += char;
-                }
-            }
-            if (row.length > 1 || row[0] !== "") { rows.push(row); }
-            
+            const rows = parseCSVToArray(csvText);
             const simpList = [];
-            if (rows.length < 2) return simpList;
+            if (rows.length < 2) return [];
             
             const headers = rows[0].map(h => h.toLowerCase().trim());
             const bIdx = headers.findIndex(h => h.includes('bulan'));
@@ -1229,9 +1209,7 @@
             return simpList;
         }
 
-        // ==============================
-        // FUNGSI PUSH KE APPS SCRIPT (AUTO SYNC)
-        // ==============================
+        // PUSH DATA TO APPS SCRIPT (AUTO SYNC)
         async function pushDataToSheet(action, payload) {
             if (!APPSCRIPT_WEB_APP_URL || APPSCRIPT_WEB_APP_URL === "YOUR_APPSCRIPT_WEB_APP_URL") {
                 console.warn("URL Apps Script tiada. Disimpan ke storan tempatan sahaja.");
@@ -1240,8 +1218,6 @@
 
             try {
                 showToast("Menyegerak...", "Menghantar data terus ke Google Sheet...", "info");
-                
-                // Mesti menggunakan stringify dan biarkan default 'text/plain' supaya tidak ada isu CORS preflight
                 const response = await fetch(APPSCRIPT_WEB_APP_URL, {
                     method: 'POST',
                     body: JSON.stringify({ action, payload })
@@ -1262,12 +1238,9 @@
             }
         }
 
-
         // SWITCH BETWEEN TABS VISUALLY & TRIGGER REDRAW
         function switchTab(tabId) {
             currentTab = tabId;
-            
-            // Adjust visual tab button states
             const tabs = ['dashboard', 'category', 'income', 'simpanan'];
             tabs.forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
@@ -1276,8 +1249,6 @@
                 } else {
                     btn.className = "tab-transition flex-grow sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100";
                 }
-                
-                // Show/hide corresponding tab layout section
                 const pane = document.getElementById(`pane-${t}`);
                 if (t === tabId) {
                     pane.classList.remove('hidden');
@@ -1286,7 +1257,6 @@
                 }
             });
             
-            // Re-render only required target view to save memory
             if (tabId === 'dashboard') renderDashboard();
             if (tabId === 'category') renderCategoryView();
             if (tabId === 'income') renderIncomeView();
@@ -1329,7 +1299,6 @@
             localStorage.setItem('simpanan', JSON.stringify(simpananDatabase));
         }
 
-        // CONFIRM RESET SYSTEM BACK TO DEFAULT PRELOADED WORKSPACE
         function confirmResetToDefault() {
             showConfirmDialog(
                 "Set Semula Stor Peranti?",
@@ -1337,8 +1306,10 @@
                 () => {
                     localStorage.removeItem('bajet');
                     localStorage.removeItem('pendapatan');
+                    localStorage.removeItem('simpanan');
                     budgetDatabase = [...defaultBudgetItems];
                     incomeDatabase = [...defaultIncomeItems];
+                    simpananDatabase = [...defaultSimpananItems];
                     saveToLocalStorage();
                     refreshAllViews();
                     showToast("Tetapan Berjaya Diubah", "Aplikasi telah dikembalikan ke data lalai.", "info");
@@ -1346,23 +1317,19 @@
             );
         }
 
-        
         // RENDER DONUT CHART OF CATEGORIES USING CHARTJS
         function renderCategoryChart(categories, amounts) {
             const ctx = document.getElementById('categoryPieChart').getContext('2d');
             
-            // Clear existing Chart Instance to prevent double visual overlays on hover
             if (categoryChartInstance) {
                 categoryChartInstance.destroy();
             }
 
-            // Fallback chart if dataset empty
             if (categories.length === 0) {
                 categories = ["Tiada Data"];
                 amounts = [1];
             }
 
-            // Fetch current chart styling colors
             const backgroundColors = categories.map(cat => CATEGORY_COLORS[cat] || '#64748b');
 
             categoryChartInstance = new Chart(ctx, {
@@ -1381,7 +1348,7 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            display: false // We use custom interactive HTML legend below
+                            display: false 
                         },
                         tooltip: {
                             callbacks: {
@@ -1400,7 +1367,6 @@
             });
         }
 
-        
         // CALCULATE AND RENDER DASHBOARD KPI METRICS & PLOT CATEGORY PIE
         function renderDashboard() {
             const filterBulan = document.getElementById('dash-filter-bulan').value;
@@ -1408,7 +1374,6 @@
             
             document.getElementById('chart-filtered-by').innerText = `Tapis: ${filterBulan} ${filterTahun}`;
 
-            // 1. FILTER RELEVANT DATA FROM STATE
             const filteredBudget = budgetDatabase.filter(item => {
                 const matchBulan = filterBulan === 'Semua' || item.bulan === filterBulan;
                 const matchTahun = filterTahun === 'Semua' || String(item.tahun) === filterTahun;
@@ -1421,29 +1386,23 @@
                 return matchBulan && matchTahun;
             });
 
-            // 2. CALCULATE KPI METRIC CARD VALUES
-            // Income calculation
             let totalIncome = 0;
             filteredIncome.forEach(inc => {
-                totalIncome += (inc.pendapatanKasar - inc.potongan);
+                totalIncome += inc.pendapatanBersih;
             });
 
-            // Total Commitments (Anggaran Komitmen)
             let totalCommitments = 0;
             filteredBudget.filter(item => item.kategori === 'Komitmen').forEach(item => {
                 totalCommitments += item.anggaranKos;
             });
 
-            // Total Expenses Sebenar (Actual spend total of Completed / Paid)
             let totalExpenses = 0;
             filteredBudget.forEach(item => {
                 totalExpenses += item.jumlahSebenar;
             });
 
-            // Monthly Balance (Total Income - Total Expenses Sebenar)
             const monthlyBalance = totalIncome - totalExpenses;
 
-            // Update DOM element values
             document.getElementById('card-total-income').innerText = `RM ${totalIncome.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('card-commitments').innerText = `RM ${totalCommitments.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('card-expenses').innerText = `RM ${totalExpenses.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
@@ -1456,10 +1415,8 @@
                 balEl.className = "text-2xl font-black text-emerald-500 dark:text-emerald-400";
             }
 
-            // 3. GENERATE PIE CHART CATEGORIES DATA
             const categorySums = {};
             filteredBudget.forEach(item => {
-                // Sum actual costs for completed items or estimated if unpaid to capture raw dynamic expenses representation
                 const costValue = item.status === 'Selesai' ? item.jumlahSebenar : item.anggaranKos;
                 if(costValue > 0) {
                     categorySums[item.kategori] = (categorySums[item.kategori] || 0) + costValue;
@@ -1470,10 +1427,8 @@
             const amounts = Object.values(categorySums);
             const grandTotalCategorySpend = amounts.reduce((a, b) => a + b, 0);
 
-            // Re-render chart wrapper
             renderCategoryChart(categories, amounts);
 
-            // Render Custom interactive HTML legend beside chart
             const legendList = document.getElementById('category-legend-list');
             legendList.innerHTML = '';
 
@@ -1503,8 +1458,6 @@
                 });
             }
 
-            // 4. COMMITMENT STATUS CALCULATION
-            // Selesai (Paid) vs Belum Selesai (Unpaid) of category "Komitmen" specifically
             const coms = filteredBudget.filter(item => item.kategori === 'Komitmen');
             const totalCount = coms.length;
             const paidCount = coms.filter(item => item.status === 'Selesai').length;
@@ -1520,13 +1473,11 @@
             document.getElementById('stat-unpaid-bar').style.width = `${unpaidPercent}%`;
         }
 
-        
         // POPULATE DINAMIK CATEGORY FILTER DROPDOWNS ON PRE-LOAD
         function populateCategoryFilterDropdown() {
             const uniqueCats = ['Komitmen', 'Keperluan', 'Kehendak', 'Hutang', 'Kenderaan', 'Simpanan', 'Utiliti', 'Lain-lain'];
             const selectEl = document.getElementById('cat-filter');
             
-            // Re-render select options dynamically
             selectEl.innerHTML = '<option value="Semua">Semua Kategori</option>';
             uniqueCats.forEach(cat => {
                 selectEl.innerHTML += `<option value="${cat}">${cat}</option>`;
@@ -1559,7 +1510,6 @@
                 return matchCategory && matchBulan && matchTahun;
             });
 
-            // Calculate Category Metrics (Anggaran Kos)
             const catTotals = {
                 'Komitmen': 0, 'Keperluan': 0, 'Kehendak': 0, 
                 'Hutang': 0, 'Kenderaan': 0, 'Simpanan': 0, 'Utiliti': 0, 'Lain-lain': 0
@@ -1653,11 +1603,10 @@
             // Susun ikut turutan bulan (Januari hingga Disember)
             const monthOrder = { "Januari": 1, "Februari": 2, "Mac": 3, "April": 4, "Mei": 5, "Jun": 6, "Julai": 7, "Ogos": 8, "September": 9, "Oktober": 10, "November": 11, "Disember": 12 };
             filtered.sort((a, b) => {
-                if (a.tahun !== b.tahun) return b.tahun - a.tahun; // Tahun terkini di atas
-                return monthOrder[a.bulan] - monthOrder[b.bulan]; // Bulan Jan -> Dis
+                if (a.tahun !== b.tahun) return b.tahun - a.tahun; 
+                return monthOrder[a.bulan] - monthOrder[b.bulan]; 
             });
 
-            // Calculate Metrics
             let totalKasar = 0;
             let totalPotongan = 0;
             
@@ -1688,14 +1637,12 @@
             }
 
             filtered.forEach(item => {
-                const bersih = item.pendapatanKasar - item.potongan;
-                
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-all border-b border-slate-100 dark:border-slate-800">
                         <td class="py-4 px-4 font-bold text-slate-900 dark:text-white">${item.bulan} ${item.tahun}</td>
                         <td class="py-4 px-4 text-right font-semibold">RM ${item.pendapatanKasar.toFixed(2)}</td>
                         <td class="py-4 px-4 text-right text-rose-500">RM ${item.potongan.toFixed(2)}</td>
-                        <td class="py-4 px-4 text-right font-black text-emerald-600 dark:text-emerald-400 bg-slate-100/30 dark:bg-slate-800/10">RM ${bersih.toFixed(2)}</td>
+                        <td class="py-4 px-4 text-right font-black text-emerald-600 dark:text-emerald-400 bg-slate-100/30 dark:bg-slate-800/10">RM ${item.pendapatanBersih.toFixed(2)}</td>
                         <td class="py-4 px-4 text-center">
                             <div class="flex items-center justify-center gap-1.5">
                                 <button onclick="editIncomeItem(${item.id})" class="h-8 w-8 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 dark:bg-blue-950/30 dark:hover:bg-blue-950/50 dark:text-blue-400 transition-colors" title="Kemas kini pendapatan">
@@ -1716,7 +1663,6 @@
             const filterTahun = document.getElementById('simp-filter-tahun').value;
             const filterNamaItem = document.getElementById('simp-filter-namaItem') ? document.getElementById('simp-filter-namaItem').value : 'Semua';
 
-            // Dapatkan senarai simpanan yang ditapis berdasarkan tahun dan bulan SEMASA
             const filtered = simpananDatabase.filter(item => {
                 const matchBulan = filterBulan === 'Semua' || item.bulan === filterBulan;
                 const matchTahun = filterTahun === 'Semua' || String(item.tahun) === filterTahun;
@@ -1724,14 +1670,13 @@
                 return matchBulan && matchTahun && matchNamaItem;
             });
 
-            // Susun fungsi untuk dapatkan bulan sebelumnya (contoh Januari -> Disember tahun lepas)
             const bulanList = ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"];
             let bulanSebelum = null;
             let tahunSebelum = null;
 
             if (filterBulan !== 'Semua' && filterTahun !== 'Semua') {
                 const indeksBulanSemasa = bulanList.indexOf(filterBulan);
-                if (indeksBulanSemasa === 0) { // Januari
+                if (indeksBulanSemasa === 0) { 
                     bulanSebelum = "Disember";
                     tahunSebelum = (parseInt(filterTahun) - 1).toString();
                 } else if (indeksBulanSemasa > 0) {
@@ -1740,7 +1685,6 @@
                 }
             }
 
-            // Kira jumlah simpanan bulan sebelumnya (carry forward)
             let bakiBawaKeHadapan = 0;
             if (bulanSebelum && tahunSebelum) {
                 const simpananBulanSebelum = simpananDatabase.filter(item => {
@@ -1751,7 +1695,6 @@
                 });
             }
 
-            // Kira masuk, keluar dan jumlah untuk bulan SEMASA
             let totalMasukBulanIni = 0;
             let totalKeluarBulanIni = 0;
             
@@ -1760,8 +1703,6 @@
                 totalKeluarBulanIni += item.keluar;
             });
 
-            // Jumlah simpanan semasa = Baki Bawa Ke Hadapan + (Total Masuk Bulan Ini - Total Keluar Bulan Ini)
-            // Jika filter diset pada "Semua", maka ia adalah jumlah mutlak semua bulan
             let totalJumlahSemasa = 0;
             if (filterBulan !== 'Semua') {
                 totalJumlahSemasa = bakiBawaKeHadapan + totalMasukBulanIni - totalKeluarBulanIni;
@@ -1769,12 +1710,10 @@
                  simpananDatabase.forEach(item => {
                      totalJumlahSemasa += item.jumlah;
                  });
-                 // Jika filter "Semua", total keluar paparkan semua rekod
                  totalKeluarBulanIni = simpananDatabase.reduce((sum, item) => sum + item.keluar, 0);
             }
 
             document.getElementById('simp-card-jumlah').innerText = `RM ${totalJumlahSemasa.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
-            // Simpanan Keluar memaparkan nilai bagi bulan ditapis.
             document.getElementById('simp-card-keluar').innerText = `RM ${totalKeluarBulanIni.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('simp-record-count').innerText = `Menunjukkan ${filtered.length} rekod`;
 
@@ -1792,7 +1731,6 @@
                 return;
             }
 
-            // Baris Baki Bawa Ke Hadapan (Hanya tunjuk jika ada penapis spesifik bulan & ada nilai baki)
             if (filterBulan !== 'Semua' && bakiBawaKeHadapan > 0) {
                  tbody.innerHTML += `
                     <tr class="bg-blue-50/50 dark:bg-blue-900/10 border-b border-blue-100 dark:border-blue-900/30">
@@ -1835,7 +1773,6 @@
             });
         }
 
-        
         // --- BUDGET ITEM MODAL MANAGEMENT ---
         function openBudgetModal(action, id = null) {
             const modal = document.getElementById('modal-budget');
@@ -1871,8 +1808,6 @@
 
         async function saveBudgetForm(event) {
             event.preventDefault();
-            
-            // UI Feedback state
             const submitBtn = event.target.querySelector('button[type="submit"]');
             const originalBtnHtml = submitBtn.innerHTML;
             submitBtn.disabled = true;
@@ -1887,32 +1822,25 @@
             const jumlahSebenar = parseFloat(document.getElementById('budget-sebenar').value) || 0;
             const status = document.getElementById('budget-status').value;
 
-            // Dapatkan rujukan sheetRow jika item wujud
             const existingItem = id ? budgetDatabase.find(i => i.id === parseInt(id, 10)) : null;
             const sheetRow = existingItem ? existingItem.sheetRow : null;
 
             let successPush = false;
 
             if (id && existingItem) {
-                // Update existing record
                 budgetDatabase[budgetDatabase.indexOf(existingItem)] = { ...existingItem, bulan, tahun, kategori, namaItem, anggaranKos, status, jumlahSebenar };
-                
-                // Hantar update ke AppScript jika wujud row di Google Sheet
                 if (sheetRow) {
                     successPush = await pushDataToSheet("UPDATE_BUDGET", {
                         sheetRow, bulan, tahun, kategori, namaItem, anggaranKos, status, jumlahSebenar
                     });
                 }
             } else {
-                // Insert new record
                 const newRecord = {
                     id: Date.now(),
                     sheetRow: null,
                     bulan, tahun, kategori, namaItem, anggaranKos, status, jumlahSebenar
                 };
                 budgetDatabase.push(newRecord);
-                
-                // Hantar row baru ke AppScript
                 successPush = await pushDataToSheet("ADD_BUDGET", {
                     bulan, tahun, kategori, namaItem, anggaranKos, status, jumlahSebenar
                 });
@@ -1922,11 +1850,9 @@
             closeBudgetModal();
             refreshAllViews();
 
-            // Kembalikan keadaan butang UI
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalBtnHtml;
 
-            // Refresh terus data dari Sheet supaya kita dapat nombor "sheetRow" yang baru secara automatik
             if(successPush) setTimeout(syncWithGoogleSheet, 1500);
         }
 
@@ -1942,7 +1868,7 @@
                     const item = budgetDatabase.find(i => i.id === id);
                     if (item && item.sheetRow) {
                         await pushDataToSheet("DELETE_ROW", { sheetType: 'budget', sheetRow: item.sheetRow });
-                        setTimeout(syncWithGoogleSheet, 1500); // Reload the sheet database
+                        setTimeout(syncWithGoogleSheet, 1500); 
                     }
 
                     budgetDatabase = budgetDatabase.filter(i => i.id !== id);
@@ -1985,8 +1911,6 @@
 
         async function saveIncomeForm(event) {
             event.preventDefault();
-            
-            // UI Feedback state
             const submitBtn = event.target.querySelector('button[type="submit"]');
             const originalBtnHtml = submitBtn.innerHTML;
             submitBtn.disabled = true;
@@ -2005,31 +1929,29 @@
             let successPush = false;
 
             if (id && existingItem) {
-                // Edit mode
-                incomeDatabase[incomeDatabase.indexOf(existingItem)] = { ...existingItem, bulan, tahun, pendapatanKasar, potongan };
-                
+                incomeDatabase[incomeDatabase.indexOf(existingItem)] = { ...existingItem, bulan, tahun, pendapatanKasar, potongan, pendapatanBersih };
                 if (sheetRow) {
                     successPush = await pushDataToSheet("UPDATE_INCOME", {
-                        sheetRow, bulan, tahun, pendapatanKasar, pendapatanBersih
+                        sheetRow, bulan, tahun, pendapatanKasar, potongan, pendapatanBersih
                     });
                 }
             } else {
-                // Add mode
                 const exists = incomeDatabase.some(i => i.bulan === bulan && i.tahun === tahun);
                 if(exists) {
                     showToast("Ralat Pertindihan Data", "Rekod bagi bulan dan tahun ini telah wujud. Anda hanya perlu menyunting rekod sedia ada.", "error");
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnHtml;
                     return;
                 }
 
                 const newRecord = {
                     id: Date.now(),
                     sheetRow: null,
-                    bulan, tahun, pendapatanKasar, potongan
+                    bulan, tahun, pendapatanKasar, potongan, pendapatanBersih
                 };
                 incomeDatabase.push(newRecord);
-                
                 successPush = await pushDataToSheet("ADD_INCOME", {
-                    bulan, tahun, pendapatanKasar, pendapatanBersih
+                    bulan, tahun, pendapatanKasar, potongan, pendapatanBersih
                 });
             }
 
@@ -2037,7 +1959,6 @@
             closeIncomeModal();
             refreshAllViews();
 
-            // Kembalikan keadaan butang UI
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalBtnHtml;
 
@@ -2055,8 +1976,8 @@
                 async () => {
                     const item = incomeDatabase.find(i => i.id === id);
                     if (item && item.sheetRow) {
-                        await pushDataToSheet("DELETE_ROW", { sheetType: 'budget', sheetRow: item.sheetRow });
-                        setTimeout(syncWithGoogleSheet, 1500); // Reload the sheet database
+                        await pushDataToSheet("DELETE_ROW", { sheetType: 'pendapatan', sheetRow: item.sheetRow });
+                        setTimeout(syncWithGoogleSheet, 1500); 
                     }
 
                     incomeDatabase = incomeDatabase.filter(i => i.id !== id);
@@ -2176,7 +2097,6 @@
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             
-            // Icon customization
             let icon = '<i class="fa-solid fa-circle-info text-blue-500"></i>';
             if (type === 'success') icon = '<i class="fa-solid fa-circle-check text-emerald-500"></i>';
             if (type === 'error') icon = '<i class="fa-solid fa-circle-exclamation text-rose-500"></i>';
@@ -2191,7 +2111,6 @@
             
             container.appendChild(toast);
             
-            // Auto fade out toast after 4 seconds
             setTimeout(() => {
                 toast.classList.add('animate-out', 'fade-out', 'duration-500');
                 setTimeout(() => toast.remove(), 500);
@@ -2208,7 +2127,6 @@
             const btnYes = document.getElementById('confirm-btn-yes');
             const btnCancel = document.getElementById('confirm-btn-cancel');
 
-            // Override click triggers safely
             btnYes.onclick = () => {
                 onConfirm();
                 modal.classList.add('hidden');
@@ -2219,13 +2137,10 @@
             };
         }
 
-        
         // --- COLD SYSTEM INITIALIZATION ---
         window.onload = function() {
-            // Dark Mode / Light Mode Local Preference Handlers
             const themeToggleBtn = document.getElementById('theme-toggle');
             
-            // Apply system or stored mode configurations
             if (localStorage.getItem('theme') === 'light') {
                 document.documentElement.classList.remove('dark');
             } else {
@@ -2240,13 +2155,11 @@
                     document.documentElement.classList.add('dark');
                     localStorage.setItem('theme', 'dark');
                 }
-                // Redraw category pie to reload dark border colors
                 if (currentTab === 'dashboard') {
                     renderDashboard();
                 }
             });
 
-            // Boot databases and fetch Sheets CSV in parallel
             loadDatabase();
             syncWithGoogleSheet();
         }
