@@ -930,7 +930,7 @@
     <!-- JAVASCRIPT LOGIC SECTION -->
     <script>
         // URL WEB APP GOOGLE APPS SCRIPT (Sila tampal Web App URL anda dari Apps Script di sini)
-        const APPSCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwAfLdzKbhXQ_yBsUt9Jve5hLoIEi6ZdbSkIqkP0Zj9xJguydwXtTTChM1RINTFOYsL/exec"; 
+        const APPSCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwvxkP_HQPrD3pyr8Th5QNqEJIQjLVWbQAg-YCmcg3Cc8VYMTwwLk4w2DPjjW7S_8_V/exec"; 
         
         // DEFAULT SEED DATA (Used if Google Sheet cannot be loaded or is offline)
         const defaultBudgetItems = [
@@ -1519,9 +1519,9 @@
             
             filtered.forEach(item => {
                 if (catTotals[item.kategori] !== undefined) {
-                    catTotals[item.kategori] += item.anggaranKos;
+                    catTotals[item.kategori] += item.jumlahSebenar;
                 } else {
-                    catTotals['Lain-lain'] += item.anggaranKos;
+                    catTotals['Lain-lain'] += item.jumlahSebenar;
                 }
                 totalSebenarKeseluruhan += item.jumlahSebenar;
                 totalAnggaranKeseluruhan += item.anggaranKos;
