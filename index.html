@@ -2,18 +2,8 @@
 <html lang="ms" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UrusDuit - Dashboard Pengurusan Kewangan</title>
-
-    <!-- PWA: manifest & ikon -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#16a34a">
-    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="UrusDuit">
     
     <!-- Google Fonts & Font Awesome Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -191,8 +181,13 @@
                         <label for="dash-filter-tahun" class="sr-only">Tahun</label>
                         <select id="dash-filter-tahun" onchange="renderDashboard()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
                             <option value="Semua">Semua Tahun</option>
+                            <option value="2030">2030</option>
+                            <option value="2029">2029</option>
+                            <option value="2028">2028</option>
+                            <option value="2027">2027</option>
                             <option value="2026">2026</option>
                             <option value="2025">2025</option>
+                            <option value="2024">2024</option>
                         </select>
                     </div>
                 </div>
@@ -378,7 +373,7 @@
                 </div>
                 
                 <div class="flex flex-wrap items-center gap-3">
-                    <div class="w-full sm:w-36">
+                    <div class="w-full sm:w-32">
                         <label for="cat-filter-bulan" class="sr-only">Tapis Bulan</label>
                         <select id="cat-filter-bulan" onchange="renderCategoryView()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
                             <option value="Semua">Semua Bulan</option>
@@ -396,23 +391,33 @@
                             <option value="Disember">Disember</option>
                         </select>
                     </div>
-                    <div class="w-full sm:w-32">
+                    <div class="w-full sm:w-28">
                         <label for="cat-filter-tahun" class="sr-only">Tapis Tahun</label>
                         <select id="cat-filter-tahun" onchange="renderCategoryView()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
                             <option value="Semua">Semua Tahun</option>
+                            <option value="2030">2030</option>
+                            <option value="2029">2029</option>
+                            <option value="2028">2028</option>
+                            <option value="2027">2027</option>
                             <option value="2026">2026</option>
                             <option value="2025">2025</option>
+                            <option value="2024">2024</option>
                         </select>
                     </div>
-                    <div class="w-full sm:w-44">
+                    <div class="w-full sm:w-36">
                         <label for="cat-filter" class="sr-only">Tapis Kategori</label>
                         <select id="cat-filter" onchange="renderCategoryView()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
                             <option value="Semua">Semua Kategori</option>
                         </select>
                     </div>
-                    <button onclick="openBudgetModal('add')" class="w-full sm:w-auto px-4 py-2 text-sm bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-primary-600/10 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-plus"></i> Tambah Item Bajet
-                    </button>
+                    <div class="flex gap-2 w-full sm:w-auto">
+                        <button onclick="copyPreviousMonthBudget()" class="flex-1 sm:flex-none px-4 py-2 text-sm bg-slate-600 hover:bg-slate-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-slate-600/10 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-copy"></i> Salin Bulan Lepas
+                        </button>
+                        <button onclick="openBudgetModal('add')" class="flex-1 sm:flex-none px-4 py-2 text-sm bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-primary-600/10 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Tambah Item
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -525,8 +530,13 @@
                         <label for="inc-filter-tahun" class="sr-only">Tahun</label>
                         <select id="inc-filter-tahun" onchange="renderIncomeView()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
                             <option value="Semua">Semua Tahun</option>
+                            <option value="2030">2030</option>
+                            <option value="2029">2029</option>
+                            <option value="2028">2028</option>
+                            <option value="2027">2027</option>
                             <option value="2026">2026</option>
                             <option value="2025">2025</option>
+                            <option value="2024">2024</option>
                         </select>
                     </div>
                     <button onclick="openIncomeModal('add')" class="w-full sm:w-auto px-4 py-2 text-sm bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-primary-600/10 flex items-center justify-center gap-2">
@@ -641,23 +651,33 @@
                         </select>
                     </div>
                     
-                    <div class="w-full sm:w-32">
+                    <div class="w-full sm:w-28">
                         <label for="simp-filter-tahun" class="sr-only">Tahun</label>
                         <select id="simp-filter-tahun" onchange="renderSimpananView()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
                             <option value="Semua">Semua Tahun</option>
+                            <option value="2030">2030</option>
+                            <option value="2029">2029</option>
+                            <option value="2028">2028</option>
+                            <option value="2027">2027</option>
                             <option value="2026">2026</option>
                             <option value="2025">2025</option>
+                            <option value="2024">2024</option>
                         </select>
                     </div>
-                    <div class="w-full sm:w-44">
+                    <div class="w-full sm:w-36">
                         <label for="simp-filter-namaItem" class="sr-only">Tapis Nama Item</label>
                         <select id="simp-filter-namaItem" onchange="renderSimpananView()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
                             <option value="Semua">Semua Item</option>
                         </select>
                     </div>
-                    <button onclick="openSimpananModal('add')" class="w-full sm:w-auto px-4 py-2 text-sm bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-primary-600/10 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-plus"></i> Tambah Simpanan
-                    </button>
+                    <div class="flex gap-2 w-full sm:w-auto">
+                        <button onclick="copyPreviousMonthSimpanan()" class="flex-1 sm:flex-none px-4 py-2 text-sm bg-slate-600 hover:bg-slate-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-slate-600/10 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-copy"></i> Salin Bulan Lepas
+                        </button>
+                        <button onclick="openSimpananModal('add')" class="flex-1 sm:flex-none px-4 py-2 text-sm bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-primary-600/10 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Tambah Item
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -758,8 +778,13 @@
                     <div>
                         <label for="budget-tahun" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Tahun</label>
                         <select id="budget-tahun" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                            <option value="2026">2026</option>
+                            <option value="2030">2030</option>
+                            <option value="2029">2029</option>
+                            <option value="2028">2028</option>
+                            <option value="2027">2027</option>
+                            <option value="2026" selected>2026</option>
                             <option value="2025">2025</option>
+                            <option value="2024">2024</option>
                         </select>
                     </div>
                 </div>
@@ -848,8 +873,13 @@
                     <div>
                         <label for="income-tahun" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Tahun</label>
                         <select id="income-tahun" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                            <option value="2026">2026</option>
+                            <option value="2030">2030</option>
+                            <option value="2029">2029</option>
+                            <option value="2028">2028</option>
+                            <option value="2027">2027</option>
+                            <option value="2026" selected>2026</option>
                             <option value="2025">2025</option>
+                            <option value="2024">2024</option>
                         </select>
                     </div>
                 </div>
@@ -911,8 +941,13 @@
                     <div>
                         <label for="simp-tahun" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Tahun</label>
                         <select id="simp-tahun" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                            <option value="2026">2026</option>
+                            <option value="2030">2030</option>
+                            <option value="2029">2029</option>
+                            <option value="2028">2028</option>
+                            <option value="2027">2027</option>
+                            <option value="2026" selected>2026</option>
                             <option value="2025">2025</option>
+                            <option value="2024">2024</option>
                         </select>
                     </div>
                 </div>
@@ -1262,14 +1297,14 @@
         }
 
         // PUSH DATA TO APPS SCRIPT (AUTO SYNC)
-        async function pushDataToSheet(action, payload) {
+        async function pushDataToSheet(action, payload, silent = false) {
             if (!APPSCRIPT_WEB_APP_URL || APPSCRIPT_WEB_APP_URL === "YOUR_APPSCRIPT_WEB_APP_URL") {
                 console.warn("URL Apps Script tiada. Disimpan ke storan tempatan sahaja.");
                 return true; 
             }
 
             try {
-                showToast("Menyegerak...", "Menghantar data terus ke Google Sheet...", "info");
+                if(!silent) showToast("Menyegerak...", "Menghantar data terus ke Google Sheet...", "info");
                 const response = await fetch(APPSCRIPT_WEB_APP_URL, {
                     method: 'POST',
                     body: JSON.stringify({ action, payload })
@@ -1278,14 +1313,14 @@
                 const result = await response.json();
                 
                 if (result.status === 'success') {
-                    showToast("Berjaya", "Data Google Sheet berjaya dikemas kini secara terus.", "success");
+                    if(!silent) showToast("Berjaya", "Data Google Sheet berjaya dikemas kini secara terus.", "success");
                     return true;
                 } else {
                     throw new Error(result.message);
                 }
             } catch (error) {
                 console.error("Gagal menyegerak ke Google Sheet:", error);
-                showToast("Ralat Rangkaian", "Gagal mengemas kini Sheet. Disimpan setempat (Local).", "error");
+                if(!silent) showToast("Ralat Rangkaian", "Gagal mengemas kini Sheet. Disimpan setempat (Local).", "error");
                 return false;
             }
         }
@@ -1562,7 +1597,8 @@
 
             const categorySums = {};
             filteredBudget.forEach(item => {
-                const costValue = item.status === 'Selesai' ? item.jumlahSebenar : item.anggaranKos;
+                // Diperbarui: Hanya mengambil nilai jumlah sebenar untuk carta dashboard
+                const costValue = item.jumlahSebenar;
                 if(costValue > 0) {
                     categorySums[item.kategori] = (categorySums[item.kategori] || 0) + costValue;
                 }
@@ -1583,7 +1619,7 @@
                 legendList.innerHTML = `
                     <div class="text-center text-sm text-slate-400 py-6">
                         <i class="fa-solid fa-folder-open block text-xl mb-1 text-slate-300"></i>
-                        Tiada Rekod Pengeluaran
+                        Tiada Rekod Pengeluaran Sebenar
                     </div>`;
             } else {
                 categories.forEach(cat => {
@@ -1734,6 +1770,75 @@
                         </td>
                     </tr>`;
             });
+        }
+
+        // FUNGSI: Salin Rekod Bajet Bulan Lepas
+        async function copyPreviousMonthBudget() {
+            const currentBulan = document.getElementById('cat-filter-bulan').value;
+            const currentTahun = document.getElementById('cat-filter-tahun').value;
+
+            if (currentBulan === 'Semua' || currentTahun === 'Semua') {
+                showToast("Sila Pilih Bulan & Tahun", "Anda mesti memilih bulan dan tahun sasaran yang spesifik untuk menyalin data.", "error");
+                return;
+            }
+
+            const bulanList = ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"];
+            const currentIdx = bulanList.indexOf(currentBulan);
+            let prevBulan = '';
+            let prevTahun = currentTahun;
+
+            if (currentIdx === 0) {
+                prevBulan = "Disember";
+                prevTahun = (parseInt(currentTahun) - 1).toString();
+            } else {
+                prevBulan = bulanList[currentIdx - 1];
+            }
+
+            const prevData = budgetDatabase.filter(i => i.bulan === prevBulan && String(i.tahun) === prevTahun);
+
+            if (prevData.length === 0) {
+                showToast("Tiada Data Bulan Lepas", `Tiada rekod bajet ditemui pada ${prevBulan} ${prevTahun} untuk disalin.`, "error");
+                return;
+            }
+
+            showConfirmDialog(
+                "Salin Data Bulan Lepas?",
+                `Adakah anda pasti ingin menyalin ${prevData.length} rekod dari ${prevBulan} ${prevTahun} ke bulan ${currentBulan} ${currentTahun}? Anggaran kos akan dikekalkan, jumlah sebenar akan di-reset ke 0.`,
+                async () => {
+                    showToast("Menyalin Data...", "Sila tunggu sebentar...", "info");
+                    
+                    for (const item of prevData) {
+                        const newRecord = {
+                            id: Date.now() + Math.floor(Math.random() * 10000),
+                            sheetRow: null,
+                            bulan: currentBulan,
+                            tahun: parseInt(currentTahun),
+                            kategori: item.kategori,
+                            namaItem: item.namaItem,
+                            anggaranKos: item.anggaranKos,
+                            status: 'Belum',
+                            jumlahSebenar: 0
+                        };
+                        budgetDatabase.push(newRecord);
+                        
+                        // Push ke Google Sheet secara senyap (silent)
+                        await pushDataToSheet("ADD_BUDGET", {
+                            bulan: newRecord.bulan, 
+                            tahun: newRecord.tahun, 
+                            kategori: newRecord.kategori, 
+                            namaItem: newRecord.namaItem, 
+                            anggaranKos: newRecord.anggaranKos, 
+                            status: newRecord.status, 
+                            jumlahSebenar: newRecord.jumlahSebenar
+                        }, true);
+                    }
+                    
+                    saveToLocalStorage();
+                    refreshAllViews();
+                    setTimeout(syncWithGoogleSheet, 2000);
+                    showToast("Berjaya", `Rekod bulan lepas telah berjaya disalin ke bulan ${currentBulan}.`, "success");
+                }
+            );
         }
 
         // RENDER THIRD TAB CONTENT (INCOME)
@@ -1909,6 +2014,80 @@
                         </td>
                     </tr>`;
             });
+        }
+
+        // FUNGSI: Salin Rekod Simpanan Bulan Lepas
+        async function copyPreviousMonthSimpanan() {
+            // Kita sasarkan pada bulan tamat filter jika range, atau lebih tepatnya kita set sasaran kepada satu bulan.
+            const currentBulan = document.getElementById('simp-filter-bulan-tamat').value;
+            const currentTahun = document.getElementById('simp-filter-tahun').value;
+
+            if (currentTahun === 'Semua') {
+                showToast("Sila Pilih Tahun", "Anda mesti memilih tahun sasaran yang spesifik untuk menyalin data.", "error");
+                return;
+            }
+
+            const bulanList = ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"];
+            const currentIdx = bulanList.indexOf(currentBulan);
+            let prevBulan = '';
+            let prevTahun = currentTahun;
+
+            if (currentIdx === 0) {
+                prevBulan = "Disember";
+                prevTahun = (parseInt(currentTahun) - 1).toString();
+            } else {
+                prevBulan = bulanList[currentIdx - 1];
+            }
+
+            const prevData = simpananDatabase.filter(i => i.bulan === prevBulan && String(i.tahun) === prevTahun);
+
+            if (prevData.length === 0) {
+                showToast("Tiada Data Bulan Lepas", `Tiada rekod simpanan ditemui pada ${prevBulan} ${prevTahun} untuk disalin.`, "error");
+                return;
+            }
+
+            showConfirmDialog(
+                "Salin Data Bulan Lepas?",
+                `Adakah anda pasti ingin menyalin ${prevData.length} rekod dari ${prevBulan} ${prevTahun} ke bulan sasaran (${currentBulan} ${currentTahun})? Anggaran simpanan akan dikekalkan, transaksi akan di-reset ke 0.`,
+                async () => {
+                    showToast("Menyalin Data...", "Sila tunggu sebentar...", "info");
+                    
+                    for (const item of prevData) {
+                        const newRecord = {
+                            id: Date.now() + Math.floor(Math.random() * 10000),
+                            sheetRow: null,
+                            bulan: currentBulan,
+                            tahun: parseInt(currentTahun),
+                            kategori: item.kategori,
+                            namaItem: item.namaItem,
+                            anggaran: item.anggaran,
+                            status: 'Tidak',
+                            masuk: 0,
+                            keluar: 0,
+                            jumlah: 0
+                        };
+                        simpananDatabase.push(newRecord);
+                        
+                        // Push ke Google Sheet secara senyap (silent)
+                        await pushDataToSheet("ADD_SIMPANAN", {
+                            bulan: newRecord.bulan, 
+                            tahun: newRecord.tahun, 
+                            kategori: newRecord.kategori, 
+                            namaItem: newRecord.namaItem, 
+                            anggaran: newRecord.anggaran, 
+                            status: newRecord.status, 
+                            masuk: newRecord.masuk, 
+                            keluar: newRecord.keluar, 
+                            jumlah: newRecord.jumlah
+                        }, true);
+                    }
+                    
+                    saveToLocalStorage();
+                    refreshAllViews();
+                    setTimeout(syncWithGoogleSheet, 2000);
+                    showToast("Berjaya", `Rekod bulan lepas telah berjaya disalin ke bulan ${currentBulan}.`, "success");
+                }
+            );
         }
 
         // --- BUDGET ITEM MODAL MANAGEMENT ---
@@ -2300,15 +2479,6 @@
 
             loadDatabase();
             syncWithGoogleSheet();
-        }
-
-        // --- PWA: daftar service worker untuk sokongan install & offline shell ---
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch((err) => {
-                    console.warn('Service worker gagal didaftarkan:', err);
-                });
-            });
         }
     </script>
 </body>
