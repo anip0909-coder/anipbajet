@@ -703,6 +703,98 @@
                 </div>
             </div>
 
+            <!-- Goal-Based Specific Savings Metric Cards (Grid of 8) -->
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                <div class="flex items-center gap-2">
+                    <div class="p-1.5 bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 rounded-lg">
+                        <i class="fa-solid fa-bullseye text-sm"></i>
+                    </div>
+                    <h3 class="font-bold text-sm text-slate-900 dark:text-slate-100">Nilai Simpanan Mengikut Sasaran Khas (Goal-Based)</h3>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Holiday Card -->
+                    <div class="bg-gradient-to-br from-indigo-50/40 to-white dark:from-indigo-950/10 dark:to-slate-900/50 p-4 rounded-xl border border-indigo-100 dark:border-indigo-900/20 flex items-center gap-3">
+                        <div class="h-8 w-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-sm flex-shrink-0">
+                            <i class="fa-solid fa-umbrella-beach"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">Holiday</span>
+                            <h4 class="text-sm font-black text-slate-900 dark:text-white truncate" id="simp-val-holiday">RM 0.00</h4>
+                        </div>
+                    </div>
+                    <!-- ASB Card -->
+                    <div class="bg-gradient-to-br from-emerald-50/40 to-white dark:from-emerald-950/10 dark:to-slate-900/50 p-4 rounded-xl border border-emerald-100 dark:border-emerald-900/20 flex items-center gap-3">
+                        <div class="h-8 w-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-sm flex-shrink-0">
+                            <i class="fa-solid fa-piggy-bank"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">ASB</span>
+                            <h4 class="text-sm font-black text-slate-900 dark:text-white truncate" id="simp-val-asb">RM 0.00</h4>
+                        </div>
+                    </div>
+                    <!-- Touch & Go Card -->
+                    <div class="bg-gradient-to-br from-blue-50/40 to-white dark:from-blue-950/10 dark:to-slate-900/50 p-4 rounded-xl border border-blue-100 dark:border-blue-900/20 flex items-center gap-3">
+                        <div class="h-8 w-8 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-sm flex-shrink-0">
+                            <i class="fa-solid fa-credit-card"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">Touch & Go</span>
+                            <h4 class="text-sm font-black text-slate-900 dark:text-white truncate" id="simp-val-tng">RM 0.00</h4>
+                        </div>
+                    </div>
+                    <!-- Keperluan rumah baru Card -->
+                    <div class="bg-gradient-to-br from-amber-50/40 to-white dark:from-amber-950/10 dark:to-slate-900/50 p-4 rounded-xl border border-amber-100 dark:border-amber-900/20 flex items-center gap-3">
+                        <div class="h-8 w-8 rounded-lg bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 flex items-center justify-center text-sm flex-shrink-0">
+                            <i class="fa-solid fa-house-chimney"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">Rumah Baru</span>
+                            <h4 class="text-sm font-black text-slate-900 dark:text-white truncate" id="simp-val-rumah">RM 0.00</h4>
+                        </div>
+                    </div>
+                    <!-- Ilyas Card -->
+                    <div class="bg-gradient-to-br from-rose-50/40 to-white dark:from-rose-950/10 dark:to-slate-900/50 p-4 rounded-xl border border-rose-100 dark:border-rose-900/20 flex items-center gap-3">
+                        <div class="h-8 w-8 rounded-lg bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 flex items-center justify-center text-sm flex-shrink-0">
+                            <i class="fa-solid fa-child"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">Ilyas</span>
+                            <h4 class="text-sm font-black text-slate-900 dark:text-white truncate" id="simp-val-ilyas">RM 0.00</h4>
+                        </div>
+                    </div>
+                    <!-- Humaira Card -->
+                    <div class="bg-gradient-to-br from-teal-50/40 to-white dark:from-teal-950/10 dark:to-slate-900/50 p-4 rounded-xl border border-teal-100 dark:border-teal-900/20 flex items-center gap-3">
+                        <div class="h-8 w-8 rounded-lg bg-teal-100 dark:bg-teal-900/50 text-teal-600 dark:text-teal-400 flex items-center justify-center text-sm flex-shrink-0">
+                            <i class="fa-solid fa-child-dress"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">Humaira</span>
+                            <h4 class="text-sm font-black text-slate-900 dark:text-white truncate" id="simp-val-humaira">RM 0.00</h4>
+                        </div>
+                    </div>
+                    <!-- Servis Kereta Card -->
+                    <div class="bg-gradient-to-br from-orange-50/40 to-white dark:from-orange-950/10 dark:to-slate-900/50 p-4 rounded-xl border border-orange-100 dark:border-orange-900/20 flex items-center gap-3">
+                        <div class="h-8 w-8 rounded-lg bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-400 flex items-center justify-center text-sm flex-shrink-0">
+                            <i class="fa-solid fa-wrench"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">Servis Kereta</span>
+                            <h4 class="text-sm font-black text-slate-900 dark:text-white truncate" id="simp-val-servis">RM 0.00</h4>
+                        </div>
+                    </div>
+                    <!-- Penilaian Swasta Card -->
+                    <div class="bg-gradient-to-br from-slate-100 to-white dark:from-slate-800/40 dark:to-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700/50 flex items-center gap-3">
+                        <div class="h-8 w-8 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center text-sm flex-shrink-0">
+                            <i class="fa-solid fa-file-signature"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">Penilaian Swasta</span>
+                            <h4 class="text-sm font-black text-slate-900 dark:text-white truncate" id="simp-val-penilaian">RM 0.00</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Simpanan Table -->
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
                 <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
@@ -1037,9 +1129,17 @@
             { id: 2, bulan: "Februari", tahun: 2026, pendapatanKasar: 5500, potongan: 550, pendapatanBersih: 4950 }
         ];
 
+        // Seeded with representative goals values matching requested items
         const defaultSimpananItems = [
             { id: 1, bulan: "Januari", tahun: 2026, kategori: "Kecemasan", namaItem: "Tabung Haji", anggaran: 300, status: "Simpan", masuk: 300, keluar: 0, jumlah: 300 },
-            { id: 2, bulan: "Februari", tahun: 2026, kategori: "Percutian", namaItem: "ASB", anggaran: 200, status: "Simpan", masuk: 200, keluar: 50, jumlah: 150 }
+            { id: 2, bulan: "Februari", tahun: 2026, kategori: "Percutian", namaItem: "ASB", anggaran: 200, status: "Simpan", masuk: 200, keluar: 50, jumlah: 150 },
+            { id: 3, bulan: "Januari", tahun: 2026, kategori: "Percutian", namaItem: "Holiday", anggaran: 500, status: "Simpan", masuk: 500, keluar: 0, jumlah: 500 },
+            { id: 4, bulan: "Januari", tahun: 2026, kategori: "Pengangkutan", namaItem: "Touch & Go", anggaran: 150, status: "Simpan", masuk: 150, keluar: 50, jumlah: 100 },
+            { id: 5, bulan: "Januari", tahun: 2026, kategori: "Rumah", namaItem: "Keperluan rumah baru", anggaran: 1000, status: "Simpan", masuk: 1000, keluar: 200, jumlah: 800 },
+            { id: 6, bulan: "Januari", tahun: 2026, kategori: "Keluarga", namaItem: "Ilyas", anggaran: 300, status: "Simpan", masuk: 300, keluar: 0, jumlah: 300 },
+            { id: 7, bulan: "Januari", tahun: 2026, kategori: "Keluarga", namaItem: "Humaira", anggaran: 300, status: "Simpan", masuk: 300, keluar: 0, jumlah: 300 },
+            { id: 8, bulan: "Januari", tahun: 2026, kategori: "Senggaraan", namaItem: "Servis Kereta", anggaran: 400, status: "Simpan", masuk: 400, keluar: 150, jumlah: 250 },
+            { id: 9, bulan: "Januari", tahun: 2026, kategori: "Profesional", namaItem: "Penilaian Swasta", anggaran: 600, status: "Simpan", masuk: 600, keluar: 0, jumlah: 600 }
         ];
 
         // GLOBAL APPLICATION STATE variables
@@ -1597,7 +1697,6 @@
 
             const categorySums = {};
             filteredBudget.forEach(item => {
-                // Diperbarui: Hanya mengambil nilai jumlah sebenar untuk carta dashboard
                 const costValue = item.jumlahSebenar;
                 if(costValue > 0) {
                     categorySums[item.kategori] = (categorySums[item.kategori] || 0) + costValue;
@@ -1909,6 +2008,33 @@
             });
         }
 
+        // HELPER FUNGSI: Mengira nilai simpanan kumulatif sehingga bulan saringan yang ditapis
+        function getCumulativeSimpananItem(itemName, filterBulanTamat, filterTahun) {
+            const bulanList = ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"];
+            const idxTamat = filterBulanTamat === 'Semua' ? 11 : bulanList.indexOf(filterBulanTamat);
+            
+            let total = 0;
+            simpananDatabase.forEach(item => {
+                if (item.namaItem && item.namaItem.trim().toLowerCase() === itemName.trim().toLowerCase()) {
+                    const itemYear = String(item.tahun);
+                    const itemMonthIdx = bulanList.indexOf(item.bulan);
+                    
+                    if (filterTahun === 'Semua') {
+                        total += item.jumlah;
+                    } else {
+                        if (itemYear < filterTahun) {
+                            total += item.jumlah;
+                        } else if (itemYear === filterTahun) {
+                            if (filterBulanTamat === 'Semua' || itemMonthIdx <= idxTamat) {
+                                total += item.jumlah;
+                            }
+                        }
+                    }
+                }
+            });
+            return total;
+        }
+
         // RENDER FOURTH TAB CONTENT (SIMPANAN) WITH MONTH RANGE
         function renderSimpananView() {
             const filterBulanMula = document.getElementById('simp-filter-bulan-mula').value;
@@ -1958,6 +2084,26 @@
             document.getElementById('simp-card-jumlah').innerText = `RM ${totalJumlahSemasa.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('simp-card-keluar').innerText = `RM ${totalKeluarBulanIni.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('simp-record-count').innerText = `Menunjukkan ${filtered.length} rekod`;
+
+            // Kemas kini Metrik Kad Sasaran Simpanan Khas (Secara Kumulatif mengikut penapis tarikh semasa)
+            const targets = [
+                { name: 'Holiday', id: 'simp-val-holiday' },
+                { name: 'ASB', id: 'simp-val-asb' },
+                { name: 'Touch & Go', id: 'simp-val-tng' },
+                { name: 'Keperluan rumah baru', id: 'simp-val-rumah' },
+                { name: 'Ilyas', id: 'simp-val-ilyas' },
+                { name: 'Humaira', id: 'simp-val-humaira' },
+                { name: 'Servis Kereta', id: 'simp-val-servis' },
+                { name: 'Penilaian Swasta', id: 'simp-val-penilaian' }
+            ];
+
+            targets.forEach(t => {
+                const amt = getCumulativeSimpananItem(t.name, filterBulanTamat, filterTahun);
+                const el = document.getElementById(t.id);
+                if (el) {
+                    el.innerText = `RM ${amt.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+                }
+            });
 
             const tbody = document.getElementById('simpanan-table-body');
             tbody.innerHTML = '';
@@ -2018,7 +2164,6 @@
 
         // FUNGSI: Salin Rekod Simpanan Bulan Lepas
         async function copyPreviousMonthSimpanan() {
-            // Kita sasarkan pada bulan tamat filter jika range, atau lebih tepatnya kita set sasaran kepada satu bulan.
             const currentBulan = document.getElementById('simp-filter-bulan-tamat').value;
             const currentTahun = document.getElementById('simp-filter-tahun').value;
 
