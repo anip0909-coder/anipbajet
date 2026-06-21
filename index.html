@@ -745,7 +745,7 @@
                 </div>
             </div>
 
-            <!-- Goal-Based Specific Savings Metric Cards (Grid of 8) -->
+            <!-- Goal-Based Specific Savings Metric Cards (Dynamic) -->
             <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                 <div class="flex items-center gap-2">
                     <div class="p-1.5 bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 rounded-lg">
@@ -753,87 +753,8 @@
                     </div>
                     <h3 class="font-bold text-sm text-slate-900 dark:text-slate-100">Nilai Simpanan Mengikut Sasaran Khas (Goal-Based)</h3>
                 </div>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <!-- Holiday Card -->
-                    <div class="bg-gradient-to-br from-indigo-50/40 to-white dark:from-indigo-950/10 dark:to-slate-900/50 p-4 rounded-xl border border-indigo-100 dark:border-indigo-900/20 flex items-center gap-3">
-                        <div class="h-8 w-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-sm flex-shrink-0">
-                            <i class="fa-solid fa-umbrella-beach"></i>
-                        </div>
-                        <div class="min-w-0">
-                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">Holiday</span>
-                            <h4 class="text-sm font-black text-slate-900 dark:text-white truncate" id="simp-val-holiday">RM 0.00</h4>
-                        </div>
-                    </div>
-                    <!-- ASB Card -->
-                    <div class="bg-gradient-to-br from-emerald-50/40 to-white dark:from-emerald-950/10 dark:to-slate-900/50 p-4 rounded-xl border border-emerald-100 dark:border-emerald-900/20 flex items-center gap-3">
-                        <div class="h-8 w-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-sm flex-shrink-0">
-                            <i class="fa-solid fa-piggy-bank"></i>
-                        </div>
-                        <div class="min-w-0">
-                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">ASB</span>
-                            <h4 class="text-sm font-black text-slate-900 dark:text-white truncate" id="simp-val-asb">RM 0.00</h4>
-                        </div>
-                    </div>
-                    <!-- Touch & Go Card -->
-                    <div class="bg-gradient-to-br from-blue-50/40 to-white dark:from-blue-950/10 dark:to-slate-900/50 p-4 rounded-xl border border-blue-100 dark:border-blue-900/20 flex items-center gap-3">
-                        <div class="h-8 w-8 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-sm flex-shrink-0">
-                            <i class="fa-solid fa-credit-card"></i>
-                        </div>
-                        <div class="min-w-0">
-                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">Touch & Go</span>
-                            <h4 class="text-sm font-black text-slate-900 dark:text-white truncate" id="simp-val-tng">RM 0.00</h4>
-                        </div>
-                    </div>
-                    <!-- Keperluan rumah baru Card -->
-                    <div class="bg-gradient-to-br from-amber-50/40 to-white dark:from-amber-950/10 dark:to-slate-900/50 p-4 rounded-xl border border-amber-100 dark:border-amber-900/20 flex items-center gap-3">
-                        <div class="h-8 w-8 rounded-lg bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 flex items-center justify-center text-sm flex-shrink-0">
-                            <i class="fa-solid fa-house-chimney"></i>
-                        </div>
-                        <div class="min-w-0">
-                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">Rumah Baru</span>
-                            <h4 class="text-sm font-black text-slate-900 dark:text-white truncate" id="simp-val-rumah">RM 0.00</h4>
-                        </div>
-                    </div>
-                    <!-- Ilyas Card -->
-                    <div class="bg-gradient-to-br from-rose-50/40 to-white dark:from-rose-950/10 dark:to-slate-900/50 p-4 rounded-xl border border-rose-100 dark:border-rose-900/20 flex items-center gap-3">
-                        <div class="h-8 w-8 rounded-lg bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 flex items-center justify-center text-sm flex-shrink-0">
-                            <i class="fa-solid fa-child"></i>
-                        </div>
-                        <div class="min-w-0">
-                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">Ilyas</span>
-                            <h4 class="text-sm font-black text-slate-900 dark:text-white truncate" id="simp-val-ilyas">RM 0.00</h4>
-                        </div>
-                    </div>
-                    <!-- Humaira Card -->
-                    <div class="bg-gradient-to-br from-teal-50/40 to-white dark:from-teal-950/10 dark:to-slate-900/50 p-4 rounded-xl border border-teal-100 dark:border-teal-900/20 flex items-center gap-3">
-                        <div class="h-8 w-8 rounded-lg bg-teal-100 dark:bg-teal-900/50 text-teal-600 dark:text-teal-400 flex items-center justify-center text-sm flex-shrink-0">
-                            <i class="fa-solid fa-child-dress"></i>
-                        </div>
-                        <div class="min-w-0">
-                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">Humaira</span>
-                            <h4 class="text-sm font-black text-slate-900 dark:text-white truncate" id="simp-val-humaira">RM 0.00</h4>
-                        </div>
-                    </div>
-                    <!-- Servis Kereta Card -->
-                    <div class="bg-gradient-to-br from-orange-50/40 to-white dark:from-orange-950/10 dark:to-slate-900/50 p-4 rounded-xl border border-orange-100 dark:border-orange-900/20 flex items-center gap-3">
-                        <div class="h-8 w-8 rounded-lg bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-400 flex items-center justify-center text-sm flex-shrink-0">
-                            <i class="fa-solid fa-wrench"></i>
-                        </div>
-                        <div class="min-w-0">
-                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">Servis Kereta</span>
-                            <h4 class="text-sm font-black text-slate-900 dark:text-white truncate" id="simp-val-servis">RM 0.00</h4>
-                        </div>
-                    </div>
-                    <!-- Penilaian Swasta Card -->
-                    <div class="bg-gradient-to-br from-slate-100 to-white dark:from-slate-800/40 dark:to-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700/50 flex items-center gap-3">
-                        <div class="h-8 w-8 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center text-sm flex-shrink-0">
-                            <i class="fa-solid fa-file-signature"></i>
-                        </div>
-                        <div class="min-w-0">
-                            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">Penilaian Swasta</span>
-                            <h4 class="text-sm font-black text-slate-900 dark:text-white truncate" id="simp-val-penilaian">RM 0.00</h4>
-                        </div>
-                    </div>
+                <div id="simp-goal-cards-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Dynamic goal cards injected here based on all namaItem in Simpanan data -->
                 </div>
             </div>
 
@@ -2311,6 +2232,72 @@
             return total;
         }
 
+        // Visual palette cycled automatically for dynamically generated goal cards
+        const SIMPANAN_GOAL_CARD_STYLES = [
+            { grad: "from-indigo-50/40 to-white dark:from-indigo-950/10 dark:to-slate-900/50", border: "border-indigo-100 dark:border-indigo-900/20", iconBg: "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400", bar: "bg-indigo-500", icon: "fa-bullseye" },
+            { grad: "from-emerald-50/40 to-white dark:from-emerald-950/10 dark:to-slate-900/50", border: "border-emerald-100 dark:border-emerald-900/20", iconBg: "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400", bar: "bg-emerald-500", icon: "fa-piggy-bank" },
+            { grad: "from-blue-50/40 to-white dark:from-blue-950/10 dark:to-slate-900/50", border: "border-blue-100 dark:border-blue-900/20", iconBg: "bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400", bar: "bg-blue-500", icon: "fa-wallet" },
+            { grad: "from-amber-50/40 to-white dark:from-amber-950/10 dark:to-slate-900/50", border: "border-amber-100 dark:border-amber-900/20", iconBg: "bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400", bar: "bg-amber-500", icon: "fa-house-chimney" },
+            { grad: "from-rose-50/40 to-white dark:from-rose-950/10 dark:to-slate-900/50", border: "border-rose-100 dark:border-rose-900/20", iconBg: "bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400", bar: "bg-rose-500", icon: "fa-heart" },
+            { grad: "from-teal-50/40 to-white dark:from-teal-950/10 dark:to-slate-900/50", border: "border-teal-100 dark:border-teal-900/20", iconBg: "bg-teal-100 dark:bg-teal-900/50 text-teal-600 dark:text-teal-400", bar: "bg-teal-500", icon: "fa-star" },
+            { grad: "from-orange-50/40 to-white dark:from-orange-950/10 dark:to-slate-900/50", border: "border-orange-100 dark:border-orange-900/20", iconBg: "bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-400", bar: "bg-orange-500", icon: "fa-wrench" },
+            { grad: "from-slate-100 to-white dark:from-slate-800/40 dark:to-slate-900/50", border: "border-slate-200 dark:border-slate-700/50", iconBg: "bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300", bar: "bg-slate-500", icon: "fa-file-signature" },
+            { grad: "from-cyan-50/40 to-white dark:from-cyan-950/10 dark:to-slate-900/50", border: "border-cyan-100 dark:border-cyan-900/20", iconBg: "bg-cyan-100 dark:bg-cyan-900/50 text-cyan-600 dark:text-cyan-400", bar: "bg-cyan-500", icon: "fa-umbrella-beach" },
+            { grad: "from-fuchsia-50/40 to-white dark:from-fuchsia-950/10 dark:to-slate-900/50", border: "border-fuchsia-100 dark:border-fuchsia-900/20", iconBg: "bg-fuchsia-100 dark:bg-fuchsia-900/50 text-fuchsia-600 dark:text-fuchsia-400", bar: "bg-fuchsia-500", icon: "fa-gift" }
+        ];
+
+        // RENDER GOAL-BASED SAVINGS CARDS AUTOMATICALLY FOR EVERY UNIQUE ITEM IN THE SIMPANAN DATA
+        function renderSimpananGoalCards(filterBulanTamat, filterTahun) {
+            const grid = document.getElementById('simp-goal-cards-grid');
+            if (!grid) return;
+
+            const bulanList = ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"];
+            const uniqueItems = [...new Set(simpananDatabase.map(i => i.namaItem))].filter(Boolean);
+
+            if (uniqueItems.length === 0) {
+                grid.innerHTML = `<p class="col-span-full text-xs text-slate-400 dark:text-slate-500 text-center py-4">Tiada sasaran simpanan ditemui. Tambah rekod simpanan untuk mula menjejak sasaran.</p>`;
+                return;
+            }
+
+            grid.innerHTML = uniqueItems.map((namaItem, idx) => {
+                const itemRecords = simpananDatabase.filter(i => i.namaItem === namaItem);
+
+                // Determine the most up-to-date target (anggaran) by latest tahun + bulan
+                const latestRecord = itemRecords.reduce((latest, cur) => {
+                    if (!latest) return cur;
+                    if (cur.tahun !== latest.tahun) return cur.tahun > latest.tahun ? cur : latest;
+                    return bulanList.indexOf(cur.bulan) > bulanList.indexOf(latest.bulan) ? cur : latest;
+                }, null);
+
+                const target = latestRecord ? latestRecord.anggaran : 0;
+                const current = getCumulativeSimpananItem(namaItem, filterBulanTamat, filterTahun);
+                const percent = target > 0 ? Math.min(100, Math.max(0, (current / target) * 100)) : 0;
+                const style = SIMPANAN_GOAL_CARD_STYLES[idx % SIMPANAN_GOAL_CARD_STYLES.length];
+
+                return `
+                    <div class="bg-gradient-to-br ${style.grad} p-4 rounded-xl border ${style.border} space-y-2.5">
+                        <div class="flex items-center gap-3">
+                            <div class="h-8 w-8 rounded-lg ${style.iconBg} flex items-center justify-center text-sm flex-shrink-0">
+                                <i class="fa-solid ${style.icon}"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">${namaItem}</span>
+                                <h4 class="text-sm font-black text-slate-900 dark:text-white truncate">RM ${current.toLocaleString('en-MY', {minimumFractionDigits: 2})}</h4>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="w-full bg-white/60 dark:bg-slate-950/40 h-1.5 rounded-full overflow-hidden">
+                                <div class="${style.bar} h-full rounded-full transition-all duration-500" style="width: ${percent}%"></div>
+                            </div>
+                            <div class="flex justify-between items-center mt-1">
+                                <span class="text-[10px] text-slate-500 dark:text-slate-400">Sasaran RM ${target.toLocaleString('en-MY', {minimumFractionDigits: 2})}</span>
+                                <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300">${percent.toFixed(0)}%</span>
+                            </div>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
         // RENDER FOURTH TAB CONTENT (SIMPANAN) WITH MONTH RANGE
         function renderSimpananView() {
             const filterBulanMula = document.getElementById('simp-filter-bulan-mula').value;
@@ -2361,25 +2348,8 @@
             document.getElementById('simp-card-keluar').innerText = `RM ${totalKeluarBulanIni.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('simp-record-count').innerText = `Menunjukkan ${filtered.length} rekod`;
 
-            // Kemas kini Metrik Kad Sasaran Simpanan Khas (Secara Kumulatif mengikut penapis tarikh semasa)
-            const targets = [
-                { name: 'Holiday', id: 'simp-val-holiday' },
-                { name: 'ASB', id: 'simp-val-asb' },
-                { name: 'Touch & Go', id: 'simp-val-tng' },
-                { name: 'Keperluan rumah baru', id: 'simp-val-rumah' },
-                { name: 'Ilyas', id: 'simp-val-ilyas' },
-                { name: 'Humaira', id: 'simp-val-humaira' },
-                { name: 'Servis Kereta', id: 'simp-val-servis' },
-                { name: 'Penilaian Swasta', id: 'simp-val-penilaian' }
-            ];
-
-            targets.forEach(t => {
-                const amt = getCumulativeSimpananItem(t.name, filterBulanTamat, filterTahun);
-                const el = document.getElementById(t.id);
-                if (el) {
-                    el.innerText = `RM ${amt.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
-                }
-            });
+            // Kemas kini Kad Sasaran Simpanan Khas (Secara Automatik ikut SEMUA nama item dalam data)
+            renderSimpananGoalCards(filterBulanTamat, filterTahun);
 
             const tbody = document.getElementById('simpanan-table-body');
             tbody.innerHTML = '';
