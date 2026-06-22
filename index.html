@@ -1159,7 +1159,7 @@
         const INCOME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=142125272";
         const SIMPANAN_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=611554426";
         // Sila gantikan GID di bawah selepas anda 'Publish to Web' tab "Nota Kalendar" baharu dalam Google Sheet anda
-        const CALENDAR_NOTES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=YOUR_NOTA_KALENDAR_GID";
+        const CALENDAR_NOTES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=1513581026";
         
         const CATEGORY_COLORS = {
             'Komitmen': '#f59e0b',  // Amber
@@ -1191,7 +1191,9 @@
                     fetch(GOOGLE_SHEET_CSV_URL),
                     fetch(SIMPANAN_CSV_URL).catch(() => null),
                     fetch(INCOME_CSV_URL).catch(() => null),
-                    fetch(CALENDAR_NOTES_CSV_URL).catch(() => null)
+                    CALENDAR_NOTES_CSV_URL.includes('YOUR_NOTA_KALENDAR_GID')
+                        ? Promise.resolve(null)
+                        : fetch(CALENDAR_NOTES_CSV_URL).catch(() => null)
                 ]);
                 
                 if (!budgetResponse.ok) throw new Error("CORS or Connection Error from Google Spreadsheet.");
@@ -1211,7 +1213,26 @@
 
                 if (noteResponse && noteResponse.ok) {
                     const noteCsvText = await noteResponse.text();
-                    calendarNotesDB = parseCalendarNotesCSV(noteCsvText);
+                    const parsedNotes = parseCalendarNotesCSV(noteCsvText);
+                    // MERGE: kekalkan nota tempatan (local-*) yang belum tersync ke sheet.
+                    // Ini elak nota baru dipadam semula oleh sync sekiranya sheet masih kosong
+                    // atau Apps Script belum redeploy dengan betul.
+                    Object.keys(calendarNotesDB).forEach(dateKey => {
+                        (calendarNotesDB[dateKey] || []).forEach(localNote => {
+                            if (localNote.id && localNote.id.startsWith('local-')) {
+                                // Semak nota ini belum ada dalam data sheet (elak duplikasi)
+                                const alreadyInSheet = (parsedNotes[dateKey] || []).some(
+                                    sn => sn.text.trim() === localNote.text.trim()
+                                );
+                                if (!alreadyInSheet) {
+                                    if (!parsedNotes[dateKey]) parsedNotes[dateKey] = [];
+                                    parsedNotes[dateKey].push(localNote);
+                                }
+                            }
+                        });
+                    });
+
+                    calendarNotesDB = parsedNotes;
                     saveCalendarNotes();
                 }
                 
@@ -1461,6 +1482,7 @@
                 if(!silent) showToast("Menyegerak...", "Menghantar data terus ke Google Sheet...", "info");
                 const response = await fetch(APPSCRIPT_WEB_APP_URL, {
                     method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ action, payload })
                 });
 
@@ -1810,8 +1832,9 @@
             if (!calendarNotesDB[currentCalendarDateKey]) {
                 calendarNotesDB[currentCalendarDateKey] = [];
             }
+            const tempId = 'local-' + Date.now().toString();
             calendarNotesDB[currentCalendarDateKey].push({
-                id: 'local-' + Date.now().toString(),
+                id: tempId,
                 sheetRow: null,
                 text: text
             });
@@ -1821,14 +1844,13 @@
             renderCalendarDayNotesList();
             renderUpcomingCalendarNotes();
             renderDashboardNotesPanel();
-            showToast("Nota Ditambah", "Nota baharu telah disimpan pada tarikh ini.", "success");
 
             const successPush = await pushDataToSheet("ADD_NOTE", {
                 tahun: y, bulan: calendarBulanList[m - 1], hari: d, text
-            }, true);
+            }, false); // false = tunjuk toast kejayaan/ralat
 
             submitBtn.disabled = false;
-            if (successPush) setTimeout(syncWithGoogleSheet, 1500);
+            if (successPush) setTimeout(syncWithGoogleSheet, 2000);
         }
 
         function startEditCalendarNote(noteId) {
@@ -1862,14 +1884,20 @@
             renderCalendarDayNotesList();
             renderUpcomingCalendarNotes();
             renderDashboardNotesPanel();
-            showToast("Nota Dikemaskini", "Perubahan nota telah disimpan.", "success");
 
             if (note.sheetRow) {
                 const [y, m, d] = currentCalendarDateKey.split('-').map(Number);
                 const successPush = await pushDataToSheet("UPDATE_NOTE", {
                     sheetRow: note.sheetRow, tahun: y, bulan: calendarBulanList[m - 1], hari: d, text: newText
-                }, true);
-                if (successPush) setTimeout(syncWithGoogleSheet, 1500);
+                }, false);
+                if (successPush) setTimeout(syncWithGoogleSheet, 2000);
+            } else {
+                // Note not yet in sheet (still local) — push as new row
+                const [y, m, d] = currentCalendarDateKey.split('-').map(Number);
+                const successPush = await pushDataToSheet("ADD_NOTE", {
+                    tahun: y, bulan: calendarBulanList[m - 1], hari: d, text: newText
+                }, false);
+                if (successPush) setTimeout(syncWithGoogleSheet, 2000);
             }
         }
 
@@ -1884,11 +1912,12 @@
                     calendarNotesDB[currentCalendarDateKey] = notes.filter(n => n.id !== noteId);
                     saveCalendarNotes();
                     renderCalendarDayNotesList();
-                    showToast("Nota Dipadam", "Nota telah berjaya dibuang.", "info");
+                    renderUpcomingCalendarNotes();
+                    renderDashboardNotesPanel();
 
                     if (note && note.sheetRow) {
-                        const successPush = await pushDataToSheet("DELETE_ROW", { sheetType: 'calendar', sheetRow: note.sheetRow }, true);
-                        if (successPush) setTimeout(syncWithGoogleSheet, 1500);
+                        const successPush = await pushDataToSheet("DELETE_ROW", { sheetType: 'calendar', sheetRow: note.sheetRow }, false);
+                        if (successPush) setTimeout(syncWithGoogleSheet, 2000);
                     }
                 }
             );
