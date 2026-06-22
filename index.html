@@ -378,52 +378,31 @@
                 </div>
             </div>
 
-            <!-- Annual Calendar with Notes -->
-            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 border-b border-slate-100 dark:border-slate-800 pb-3">
+            <!-- Annual Calendar with Notes (12-month full year view) -->
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                <!-- Header: year navigation -->
+                <div class="flex items-center justify-between mb-5 border-b border-slate-100 dark:border-slate-800 pb-3">
                     <div class="flex items-center gap-2">
                         <i class="fa-solid fa-calendar-days text-primary-500"></i>
                         <h3 class="font-bold text-slate-900 dark:text-slate-100">Kalendar &amp; Nota</h3>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button onclick="changeCalendarMonth(-1)" class="h-8 w-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                        <button onclick="changeCalendarYear(-1)" class="h-8 w-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
                             <i class="fa-solid fa-chevron-left text-xs"></i>
                         </button>
-                        <span id="calendar-month-label" class="text-sm font-bold text-slate-900 dark:text-white w-36 text-center select-none">-</span>
-                        <button onclick="changeCalendarMonth(1)" class="h-8 w-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                        <span id="calendar-year-label" class="text-sm font-bold text-slate-900 dark:text-white w-16 text-center select-none">-</span>
+                        <button onclick="changeCalendarYear(1)" class="h-8 w-8 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
                             <i class="fa-solid fa-chevron-right text-xs"></i>
                         </button>
                         <button onclick="goToCalendarToday()" class="ml-1 px-3 h-8 flex items-center justify-center rounded-lg bg-primary-50 dark:bg-primary-950/50 text-primary-600 dark:text-primary-400 text-xs font-bold hover:bg-primary-100 dark:hover:bg-primary-900/50 transition-colors">
-                            Hari Ini
+                            Tahun Ini
                         </button>
                     </div>
                 </div>
 
-                <!-- Weekday Header -->
-                <div class="grid grid-cols-7 gap-1.5 mb-1.5 text-center">
-                    <span class="text-[11px] font-bold text-slate-400 uppercase">Ahd</span>
-                    <span class="text-[11px] font-bold text-slate-400 uppercase">Isn</span>
-                    <span class="text-[11px] font-bold text-slate-400 uppercase">Sel</span>
-                    <span class="text-[11px] font-bold text-slate-400 uppercase">Rab</span>
-                    <span class="text-[11px] font-bold text-slate-400 uppercase">Kha</span>
-                    <span class="text-[11px] font-bold text-slate-400 uppercase">Jum</span>
-                    <span class="text-[11px] font-bold text-slate-400 uppercase">Sab</span>
-                </div>
-
-                <!-- Day Grid -->
-                <div id="calendar-grid" class="grid grid-cols-7 gap-1.5">
-                    <!-- Dynamic day cells injected here -->
-                </div>
-
-                <!-- Upcoming/Today Notes Panel (so notes are visible directly on the dashboard) -->
-                <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800">
-                    <div class="flex items-center gap-2 mb-3">
-                        <i class="fa-solid fa-note-sticky text-amber-500 text-sm"></i>
-                        <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Nota &amp; Peringatan Akan Datang</h4>
-                    </div>
-                    <div id="calendar-upcoming-notes-list" class="space-y-2">
-                        <!-- Dynamic upcoming notes injected here -->
-                    </div>
+                <!-- 12-month grid -->
+                <div id="calendar-year-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <!-- 12 month mini-calendars injected here -->
                 </div>
 
                 <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-4 flex items-center gap-1.5">
@@ -1581,8 +1560,8 @@
             return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         }
 
-        function changeCalendarMonth(delta) {
-            calendarViewDate.setMonth(calendarViewDate.getMonth() + delta);
+        function changeCalendarYear(delta) {
+            calendarViewDate.setFullYear(calendarViewDate.getFullYear() + delta);
             renderCalendar();
         }
 
@@ -1592,59 +1571,67 @@
         }
 
         function renderCalendar() {
-            const year = calendarViewDate.getFullYear();
-            const month = calendarViewDate.getMonth();
-
-            document.getElementById('calendar-month-label').innerText = `${calendarBulanList[month]} ${year}`;
-
-            const firstDayOfMonth = new Date(year, month, 1);
-            const startWeekday = firstDayOfMonth.getDay(); // 0 = Ahad
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const daysInPrevMonth = new Date(year, month, 0).getDate();
+            const viewYear = calendarViewDate.getFullYear();
+            const yearLabel = document.getElementById('calendar-year-label');
+            if (yearLabel) yearLabel.innerText = viewYear;
 
             const today = new Date();
-            const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
+            const todayKey = formatCalendarDateKey(today.getFullYear(), today.getMonth(), today.getDate());
 
-            const grid = document.getElementById('calendar-grid');
-            let cellsHtml = '';
+            const yearGrid = document.getElementById('calendar-year-grid');
+            if (!yearGrid) return;
 
-            // Leading cells from previous month (greyed out, not clickable)
-            for (let i = startWeekday - 1; i >= 0; i--) {
-                const d = daysInPrevMonth - i;
-                cellsHtml += `<div class="aspect-square flex items-center justify-center rounded-lg text-xs text-slate-300 dark:text-slate-700">${d}</div>`;
-            }
+            const shortDay = ['A', 'I', 'S', 'R', 'K', 'J', 'S'];
 
-            // Current month cells
-            for (let d = 1; d <= daysInMonth; d++) {
-                const dateKey = formatCalendarDateKey(year, month, d);
-                const noteCount = (calendarNotesDB[dateKey] || []).length;
-                const isToday = isCurrentMonth && today.getDate() === d;
+            let yearHtml = '';
+            for (let m = 0; m < 12; m++) {
+                const firstDay = new Date(viewYear, m, 1).getDay(); // 0=Sun
+                const daysInMonth = new Date(viewYear, m + 1, 0).getDate();
+                const isCurrentMonth = today.getFullYear() === viewYear && today.getMonth() === m;
 
-                let cellClasses = "aspect-square flex flex-col items-center justify-center rounded-lg text-xs font-semibold cursor-pointer relative transition-colors border ";
-                if (isToday) {
-                    cellClasses += "bg-primary-600 border-primary-600 text-white hover:bg-primary-700";
-                } else {
-                    cellClasses += "border-transparent text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800";
+                // Day header row
+                let monthHtml = `
+                    <div class="rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden">
+                        <div class="px-2.5 py-2 bg-slate-50 dark:bg-slate-800/60 flex items-center justify-between">
+                            <span class="text-[11px] font-extrabold text-slate-700 dark:text-slate-200 uppercase tracking-wide">${calendarBulanList[m]}</span>
+                            ${isCurrentMonth ? '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400">Bulan Ini</span>' : ''}
+                        </div>
+                        <div class="p-1.5">
+                            <div class="grid grid-cols-7 mb-0.5">
+                                ${shortDay.map(d => `<div class="text-center text-[8px] font-bold text-slate-400 py-0.5">${d}</div>`).join('')}
+                            </div>
+                            <div class="grid grid-cols-7 gap-0.5">`;
+
+                // Leading blank cells
+                for (let i = 0; i < firstDay; i++) {
+                    monthHtml += `<div></div>`;
                 }
 
-                const dotHtml = noteCount > 0
-                    ? `<span class="absolute bottom-1 w-1.5 h-1.5 rounded-full ${isToday ? 'bg-white' : 'bg-primary-500'}"></span>`
-                    : '';
+                // Day cells
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const dateKey = formatCalendarDateKey(viewYear, m, d);
+                    const hasNote = (calendarNotesDB[dateKey] || []).length > 0;
+                    const isToday = dateKey === todayKey;
 
-                cellsHtml += `<div class="${cellClasses}" onclick="openCalendarDayModal('${dateKey}')">
-                    <span>${d}</span>
-                    ${dotHtml}
-                </div>`;
+                    let cls = 'relative flex items-center justify-center rounded text-[10px] font-semibold cursor-pointer transition-colors aspect-square ';
+                    if (isToday) {
+                        cls += 'bg-primary-600 text-white hover:bg-primary-700';
+                    } else {
+                        cls += 'text-slate-600 dark:text-slate-300 hover:bg-primary-50 dark:hover:bg-primary-950/30 hover:text-primary-600 dark:hover:text-primary-400';
+                    }
+
+                    const dot = hasNote
+                        ? `<span class="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${isToday ? 'bg-white/80' : 'bg-primary-400'}"></span>`
+                        : '';
+
+                    monthHtml += `<div class="${cls}" onclick="openCalendarDayModal('${dateKey}')">${d}${dot}</div>`;
+                }
+
+                monthHtml += `</div></div></div>`;
+                yearHtml += monthHtml;
             }
 
-            // Trailing cells from next month (greyed out, not clickable)
-            const totalCells = startWeekday + daysInMonth;
-            const trailing = (7 - (totalCells % 7)) % 7;
-            for (let d = 1; d <= trailing; d++) {
-                cellsHtml += `<div class="aspect-square flex items-center justify-center rounded-lg text-xs text-slate-300 dark:text-slate-700">${d}</div>`;
-            }
-
-            grid.innerHTML = cellsHtml;
+            yearGrid.innerHTML = yearHtml;
             renderUpcomingCalendarNotes();
             renderDashboardNotesPanel();
         }
