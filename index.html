@@ -357,6 +357,27 @@
                 </div>
             </div>
 
+            <!-- Nota Kalendar Standalone Card (visible on dashboard without scrolling) -->
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div class="p-1.5 bg-amber-50 dark:bg-amber-950/40 rounded-lg">
+                            <i class="fa-solid fa-note-sticky text-amber-500 text-sm"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-sm text-slate-900 dark:text-slate-100">Nota &amp; Peringatan</h3>
+                            <p class="text-[11px] text-slate-400 dark:text-slate-500">Hari ini &amp; akan datang</p>
+                        </div>
+                    </div>
+                    <button onclick="openCalendarDayModal(formatCalendarDateKey(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()))" class="flex items-center gap-1.5 px-3 h-8 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 text-xs font-bold hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-colors">
+                        <i class="fa-solid fa-plus text-[11px]"></i> Tambah
+                    </button>
+                </div>
+                <div id="dashboard-notes-panel" class="p-4 space-y-1.5 max-h-56 overflow-y-auto">
+                    <!-- Dynamic notes injected here -->
+                </div>
+            </div>
+
             <!-- Annual Calendar with Notes -->
             <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 border-b border-slate-100 dark:border-slate-800 pb-3">
@@ -392,6 +413,17 @@
                 <!-- Day Grid -->
                 <div id="calendar-grid" class="grid grid-cols-7 gap-1.5">
                     <!-- Dynamic day cells injected here -->
+                </div>
+
+                <!-- Upcoming/Today Notes Panel (so notes are visible directly on the dashboard) -->
+                <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-2 mb-3">
+                        <i class="fa-solid fa-note-sticky text-amber-500 text-sm"></i>
+                        <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Nota &amp; Peringatan Akan Datang</h4>
+                    </div>
+                    <div id="calendar-upcoming-notes-list" class="space-y-2">
+                        <!-- Dynamic upcoming notes injected here -->
+                    </div>
                 </div>
 
                 <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-4 flex items-center gap-1.5">
@@ -1100,7 +1132,7 @@
     <!-- JAVASCRIPT LOGIC SECTION -->
     <script>
         // URL WEB APP GOOGLE APPS SCRIPT (Sila tampal Web App URL anda dari Apps Script di sini)
-        const APPSCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwAfLdzKbhXQ_yBsUt9Jve5hLoIEi6ZdbSkIqkP0Zj9xJguydwXtTTChM1RINTFOYsL/exec"; 
+        const APPSCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwvxkP_HQPrD3pyr8Th5QNqEJIQjLVWbQAg-YCmcg3Cc8VYMTwwLk4w2DPjjW7S_8_V/exec"; 
         
         // DEFAULT SEED DATA (Used if Google Sheet cannot be loaded or is offline)
         const defaultBudgetItems = [
@@ -1148,7 +1180,7 @@
         const INCOME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=142125272";
         const SIMPANAN_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=611554426";
         // Sila gantikan GID di bawah selepas anda 'Publish to Web' tab "Nota Kalendar" baharu dalam Google Sheet anda
-        const CALENDAR_NOTES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=1513581026";
+        const CALENDAR_NOTES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=YOUR_NOTA_KALENDAR_GID";
         
         const CATEGORY_COLORS = {
             'Komitmen': '#f59e0b',  // Amber
@@ -1390,11 +1422,11 @@
                         tahun: tIdx >= 0 && r[tIdx] ? parseInt(r[tIdx].trim(), 10) || 2026 : 2026,
                         kategori: kategori,
                         namaItem: namaItem,
-                        anggaran: aIdx >= 0 ? parseFloat((r[aIdx] || '').replace(/[^\d.]/g, '')) || 0 : 0,
+                        anggaran: aIdx >= 0 ? parseFloat((r[aIdx] || '').replace(/[^\d.\-]/g, '')) || 0 : 0,
                         status: sIdx >= 0 && r[sIdx] ? r[sIdx].trim() : 'Tidak',
-                        masuk: mIdx >= 0 ? parseFloat((r[mIdx] || '').replace(/[^\d.]/g, '')) || 0 : 0,
-                        keluar: outIdx >= 0 ? parseFloat((r[outIdx] || '').replace(/[^\d.]/g, '')) || 0 : 0,
-                        jumlah: jIdx >= 0 ? parseFloat((r[jIdx] || '').replace(/[^\d.]/g, '')) || 0 : 0
+                        masuk: mIdx >= 0 ? parseFloat((r[mIdx] || '').replace(/[^\d.\-]/g, '')) || 0 : 0,
+                        keluar: outIdx >= 0 ? parseFloat((r[outIdx] || '').replace(/[^\d.\-]/g, '')) || 0 : 0,
+                        jumlah: jIdx >= 0 ? parseFloat((r[jIdx] || '').replace(/[^\d.\-]/g, '')) || 0 : 0
                     });
                 }
             }
@@ -1613,6 +1645,116 @@
             }
 
             grid.innerHTML = cellsHtml;
+            renderUpcomingCalendarNotes();
+            renderDashboardNotesPanel();
+        }
+
+        // Render nota pada panel standalone dashboard (kad Nota & Peringatan)
+        function renderDashboardNotesPanel() {
+            const panel = document.getElementById('dashboard-notes-panel');
+            if (!panel) return;
+
+            const today = new Date();
+            const todayKey = formatCalendarDateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+            // Kumpul nota hari ini ke hadapan, susun ikut tarikh
+            const upcoming = [];
+            Object.keys(calendarNotesDB).forEach(dateKey => {
+                if (dateKey >= todayKey) {
+                    (calendarNotesDB[dateKey] || []).forEach(note => {
+                        upcoming.push({ dateKey, ...note });
+                    });
+                }
+            });
+            upcoming.sort((a, b) => a.dateKey.localeCompare(b.dateKey));
+
+            if (upcoming.length === 0) {
+                panel.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-6 gap-2">
+                        <i class="fa-regular fa-calendar-check text-2xl text-slate-300 dark:text-slate-700"></i>
+                        <p class="text-xs text-slate-400 dark:text-slate-500">Tiada nota atau peringatan. Klik <strong>Tambah</strong> atau tekan mana-mana tarikh dalam kalendar di bawah.</p>
+                    </div>`;
+                return;
+            }
+
+            const weekdayNames = ["Ahd", "Isn", "Sel", "Rab", "Kha", "Jum", "Sab"];
+            let lastDateKey = null;
+
+            panel.innerHTML = upcoming.map(note => {
+                const [y, m, d] = note.dateKey.split('-').map(Number);
+                const dateObj = new Date(y, m - 1, d);
+                const isToday = note.dateKey === todayKey;
+                const isTomorrow = (() => {
+                    const t = new Date(today); t.setDate(t.getDate() + 1);
+                    return formatCalendarDateKey(t.getFullYear(), t.getMonth(), t.getDate()) === note.dateKey;
+                })();
+
+                let dateBadgeText, dateBadgeClass;
+                if (isToday) {
+                    dateBadgeText = 'Hari Ini';
+                    dateBadgeClass = 'bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300';
+                } else if (isTomorrow) {
+                    dateBadgeText = 'Esok';
+                    dateBadgeClass = 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400';
+                } else {
+                    dateBadgeText = `${weekdayNames[dateObj.getDay()]} ${d} ${calendarBulanList[m - 1].slice(0, 3)}`;
+                    dateBadgeClass = 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400';
+                }
+
+                const isNewDate = note.dateKey !== lastDateKey;
+                lastDateKey = note.dateKey;
+
+                return `
+                    <div onclick="openCalendarDayModal('${note.dateKey}')" class="flex items-start gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+                        <span class="shrink-0 text-[10px] font-bold px-2 py-1 rounded-lg ${dateBadgeClass} leading-tight mt-0.5">${dateBadgeText}</span>
+                        <p class="text-sm text-slate-700 dark:text-slate-200 leading-snug flex-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">${escapeCalendarNoteHtml(note.text)}</p>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 dark:text-slate-600 mt-1 shrink-0 group-hover:text-primary-400 transition-colors"></i>
+                    </div>`;
+            }).join('');
+        }
+
+        // Tunjukkan senarai nota akan datang (termasuk hari ini) terus pada skrin dashboard
+        function renderUpcomingCalendarNotes() {
+            const container = document.getElementById('calendar-upcoming-notes-list');
+            if (!container) return;
+
+            const today = new Date();
+            const todayKey = formatCalendarDateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+            // Kumpulkan semua nota dari hari ini ke hadapan, susun ikut tarikh
+            const upcoming = [];
+            Object.keys(calendarNotesDB).forEach(dateKey => {
+                if (dateKey >= todayKey) {
+                    (calendarNotesDB[dateKey] || []).forEach(note => {
+                        upcoming.push({ dateKey, ...note });
+                    });
+                }
+            });
+            upcoming.sort((a, b) => a.dateKey.localeCompare(b.dateKey));
+
+            const limited = upcoming.slice(0, 6);
+
+            if (limited.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 dark:text-slate-500 py-2">Tiada nota atau peringatan akan datang.</p>`;
+                return;
+            }
+
+            const weekdayNames = ["Ahad", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu"];
+
+            container.innerHTML = limited.map(note => {
+                const [y, m, d] = note.dateKey.split('-').map(Number);
+                const dateObj = new Date(y, m - 1, d);
+                const isToday = note.dateKey === todayKey;
+                const dateLabel = isToday ? 'Hari Ini' : `${d} ${calendarBulanList[m - 1].slice(0, 3)}`;
+
+                return `
+                    <div onclick="openCalendarDayModal('${note.dateKey}')" class="flex items-center gap-3 p-2.5 rounded-xl border ${isToday ? 'border-primary-200 dark:border-primary-900/40 bg-primary-50/50 dark:bg-primary-950/20' : 'border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40'} cursor-pointer transition-colors">
+                        <div class="shrink-0 w-14 text-center">
+                            <span class="text-[10px] font-bold uppercase tracking-wide ${isToday ? 'text-primary-600 dark:text-primary-400' : 'text-slate-400 dark:text-slate-500'}">${dateLabel}</span>
+                        </div>
+                        <p class="text-xs text-slate-700 dark:text-slate-200 truncate flex-1">${escapeCalendarNoteHtml(note.text)}</p>
+                    </div>`;
+            }).join('');
         }
 
         function openCalendarDayModal(dateKey) {
@@ -1690,6 +1832,8 @@
             saveCalendarNotes();
             input.value = '';
             renderCalendarDayNotesList();
+            renderUpcomingCalendarNotes();
+            renderDashboardNotesPanel();
             showToast("Nota Ditambah", "Nota baharu telah disimpan pada tarikh ini.", "success");
 
             const successPush = await pushDataToSheet("ADD_NOTE", {
@@ -1729,6 +1873,8 @@
             note.text = newText;
             saveCalendarNotes();
             renderCalendarDayNotesList();
+            renderUpcomingCalendarNotes();
+            renderDashboardNotesPanel();
             showToast("Nota Dikemaskini", "Perubahan nota telah disimpan.", "success");
 
             if (note.sheetRow) {
@@ -2285,37 +2431,25 @@
             });
         }
 
-        // HELPER FUNGSI: Mengira nilai simpanan kumulatif sehingga bulan saringan yang ditapis
-        function getCumulativeSimpananItem(itemName, filterBulanTamat, filterTahun) {
-            const bulanList = ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"];
-            const idxTamat = filterBulanTamat === 'Semua' ? 11 : bulanList.indexOf(filterBulanTamat);
-            
-            let total = 0;
-            simpananDatabase.forEach(item => {
-                if (item.namaItem && item.namaItem.trim().toLowerCase() === itemName.trim().toLowerCase()) {
-                    const itemYear = String(item.tahun);
-                    const itemMonthIdx = bulanList.indexOf(item.bulan);
-                    
-                    if (filterTahun === 'Semua') {
-                        total += item.jumlah;
-                    } else {
-                        if (itemYear < filterTahun) {
-                            total += item.jumlah;
-                        } else if (itemYear === filterTahun) {
-                            if (filterBulanTamat === 'Semua' || itemMonthIdx <= idxTamat) {
-                                total += item.jumlah;
-                            }
-                        }
-                    }
-                }
-            });
-            return total;
+        // Padanan ikon pintar mengikut nama item (override icon cycle lalai jika padan kata kunci)
+        function pickGoalCardIcon(namaItem) {
+            const n = namaItem.toLowerCase();
+            if (n.includes('asb') || n.includes('saham') || n.includes('unit trust') || n.includes('amanah')) return 'fa-building-columns';
+            if (n.includes('holiday') || n.includes('percutian') || n.includes('cuti')) return 'fa-umbrella-beach';
+            if (n.includes('touch') || n.includes('tng') || n.includes('e-wallet') || n.includes('ewallet')) return 'fa-credit-card';
+            if (n.includes('rumah') || n.includes('hartanah')) return 'fa-house-chimney';
+            if (n.includes('kereta') || n.includes('servis') || n.includes('kenderaan')) return 'fa-car';
+            if (n.includes('anak') || n.includes('pendidikan') || n.includes('sekolah') || n.includes('tabung haji') || n.includes('haji')) return 'fa-graduation-cap';
+            if (n.includes('penilaian') || n.includes('swasta') || n.includes('dokumen')) return 'fa-file-signature';
+            if (n.includes('kecemasan') || n.includes('emergency')) return 'fa-kit-medical';
+            if (n.includes('emas') || n.includes('gold')) return 'fa-coins';
+            return null; // guna ikon cycle lalai ikut warna kad
         }
 
         // Visual palette cycled automatically for dynamically generated goal cards
         const SIMPANAN_GOAL_CARD_STYLES = [
             { grad: "from-indigo-50/40 to-white dark:from-indigo-950/10 dark:to-slate-900/50", border: "border-indigo-100 dark:border-indigo-900/20", iconBg: "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400", bar: "bg-indigo-500", icon: "fa-bullseye" },
-            { grad: "from-emerald-50/40 to-white dark:from-emerald-950/10 dark:to-slate-900/50", border: "border-emerald-100 dark:border-emerald-900/20", iconBg: "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400", bar: "bg-emerald-500", icon: "fa-piggy-bank" },
+            { grad: "from-emerald-50/40 to-white dark:from-emerald-950/10 dark:to-slate-900/50", border: "border-emerald-100 dark:border-emerald-900/20", iconBg: "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400", bar: "bg-emerald-500", icon: "fa-sack-dollar" },
             { grad: "from-blue-50/40 to-white dark:from-blue-950/10 dark:to-slate-900/50", border: "border-blue-100 dark:border-blue-900/20", iconBg: "bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400", bar: "bg-blue-500", icon: "fa-wallet" },
             { grad: "from-amber-50/40 to-white dark:from-amber-950/10 dark:to-slate-900/50", border: "border-amber-100 dark:border-amber-900/20", iconBg: "bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400", bar: "bg-amber-500", icon: "fa-house-chimney" },
             { grad: "from-rose-50/40 to-white dark:from-rose-950/10 dark:to-slate-900/50", border: "border-rose-100 dark:border-rose-900/20", iconBg: "bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400", bar: "bg-rose-500", icon: "fa-heart" },
@@ -2326,8 +2460,26 @@
             { grad: "from-fuchsia-50/40 to-white dark:from-fuchsia-950/10 dark:to-slate-900/50", border: "border-fuchsia-100 dark:border-fuchsia-900/20", iconBg: "bg-fuchsia-100 dark:bg-fuchsia-900/50 text-fuchsia-600 dark:text-fuchsia-400", bar: "bg-fuchsia-500", icon: "fa-gift" }
         ];
 
+        // Kira nilai semasa bagi SATU item — guna terus lajur 'jumlah' (Jumlah Simpanan RM) dari data,
+        // sama persis dengan apa yang dipapar dalam jadual. Ini memastikan nilai goal card = nilai sebenar dalam sheet.
+        function computeSimpananCurrentForItem(namaItem, filterBulanMula, filterBulanTamat, filterTahun) {
+            const bulanList = ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"];
+            const idxTamat = bulanList.indexOf(filterBulanTamat);
+
+            return simpananDatabase
+                .filter(i => {
+                    if (i.namaItem !== namaItem) return false;
+                    if (filterTahun === 'Semua') return true;
+                    const iYear = String(i.tahun);
+                    if (iYear < filterTahun) return true;
+                    if (iYear === filterTahun) return bulanList.indexOf(i.bulan) <= idxTamat;
+                    return false;
+                })
+                .reduce((sum, i) => sum + i.jumlah, 0);
+        }
+
         // RENDER GOAL-BASED SAVINGS CARDS AUTOMATICALLY FOR EVERY UNIQUE ITEM IN THE SIMPANAN DATA
-        function renderSimpananGoalCards(filterBulanTamat, filterTahun) {
+        function renderSimpananGoalCards(filterBulanMula, filterBulanTamat, filterTahun) {
             const grid = document.getElementById('simp-goal-cards-grid');
             if (!grid) return;
 
@@ -2350,19 +2502,25 @@
                 }, null);
 
                 const target = latestRecord ? latestRecord.anggaran : 0;
-                const current = getCumulativeSimpananItem(namaItem, filterBulanTamat, filterTahun);
+                const current = computeSimpananCurrentForItem(namaItem, filterBulanMula, filterBulanTamat, filterTahun);
+                const isNegative = current < 0;
                 const percent = target > 0 ? Math.min(100, Math.max(0, (current / target) * 100)) : 0;
                 const style = SIMPANAN_GOAL_CARD_STYLES[idx % SIMPANAN_GOAL_CARD_STYLES.length];
+                const iconClass = pickGoalCardIcon(namaItem) || style.icon;
+                const currentDisplay = isNegative
+                    ? `- RM ${Math.abs(current).toLocaleString('en-MY', {minimumFractionDigits: 2})}`
+                    : `RM ${current.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+                const valueClass = isNegative ? "text-sm font-black text-rose-600 dark:text-rose-400 truncate" : "text-sm font-black text-slate-900 dark:text-white truncate";
 
                 return `
                     <div class="bg-gradient-to-br ${style.grad} p-4 rounded-xl border ${style.border} space-y-2.5">
                         <div class="flex items-center gap-3">
                             <div class="h-8 w-8 rounded-lg ${style.iconBg} flex items-center justify-center text-sm flex-shrink-0">
-                                <i class="fa-solid ${style.icon}"></i>
+                                <i class="fa-solid ${iconClass}"></i>
                             </div>
                             <div class="min-w-0">
                                 <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block truncate">${namaItem}</span>
-                                <h4 class="text-sm font-black text-slate-900 dark:text-white truncate">RM ${current.toLocaleString('en-MY', {minimumFractionDigits: 2})}</h4>
+                                <h4 class="${valueClass}">${currentDisplay}</h4>
                             </div>
                         </div>
                         <div>
@@ -2421,15 +2579,26 @@
                 totalKeluarBulanIni += item.keluar;
             });
 
-            // Jumlah simpanan dalam saringan julat bulan
-            let totalJumlahSemasa = bakiBawaKeHadapan + totalMasukBulanIni - totalKeluarBulanIni;
+            // Jumlah simpanan semasa — jumlah terus lajur 'jumlah' dari semua rekod dalam julat tapis
+            // Formula ini konsisten dengan goal cards dan nilai dalam jadual
+            let totalJumlahSemasa = 0;
+            if (filterTahun === 'Semua') {
+                simpananDatabase.forEach(i => { totalJumlahSemasa += i.jumlah; });
+            } else {
+                const idxTamatForTotal = bulanList.indexOf(filterBulanTamat);
+                simpananDatabase.forEach(i => {
+                    const iYear = String(i.tahun);
+                    if (iYear < filterTahun) { totalJumlahSemasa += i.jumlah; return; }
+                    if (iYear === filterTahun && bulanList.indexOf(i.bulan) <= idxTamatForTotal) { totalJumlahSemasa += i.jumlah; }
+                });
+            }
 
             document.getElementById('simp-card-jumlah').innerText = `RM ${totalJumlahSemasa.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('simp-card-keluar').innerText = `RM ${totalKeluarBulanIni.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('simp-record-count').innerText = `Menunjukkan ${filtered.length} rekod`;
 
-            // Kemas kini Kad Sasaran Simpanan Khas (Secara Automatik ikut SEMUA nama item dalam data)
-            renderSimpananGoalCards(filterBulanTamat, filterTahun);
+            // Kemas kini Kad Sasaran Simpanan Khas (Secara Automatik ikut SEMUA nama item dalam data, formula sama dengan Jumlah Simpanan Semasa)
+            renderSimpananGoalCards(filterBulanMula, filterBulanTamat, filterTahun);
 
             const tbody = document.getElementById('simpanan-table-body');
             tbody.innerHTML = '';
@@ -2445,14 +2614,17 @@
                 return;
             }
 
-            // Tunjuk baris baki bawa ke hadapan jika ada nilai
-            if (bakiBawaKeHadapan > 0) {
+            // Tunjuk baris baki bawa ke hadapan jika ada nilai (positif ATAU negatif)
+            if (bakiBawaKeHadapan !== 0) {
+                 const bakiNegative = bakiBawaKeHadapan < 0;
+                 const bakiDisplay = bakiNegative ? `- RM ${Math.abs(bakiBawaKeHadapan).toFixed(2)}` : `RM ${bakiBawaKeHadapan.toFixed(2)}`;
+                 const bakiClass = bakiNegative ? "py-3 px-4 text-right font-bold text-rose-600 dark:text-rose-400" : "py-3 px-4 text-right font-bold text-blue-600 dark:text-blue-400";
                  tbody.innerHTML += `
                     <tr class="bg-blue-50/50 dark:bg-blue-900/10 border-b border-blue-100 dark:border-blue-900/30">
                         <td class="py-3 px-4 font-semibold text-slate-500 italic" colspan="4">Baki Bawa Ke Hadapan (Sebelum ${filterBulanMula} ${filterTahun !== 'Semua' ? filterTahun : ''})</td>
                         <td class="py-3 px-4 text-right"></td>
                         <td class="py-3 px-4 text-right"></td>
-                        <td class="py-3 px-4 text-right font-bold text-blue-600 dark:text-blue-400">RM ${bakiBawaKeHadapan.toFixed(2)}</td>
+                        <td class="${bakiClass}">${bakiDisplay}</td>
                         <td></td>
                     </tr>`;
             }
@@ -2461,6 +2633,14 @@
                 const statusBadge = item.status === 'Simpan' 
                     ? `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800 dark:bg-blue-950/40 dark:text-blue-400">Simpan</span>`
                     : `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-400">Tidak</span>`;
+
+                const jumlahIsNegative = item.jumlah < 0;
+                const jumlahClass = jumlahIsNegative
+                    ? "py-4 px-4 text-right font-black text-rose-600 dark:text-rose-400 bg-rose-50/40 dark:bg-rose-950/10"
+                    : "py-4 px-4 text-right font-black text-slate-900 dark:text-white bg-slate-100/30 dark:bg-slate-800/10";
+                const jumlahDisplay = jumlahIsNegative
+                    ? `- RM ${Math.abs(item.jumlah).toFixed(2)}`
+                    : `RM ${item.jumlah.toFixed(2)}`;
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-all border-b border-slate-100 dark:border-slate-800">
@@ -2473,7 +2653,7 @@
                         <td class="py-4 px-4 text-center">${statusBadge}</td>
                         <td class="py-4 px-4 text-right font-semibold text-emerald-600 dark:text-emerald-400">RM ${item.masuk.toFixed(2)}</td>
                         <td class="py-4 px-4 text-right font-semibold text-rose-500">RM ${item.keluar.toFixed(2)}</td>
-                        <td class="py-4 px-4 text-right font-black text-slate-900 dark:text-white bg-slate-100/30 dark:bg-slate-800/10">RM ${item.jumlah.toFixed(2)}</td>
+                        <td class="${jumlahClass}">${jumlahDisplay}</td>
                         <td class="py-4 px-4 text-center">
                             <div class="flex items-center justify-center gap-1.5">
                                 <button onclick="editSimpananItem(${item.id})" class="h-8 w-8 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 dark:bg-blue-950/30 dark:hover:bg-blue-950/50 dark:text-blue-400 transition-colors" title="Kemas kini simpanan">
