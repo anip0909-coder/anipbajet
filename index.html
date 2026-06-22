@@ -405,8 +405,11 @@
                     <!-- 12 month mini-calendars injected here -->
                 </div>
 
-                <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-4 flex items-center gap-1.5">
-                    <i class="fa-solid fa-circle-info"></i> Klik mana-mana tarikh untuk tambah, edit atau padam nota.
+                <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-4 flex flex-wrap items-center gap-3">
+                    <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full inline-block" style="background:#0ED100;"></span>Nota hari ini</span>
+                    <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full inline-block" style="background:#FF4D2E;"></span>Nota akan datang</span>
+                    <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full inline-block" style="background:#0099FF;"></span>Nota hari lepas</span>
+                    <span class="ml-auto flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Klik tarikh untuk edit nota</span>
                 </p>
             </div>
         </section>
@@ -1111,7 +1114,7 @@
     <!-- JAVASCRIPT LOGIC SECTION -->
     <script>
         // URL WEB APP GOOGLE APPS SCRIPT (Sila tampal Web App URL anda dari Apps Script di sini)
-        const APPSCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwAfLdzKbhXQ_yBsUt9Jve5hLoIEi6ZdbSkIqkP0Zj9xJguydwXtTTChM1RINTFOYsL/exec"; 
+        const APPSCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwvxkP_HQPrD3pyr8Th5QNqEJIQjLVWbQAg-YCmcg3Cc8VYMTwwLk4w2DPjjW7S_8_V/exec"; 
         
         // DEFAULT SEED DATA (Used if Google Sheet cannot be loaded or is offline)
         const defaultBudgetItems = [
@@ -1158,7 +1161,6 @@
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=914475172";
         const INCOME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=142125272";
         const SIMPANAN_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=611554426";
-        // Sila gantikan GID di bawah selepas anda 'Publish to Web' tab "Nota Kalendar" baharu dalam Google Sheet anda
         const CALENDAR_NOTES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=1513581026";
         
         const CATEGORY_COLORS = {
@@ -1191,9 +1193,7 @@
                     fetch(GOOGLE_SHEET_CSV_URL),
                     fetch(SIMPANAN_CSV_URL).catch(() => null),
                     fetch(INCOME_CSV_URL).catch(() => null),
-                    CALENDAR_NOTES_CSV_URL.includes('YOUR_NOTA_KALENDAR_GID')
-                        ? Promise.resolve(null)
-                        : fetch(CALENDAR_NOTES_CSV_URL).catch(() => null)
+                    fetch(CALENDAR_NOTES_CSV_URL).catch(() => null)
                 ]);
                 
                 if (!budgetResponse.ok) throw new Error("CORS or Connection Error from Google Spreadsheet.");
@@ -1634,6 +1634,8 @@
                     const dateKey = formatCalendarDateKey(viewYear, m, d);
                     const hasNote = (calendarNotesDB[dateKey] || []).length > 0;
                     const isToday = dateKey === todayKey;
+                    const isFuture = dateKey > todayKey;
+                    // isPast = dateKey < todayKey
 
                     let cls = 'relative flex items-center justify-center rounded text-[10px] font-semibold cursor-pointer transition-colors aspect-square ';
                     if (isToday) {
@@ -1642,8 +1644,16 @@
                         cls += 'text-slate-600 dark:text-slate-300 hover:bg-primary-50 dark:hover:bg-primary-950/30 hover:text-primary-600 dark:hover:text-primary-400';
                     }
 
+                    // Dot colour: #0ED100 hari ini | #FF4D2E akan datang | #0099FF hari lepas
+                    let dotColor = '';
+                    if (hasNote) {
+                        if (isToday)       dotColor = '#0ED100';
+                        else if (isFuture) dotColor = '#FF4D2E';
+                        else               dotColor = '#0099FF';
+                    }
+
                     const dot = hasNote
-                        ? `<span class="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${isToday ? 'bg-white/80' : 'bg-primary-400'}"></span>`
+                        ? `<span class="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full" style="background:${dotColor};"></span>`
                         : '';
 
                     monthHtml += `<div class="${cls}" onclick="openCalendarDayModal('${dateKey}')">${d}${dot}</div>`;
