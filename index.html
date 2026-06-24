@@ -1309,7 +1309,7 @@
     <!-- JAVASCRIPT LOGIC SECTION -->
     <script>
         // URL WEB APP GOOGLE APPS SCRIPT (Sila tampal Web App URL anda dari Apps Script di sini)
-        const APPSCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyc3tQ7n2raSmjGUWv2FaIGUyy7LpK_670d4i-SZxDi9KfMbzua09rr4b5i0Uny9Jb3/exec"; 
+        const APPSCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwvxkP_HQPrD3pyr8Th5QNqEJIQjLVWbQAg-YCmcg3Cc8VYMTwwLk4w2DPjjW7S_8_V/exec"; 
         
         // DEFAULT SEED DATA (Used if Google Sheet cannot be loaded or is offline)
         const defaultBudgetItems = [
@@ -1378,41 +1378,39 @@
             const statusText = document.getElementById('status-text');
             const statusBadge = document.getElementById('sheet-status');
             
-            // Start loading state visual feedback
             statusBadge.classList.remove('hidden');
             syncIcon.classList.add('fa-spin');
             statusDot.className = "h-2.5 w-2.5 rounded-full bg-yellow-400 animate-pulse";
             statusText.innerText = "Menghubung ke Google Sheet...";
             
+            let anySuccess = false;
+
+            // Fetch semua sheet secara bebas — kegagalan satu tab tidak menjejaskan tab lain
+            const fetchSheet = (url) => fetch(url).then(r => r.ok ? r.text() : null).catch(() => null);
+
+            const [budgetCsv, simpCsv, incCsv, noteCsv, maintCsv] = await Promise.all([
+                fetchSheet(GOOGLE_SHEET_CSV_URL),
+                fetchSheet(SIMPANAN_CSV_URL),
+                fetchSheet(INCOME_CSV_URL),
+                fetchSheet(CALENDAR_NOTES_CSV_URL),
+                fetchSheet(MAINTENANCE_CSV_URL)
+            ]);
+
             try {
-                // Fetch direct published CSV output for all five sheets
-                const [budgetResponse, simpResponse, incResponse, noteResponse, maintResponse] = await Promise.all([
-                    fetch(GOOGLE_SHEET_CSV_URL),
-                    fetch(SIMPANAN_CSV_URL).catch(() => null),
-                    fetch(INCOME_CSV_URL).catch(() => null),
-                    fetch(CALENDAR_NOTES_CSV_URL).catch(() => null),
-                    fetch(MAINTENANCE_CSV_URL).catch(() => null)
-                ]);
-                
-                if (!budgetResponse.ok) throw new Error("CORS or Connection Error from Google Spreadsheet.");
-                
-                const budgetCsvText = await budgetResponse.text();
-                budgetDatabase = parseGoogleSheetCSV(budgetCsvText);
-
-                if (simpResponse && simpResponse.ok) {
-                    const simpCsvText = await simpResponse.text();
-                    simpananDatabase = parseSimpananCSV(simpCsvText);
+                if (budgetCsv) {
+                    budgetDatabase = parseGoogleSheetCSV(budgetCsv);
+                    anySuccess = true;
                 }
-                
-                if (incResponse && incResponse.ok) {
-                    const incCsvText = await incResponse.text();
-                    incomeDatabase = parseIncomeCSV(incCsvText);
+                if (simpCsv) {
+                    simpananDatabase = parseSimpananCSV(simpCsv);
+                    anySuccess = true;
                 }
-
-                if (noteResponse && noteResponse.ok) {
-                    const noteCsvText = await noteResponse.text();
-                    const parsedNotes = parseCalendarNotesCSV(noteCsvText);
-                    // MERGE: kekalkan nota tempatan (local-*) yang belum tersync ke sheet.
+                if (incCsv) {
+                    incomeDatabase = parseIncomeCSV(incCsv);
+                    anySuccess = true;
+                }
+                if (noteCsv) {
+                    const parsedNotes = parseCalendarNotesCSV(noteCsv);
                     Object.keys(calendarNotesDB).forEach(dateKey => {
                         (calendarNotesDB[dateKey] || []).forEach(localNote => {
                             if (localNote.id && localNote.id.startsWith('local-')) {
@@ -1428,27 +1426,42 @@
                     });
                     calendarNotesDB = parsedNotes;
                     saveCalendarNotes();
+                    anySuccess = true;
+                }
+                if (maintCsv) {
+                    const sheetMaint = parseMaintenanceCSV(maintCsv);
+                    // Kekalkan rekod tempatan (sheetRow: null) yang BELUM wujud dalam sheet CSV
+                    // — elak duplikasi bila sheet CSV sudah update dengan rekod baru
+                    const localUnsync = maintenanceDatabase.filter(local => {
+                        if (local.sheetRow) return false; // sudah ada dalam sheet, buang
+                        // Semak sama ada rekod ini sudah ada dalam sheet (match by 3 medan kunci)
+                        const alreadyInSheet = sheetMaint.some(s =>
+                            s.namaAset === local.namaAset &&
+                            s.jenisServis === local.jenisServis &&
+                            s.tarikhServis === local.tarikhServis
+                        );
+                        return !alreadyInSheet; // kekal hanya yang betul-betul belum sync
+                    });
+                    maintenanceDatabase = [...sheetMaint, ...localUnsync];
+                    anySuccess = true;
                 }
 
-                if (maintResponse && maintResponse.ok) {
-                    const maintCsvText = await maintResponse.text();
-                    maintenanceDatabase = parseMaintenanceCSV(maintCsvText);
-                    localStorage.setItem('maintenance', JSON.stringify(maintenanceDatabase));
-                }
-                
-                // Commit to localStorage
                 saveToLocalStorage();
-                
-                isGoogleSheetConnected = true;
-                statusDot.className = "h-2.5 w-2.5 rounded-full bg-emerald-500";
-                statusText.innerText = "Google Sheet Terhubung!";
-                showToast("Sambungan Berjaya!", "Data telah berjaya dimuat turun daripada Google Sheet anda.", "success");
+
+                if (anySuccess) {
+                    isGoogleSheetConnected = true;
+                    statusDot.className = "h-2.5 w-2.5 rounded-full bg-emerald-500";
+                    statusText.innerText = "Google Sheet Terhubung!";
+                    showToast("Sambungan Berjaya!", "Data telah berjaya dimuat turun daripada Google Sheet anda.", "success");
+                } else {
+                    throw new Error("Semua sumber CSV gagal dimuatkan.");
+                }
             } catch (error) {
-                console.warn("Using fallback local database due to CORS or connection issue:", error);
+                console.warn("Sync error:", error);
                 isGoogleSheetConnected = false;
                 statusDot.className = "h-2.5 w-2.5 rounded-full bg-rose-500";
                 statusText.innerText = "Data Tempatan Berfungsi";
-                showToast("Menggunakan Data Tempatan", "Gagal memuat turun data Google Sheet secara terus (CORS atau luar talian). Sila gunakan storan tempatan.", "info");
+                showToast("Menggunakan Data Tempatan", "Gagal memuat turun data Google Sheet (CORS atau luar talian). Data tempatan digunakan.", "info");
             } finally {
                 syncIcon.classList.remove('fa-spin');
                 refreshAllViews();
@@ -3580,7 +3593,7 @@
 
         async function saveMaintenanceForm(event) {
             event.preventDefault();
-            const editId = document.getElementById('maint-edit-id').value;
+            const editId   = document.getElementById('maint-edit-id').value;
             const editSheetRow = document.getElementById('maint-edit-sheetrow').value;
 
             const payload = {
@@ -3595,26 +3608,50 @@
                 catatan:          document.getElementById('maint-catatan').value.trim()
             };
 
-            if (editId) {
-                const idx = maintenanceDatabase.findIndex(i => i.id === parseInt(editId));
-                if (idx >= 0) {
-                    maintenanceDatabase[idx] = { ...maintenanceDatabase[idx], ...payload };
-                    if (editSheetRow) {
-                        await pushDataToSheet('UPDATE_MAINTENANCE', { sheetRow: parseInt(editSheetRow), ...payload }, true);
-                    }
-                    showToast('Rekod Dikemaskini', `${payload.namaAset} — servis berjaya dikemaskini.`, 'success');
-                }
-            } else {
-                const newId = Date.now();
-                maintenanceDatabase.push({ id: newId, sheetRow: null, ...payload });
-                const pushed = await pushDataToSheet('ADD_MAINTENANCE', payload, true);
-                if (pushed) setTimeout(syncWithGoogleSheet, 2000);
-                showToast('Rekod Ditambah', `${payload.namaAset} — rekod servis baharu disimpan.`, 'success');
-            }
+            const submitBtn = document.querySelector('#form-maintenance button[type="submit"]');
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = 'Menyimpan...'; }
 
-            saveToLocalStorage();
-            closeMaintenanceModal();
-            renderMaintenanceView();
+            try {
+                if (editId) {
+                    // ── EDIT ─────────────────────────────────────────────────
+                    const idx = maintenanceDatabase.findIndex(i => i.id === parseInt(editId));
+                    if (idx >= 0) {
+                        maintenanceDatabase[idx] = { ...maintenanceDatabase[idx], ...payload };
+                        // SIMPAN TEMPATAN DULU
+                        saveToLocalStorage();
+                        renderMaintenanceView();
+                        closeMaintenanceModal();
+                        showToast('Rekod Dikemaskini', `${payload.namaAset} — servis berjaya dikemaskini.`, 'success');
+                        // Push ke sheet (silent) — kegagalan tidak padam data tempatan
+                        if (editSheetRow) {
+                            pushDataToSheet('UPDATE_MAINTENANCE', { sheetRow: parseInt(editSheetRow), ...payload }, true);
+                        }
+                    }
+                } else {
+                    // ── TAMBAH BAHARU ─────────────────────────────────────────
+                    const newId = Date.now();
+                    const newRecord = { id: newId, sheetRow: null, ...payload };
+
+                    // 1. Simpan ke localStorage & papar dalam jadual DAHULU
+                    maintenanceDatabase.unshift(newRecord);
+                    saveToLocalStorage();
+                    renderMaintenanceView();
+                    closeMaintenanceModal();
+                    showToast('Rekod Ditambah', `${payload.namaAset} — rekod servis baharu disimpan.`, 'success');
+
+                    // 2. Push ke Apps Script (async, tak blok paparan)
+                    const pushed = await pushDataToSheet('ADD_MAINTENANCE', payload, true);
+                    if (pushed) {
+                        // Beri masa 5 saat untuk Google Sheet tulis + update CSV
+                        setTimeout(syncWithGoogleSheet, 5000);
+                    }
+                }
+            } catch (err) {
+                console.error('saveMaintenanceForm error:', err);
+                showToast('Ralat', 'Gagal menyimpan rekod. Cuba semula.', 'error');
+            } finally {
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Simpan Rekod'; }
+            }
         }
 
         function deleteMaintenanceItem(id) {
