@@ -137,6 +137,10 @@
                     <i class="fa-solid fa-building-columns"></i>
                     <span>Simpanan</span>
                 </button>
+                <button onclick="switchTab('maintenance')" id="tab-maintenance" class="tab-transition flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <span>Maintenance</span>
+                </button>
             </nav>
 
             <!-- Reset Data Warning Banner / Button -->
@@ -800,6 +804,123 @@
                 </div>
             </div>
         </section>
+
+        <!-- ==================== TAB 5: MAINTENANCE ==================== -->
+        <section id="pane-maintenance" class="tab-pane hidden space-y-6">
+
+            <!-- METRIC CARDS ROW -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-xl bg-blue-50 dark:bg-blue-950/50 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-list-check text-blue-500 text-base"></i>
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Jumlah Rekod</p>
+                        <h3 class="text-xl font-black text-slate-900 dark:text-white" id="maint-card-total">0</h3>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-xl bg-amber-50 dark:bg-amber-950/50 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-clock text-amber-500 text-base"></i>
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Akan Datang (30 hari)</p>
+                        <h3 class="text-xl font-black text-slate-900 dark:text-white" id="maint-card-upcoming">0</h3>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-xl bg-rose-50 dark:bg-rose-950/50 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-triangle-exclamation text-rose-500 text-base"></i>
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Tertunggak</p>
+                        <h3 class="text-xl font-black text-rose-600 dark:text-rose-400" id="maint-card-overdue">0</h3>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-receipt text-emerald-500 text-base"></i>
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Kos Tahun Ini</p>
+                        <h3 class="text-xl font-black text-slate-900 dark:text-white" id="maint-card-kos">RM 0.00</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JADUAL SERVIS AKAN DATANG -->
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div class="p-1.5 bg-amber-50 dark:bg-amber-950/40 rounded-lg">
+                            <i class="fa-solid fa-calendar-check text-amber-500 text-sm"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-sm text-slate-900 dark:text-slate-100">Jadual Servis Seterusnya</h3>
+                            <p class="text-[11px] text-slate-400">Servis yang akan datang dalam tempoh 60 hari</p>
+                        </div>
+                    </div>
+                    <button onclick="openMaintenanceModal()" class="flex items-center gap-1.5 px-4 h-9 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold shadow-md shadow-primary-600/20 transition-all">
+                        <i class="fa-solid fa-plus text-xs"></i> Tambah Rekod
+                    </button>
+                </div>
+                <div id="maint-schedule-list" class="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 min-h-[80px]">
+                </div>
+            </div>
+
+            <!-- REKOD SERVIS LENGKAP -->
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                        <div class="flex items-center gap-2 flex-1">
+                            <div class="p-1.5 bg-blue-50 dark:bg-blue-950/40 rounded-lg">
+                                <i class="fa-solid fa-table-list text-blue-500 text-sm"></i>
+                            </div>
+                            <h3 class="font-bold text-sm text-slate-900 dark:text-slate-100">Rekod Servis Lengkap</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <select id="maint-filter-aset" onchange="renderMaintenanceView()" class="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary-500 outline-none">
+                                <option value="Semua">Semua Aset</option>
+                            </select>
+                            <select id="maint-filter-jenis" onchange="renderMaintenanceView()" class="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary-500 outline-none">
+                                <option value="Semua">Semua Jenis</option>
+                                <option value="Kenderaan">Kenderaan</option>
+                                <option value="Peralatan">Peralatan</option>
+                            </select>
+                            <select id="maint-filter-status" onchange="renderMaintenanceView()" class="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary-500 outline-none">
+                                <option value="Semua">Semua Status</option>
+                                <option value="Selesai">Selesai</option>
+                                <option value="Akan Datang">Akan Datang</option>
+                                <option value="Tertunggak">Tertunggak</option>
+                            </select>
+                            <input type="text" id="maint-filter-cari" oninput="renderMaintenanceView()" placeholder="Cari aset / servis..." class="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary-500 outline-none w-40">
+                        </div>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-slate-50 dark:bg-slate-800/60 text-left">
+                                <th class="px-4 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Nama Aset</th>
+                                <th class="px-4 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Jenis Servis</th>
+                                <th class="px-4 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Tarikh Servis</th>
+                                <th class="px-4 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Servis Seterusnya</th>
+                                <th class="px-4 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">KM / Jam</th>
+                                <th class="px-4 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Kos (RM)</th>
+                                <th class="px-4 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Status</th>
+                                <th class="px-4 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide text-center">Tindakan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="maint-table-body" class="divide-y divide-slate-100 dark:divide-slate-800">
+                        </tbody>
+                    </table>
+                    <div id="maint-empty-state" class="hidden text-center py-12">
+                        <i class="fa-solid fa-screwdriver-wrench text-3xl text-slate-300 dark:text-slate-700 mb-3 block"></i>
+                        <p class="text-sm text-slate-400 dark:text-slate-500">Tiada rekod ditemui. Klik <strong>Tambah Rekod</strong> untuk mula.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- FOOTER SECTION -->
@@ -1096,6 +1217,80 @@
         </div>
     </div>
 
+    <!-- MODAL MAINTENANCE ADD / EDIT -->
+    <div id="modal-maintenance" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full border border-slate-200 dark:border-slate-800 shadow-2xl max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center shrink-0">
+                <h3 class="font-extrabold text-lg text-slate-900 dark:text-white" id="modal-maint-title">Tambah Rekod Servis</h3>
+                <button onclick="closeMaintenanceModal()" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <form id="form-maintenance" onsubmit="saveMaintenanceForm(event)" class="overflow-y-auto p-5 space-y-4">
+                <input type="hidden" id="maint-edit-id" value="">
+                <input type="hidden" id="maint-edit-sheetrow" value="">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Nama Aset -->
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Nama Aset <span class="text-rose-500">*</span></label>
+                        <input type="text" id="maint-namaAset" required placeholder="Cth: Proton Saga, Aircond Bilik 3" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                    </div>
+                    <!-- Jenis Aset -->
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Jenis Aset <span class="text-rose-500">*</span></label>
+                        <select id="maint-jenisAset" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                            <option value="Kenderaan">Kenderaan</option>
+                            <option value="Peralatan">Peralatan</option>
+                        </select>
+                    </div>
+                    <!-- Jenis Servis -->
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Jenis Servis <span class="text-rose-500">*</span></label>
+                        <input type="text" id="maint-jenisServis" required placeholder="Cth: Tukar Minyak, Servis AC, Cuci Filter" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                    </div>
+                    <!-- Bengkel / Pembekal -->
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Bengkel / Pembekal</label>
+                        <input type="text" id="maint-bengkel" placeholder="Cth: KK Auto, Pendingin Hawa Murah" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                    </div>
+                    <!-- Tarikh Servis -->
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Tarikh Servis <span class="text-rose-500">*</span></label>
+                        <input type="date" id="maint-tarikhServis" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                    </div>
+                    <!-- Tarikh Servis Seterusnya -->
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Tarikh Servis Seterusnya</label>
+                        <input type="date" id="maint-tarikhSeterusnya" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                    </div>
+                    <!-- KM / Jam Operasi -->
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">KM / Jam Operasi</label>
+                        <input type="number" id="maint-km" min="0" placeholder="Cth: 85000" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                    </div>
+                    <!-- Kos -->
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Kos Servis (RM)</label>
+                        <input type="number" id="maint-kos" min="0" step="0.01" placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                    </div>
+                </div>
+
+                <!-- Catatan -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Catatan</label>
+                    <textarea id="maint-catatan" rows="2" placeholder="Butiran tambahan servis..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100 resize-none"></textarea>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="closeMaintenanceModal()" class="flex-1 h-10 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Batal</button>
+                    <button type="submit" class="flex-1 h-10 rounded-xl text-sm font-bold bg-primary-600 hover:bg-primary-700 text-white shadow-md shadow-primary-600/20 transition-all">Simpan Rekod</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- CUSTOM CONFIRMATION DIALOG (No alert / confirm window popups) -->
     <div id="modal-confirm" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm hidden">
         <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-sm w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl animate-in fade-in zoom-in duration-200 text-center">
@@ -1152,6 +1347,7 @@
         let budgetDatabase = [];
         let incomeDatabase = [];
         let simpananDatabase = [];
+        let maintenanceDatabase = [];
         let currentTab = 'dashboard';
         let categoryChartInstance = null;
         let summaryChartInstance = null;
@@ -1504,7 +1700,7 @@
         // SWITCH BETWEEN TABS VISUALLY & TRIGGER REDRAW
         function switchTab(tabId) {
             currentTab = tabId;
-            const tabs = ['dashboard', 'category', 'income', 'simpanan'];
+            const tabs = ['dashboard', 'category', 'income', 'simpanan', 'maintenance'];
             tabs.forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
                 if (t === tabId) {
@@ -1524,6 +1720,7 @@
             if (tabId === 'category') renderCategoryView();
             if (tabId === 'income') renderIncomeView();
             if (tabId === 'simpanan') renderSimpananView();
+            if (tabId === 'maintenance') renderMaintenanceView();
         }
 
         // REFRESH ALL TABS DATA AT ONCE
@@ -1533,6 +1730,7 @@
             renderIncomeView();
             populateSimpananCategoryFilterDropdown();
             renderSimpananView();
+            renderMaintenanceView();
             populateCategoryFilterDropdown();
         }
 
@@ -1541,6 +1739,7 @@
             const storedBudget = localStorage.getItem('bajet');
             const storedIncome = localStorage.getItem('pendapatan');
             const storedSimpanan = localStorage.getItem('simpanan');
+            const storedMaint = localStorage.getItem('maintenance');
             
             if (storedBudget && storedIncome) {
                 budgetDatabase = JSON.parse(storedBudget);
@@ -1552,6 +1751,7 @@
                 simpananDatabase = [...defaultSimpananItems];
                 saveToLocalStorage();
             }
+            maintenanceDatabase = storedMaint ? JSON.parse(storedMaint) : [];
             
             refreshAllViews();
         }
@@ -1560,6 +1760,7 @@
             localStorage.setItem('bajet', JSON.stringify(budgetDatabase));
             localStorage.setItem('pendapatan', JSON.stringify(incomeDatabase));
             localStorage.setItem('simpanan', JSON.stringify(simpananDatabase));
+            localStorage.setItem('maintenance', JSON.stringify(maintenanceDatabase));
         }
 
         // ==================== ANNUAL CALENDAR & NOTES ====================
@@ -3153,6 +3354,239 @@
                     renderDashboard();
                 }
             });
+
+        // ==================== MAINTENANCE MODULE ====================
+
+        // Derive auto-status from tarikhSeterusnya
+        function getMaintenanceAutoStatus(item) {
+            if (!item.tarikhSeterusnya) return 'Selesai';
+            const today = new Date(); today.setHours(0,0,0,0);
+            const next = new Date(item.tarikhSeterusnya);
+            if (next < today) return 'Tertunggak';
+            const diffDays = Math.ceil((next - today) / 86400000);
+            if (diffDays <= 30) return 'Akan Datang';
+            return 'Selesai';
+        }
+
+        function formatMaintDate(dateStr) {
+            if (!dateStr) return '-';
+            const [y, m, d] = dateStr.split('-');
+            return `${d}/${m}/${y}`;
+        }
+
+        function daysUntil(dateStr) {
+            if (!dateStr) return null;
+            const today = new Date(); today.setHours(0,0,0,0);
+            const target = new Date(dateStr);
+            return Math.ceil((target - today) / 86400000);
+        }
+
+        function renderMaintenanceView() {
+            const db = maintenanceDatabase;
+
+            // --- Metric Cards ---
+            const today = new Date(); today.setHours(0,0,0,0);
+            const thisYear = today.getFullYear();
+            let upcoming30 = 0, overdue = 0, kosYear = 0;
+            db.forEach(item => {
+                const status = getMaintenanceAutoStatus(item);
+                if (status === 'Akan Datang') upcoming30++;
+                if (status === 'Tertunggak') overdue++;
+                if (item.tarikhServis && new Date(item.tarikhServis).getFullYear() === thisYear) {
+                    kosYear += parseFloat(item.kos || 0);
+                }
+            });
+            document.getElementById('maint-card-total').innerText = db.length;
+            document.getElementById('maint-card-upcoming').innerText = upcoming30;
+            document.getElementById('maint-card-overdue').innerText = overdue;
+            document.getElementById('maint-card-kos').innerText = `RM ${kosYear.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+
+            // --- Jadual Servis Seterusnya (60 hari) ---
+            const scheduleEl = document.getElementById('maint-schedule-list');
+            const schedItems = db
+                .filter(i => i.tarikhSeterusnya)
+                .map(i => ({ ...i, days: daysUntil(i.tarikhSeterusnya) }))
+                .filter(i => i.days !== null && i.days <= 60)
+                .sort((a, b) => a.days - b.days);
+
+            if (schedItems.length === 0) {
+                scheduleEl.innerHTML = `<p class="col-span-full text-sm text-slate-400 dark:text-slate-500 text-center py-6">Tiada servis menunggu dalam 60 hari akan datang.</p>`;
+            } else {
+                scheduleEl.innerHTML = schedItems.map(item => {
+                    const isOverdue = item.days < 0;
+                    const isUrgent = item.days >= 0 && item.days <= 7;
+                    const borderColor = isOverdue ? 'border-rose-200 dark:border-rose-900/40' : isUrgent ? 'border-amber-200 dark:border-amber-900/40' : 'border-slate-100 dark:border-slate-800';
+                    const badgeCls = isOverdue ? 'bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400' : isUrgent ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400' : 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400';
+                    const badgeText = isOverdue ? `Tertunggak ${Math.abs(item.days)} hari` : item.days === 0 ? 'Hari Ini!' : `${item.days} hari lagi`;
+                    const icon = item.jenisAset === 'Kenderaan' ? 'fa-car' : 'fa-gear';
+                    return `
+                        <div class="flex items-start gap-3 p-3.5 rounded-xl border ${borderColor} bg-slate-50/50 dark:bg-slate-800/30">
+                            <div class="h-9 w-9 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shrink-0 shadow-sm">
+                                <i class="fa-solid ${icon} text-slate-500 dark:text-slate-400 text-sm"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">${item.namaAset}</p>
+                                <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate">${item.jenisServis}</p>
+                                <p class="text-[11px] text-slate-400 mt-0.5">${formatMaintDate(item.tarikhSeterusnya)}</p>
+                            </div>
+                            <span class="text-[10px] font-bold px-2 py-1 rounded-lg ${badgeCls} whitespace-nowrap shrink-0">${badgeText}</span>
+                        </div>`;
+                }).join('');
+            }
+
+            // --- Populate Aset Filter Dropdown ---
+            const asetSel = document.getElementById('maint-filter-aset');
+            const currentAset = asetSel.value;
+            const uniqueAset = [...new Set(db.map(i => i.namaAset))].filter(Boolean).sort();
+            asetSel.innerHTML = `<option value="Semua">Semua Aset</option>` + uniqueAset.map(a => `<option value="${a}" ${a === currentAset ? 'selected' : ''}>${a}</option>`).join('');
+
+            // --- Filter & Render Rekod Table ---
+            const filterAset = asetSel.value;
+            const filterJenis = document.getElementById('maint-filter-jenis').value;
+            const filterStatus = document.getElementById('maint-filter-status').value;
+            const filterCari = (document.getElementById('maint-filter-cari').value || '').toLowerCase().trim();
+
+            const filtered = db.filter(item => {
+                const status = getMaintenanceAutoStatus(item);
+                const matchAset = filterAset === 'Semua' || item.namaAset === filterAset;
+                const matchJenis = filterJenis === 'Semua' || item.jenisAset === filterJenis;
+                const matchStatus = filterStatus === 'Semua' || status === filterStatus;
+                const matchCari = !filterCari || item.namaAset.toLowerCase().includes(filterCari) || item.jenisServis.toLowerCase().includes(filterCari) || (item.bengkel || '').toLowerCase().includes(filterCari);
+                return matchAset && matchJenis && matchStatus && matchCari;
+            }).sort((a, b) => (b.tarikhServis || '').localeCompare(a.tarikhServis || ''));
+
+            const tbody = document.getElementById('maint-table-body');
+            const emptyState = document.getElementById('maint-empty-state');
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                tbody.innerHTML = filtered.map(item => {
+                    const status = getMaintenanceAutoStatus(item);
+                    const statusCls = status === 'Tertunggak' ? 'bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400' : status === 'Akan Datang' ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400' : 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400';
+                    const jenisBadgeCls = item.jenisAset === 'Kenderaan' ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400';
+                    const kosDisplay = parseFloat(item.kos || 0) > 0 ? `RM ${parseFloat(item.kos).toLocaleString('en-MY', {minimumFractionDigits: 2})}` : '-';
+                    const kmDisplay = item.km ? `${parseInt(item.km).toLocaleString('en-MY')}` : '-';
+                    return `
+                        <tr class="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
+                            <td class="px-4 py-3">
+                                <div class="font-semibold text-sm text-slate-800 dark:text-slate-100">${item.namaAset}</div>
+                                <span class="inline-block text-[10px] font-bold px-1.5 py-0.5 rounded ${jenisBadgeCls} mt-0.5">${item.jenisAset}</span>
+                            </td>
+                            <td class="px-4 py-3">
+                                <div class="text-sm text-slate-700 dark:text-slate-200">${item.jenisServis}</div>
+                                ${item.bengkel ? `<div class="text-[11px] text-slate-400 mt-0.5"><i class="fa-solid fa-location-dot text-[9px]"></i> ${item.bengkel}</div>` : ''}
+                            </td>
+                            <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300 whitespace-nowrap">${formatMaintDate(item.tarikhServis)}</td>
+                            <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300 whitespace-nowrap">${formatMaintDate(item.tarikhSeterusnya)}</td>
+                            <td class="px-4 py-3 text-sm text-slate-600 dark:text-slate-300 whitespace-nowrap">${kmDisplay}</td>
+                            <td class="px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200 whitespace-nowrap">${kosDisplay}</td>
+                            <td class="px-4 py-3"><span class="text-[11px] font-bold px-2 py-1 rounded-lg ${statusCls}">${status}</span></td>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center justify-center gap-1.5">
+                                    <button onclick="openMaintenanceModal(${item.id})" class="h-7 w-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950/30 transition-colors" title="Edit">
+                                        <i class="fa-solid fa-pen text-xs"></i>
+                                    </button>
+                                    <button onclick="deleteMaintenanceItem(${item.id})" class="h-7 w-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors" title="Padam">
+                                        <i class="fa-solid fa-trash text-xs"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        ${item.catatan ? `<tr class="border-t-0"><td colspan="8" class="px-4 pb-2.5 pt-0"><p class="text-[11px] text-slate-400 dark:text-slate-500 italic"><i class="fa-solid fa-note-sticky mr-1"></i>${item.catatan}</p></td></tr>` : ''}`;
+                }).join('');
+            }
+        }
+
+        function openMaintenanceModal(id = null) {
+            const modal = document.getElementById('modal-maintenance');
+            const form = document.getElementById('form-maintenance');
+            form.reset();
+            document.getElementById('maint-edit-id').value = '';
+            document.getElementById('maint-edit-sheetrow').value = '';
+            document.getElementById('modal-maint-title').innerText = 'Tambah Rekod Servis';
+
+            if (id) {
+                const item = maintenanceDatabase.find(i => i.id === id);
+                if (!item) return;
+                document.getElementById('modal-maint-title').innerText = 'Edit Rekod Servis';
+                document.getElementById('maint-edit-id').value = item.id;
+                document.getElementById('maint-edit-sheetrow').value = item.sheetRow || '';
+                document.getElementById('maint-namaAset').value = item.namaAset || '';
+                document.getElementById('maint-jenisAset').value = item.jenisAset || 'Kenderaan';
+                document.getElementById('maint-jenisServis').value = item.jenisServis || '';
+                document.getElementById('maint-bengkel').value = item.bengkel || '';
+                document.getElementById('maint-tarikhServis').value = item.tarikhServis || '';
+                document.getElementById('maint-tarikhSeterusnya').value = item.tarikhSeterusnya || '';
+                document.getElementById('maint-km').value = item.km || '';
+                document.getElementById('maint-kos').value = item.kos || '';
+                document.getElementById('maint-catatan').value = item.catatan || '';
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function closeMaintenanceModal() {
+            document.getElementById('modal-maintenance').classList.add('hidden');
+        }
+
+        async function saveMaintenanceForm(event) {
+            event.preventDefault();
+            const editId = document.getElementById('maint-edit-id').value;
+            const editSheetRow = document.getElementById('maint-edit-sheetrow').value;
+
+            const payload = {
+                namaAset:         document.getElementById('maint-namaAset').value.trim(),
+                jenisAset:        document.getElementById('maint-jenisAset').value,
+                jenisServis:      document.getElementById('maint-jenisServis').value.trim(),
+                bengkel:          document.getElementById('maint-bengkel').value.trim(),
+                tarikhServis:     document.getElementById('maint-tarikhServis').value,
+                tarikhSeterusnya: document.getElementById('maint-tarikhSeterusnya').value,
+                km:               parseFloat(document.getElementById('maint-km').value) || 0,
+                kos:              parseFloat(document.getElementById('maint-kos').value) || 0,
+                catatan:          document.getElementById('maint-catatan').value.trim()
+            };
+
+            if (editId) {
+                const idx = maintenanceDatabase.findIndex(i => i.id === parseInt(editId));
+                if (idx >= 0) {
+                    maintenanceDatabase[idx] = { ...maintenanceDatabase[idx], ...payload };
+                    if (editSheetRow) {
+                        await pushDataToSheet('UPDATE_MAINTENANCE', { sheetRow: parseInt(editSheetRow), ...payload }, true);
+                    }
+                    showToast('Rekod Dikemaskini', `${payload.namaAset} — servis berjaya dikemaskini.`, 'success');
+                }
+            } else {
+                const newId = Date.now();
+                maintenanceDatabase.push({ id: newId, sheetRow: null, ...payload });
+                const pushed = await pushDataToSheet('ADD_MAINTENANCE', payload, true);
+                if (pushed) setTimeout(syncWithGoogleSheet, 2000);
+                showToast('Rekod Ditambah', `${payload.namaAset} — rekod servis baharu disimpan.`, 'success');
+            }
+
+            saveToLocalStorage();
+            closeMaintenanceModal();
+            renderMaintenanceView();
+        }
+
+        function deleteMaintenanceItem(id) {
+            const item = maintenanceDatabase.find(i => i.id === id);
+            if (!item) return;
+            showConfirmDialog(
+                `Padam Rekod "${item.namaAset}"?`,
+                `Rekod servis "${item.jenisServis}" akan dipadam secara kekal.`,
+                async () => {
+                    maintenanceDatabase = maintenanceDatabase.filter(i => i.id !== id);
+                    if (item.sheetRow) {
+                        await pushDataToSheet('DELETE_ROW', { sheetType: 'maintenance', sheetRow: item.sheetRow }, true);
+                    }
+                    saveToLocalStorage();
+                    renderMaintenanceView();
+                    showToast('Rekod Dipadam', `${item.namaAset} — rekod telah dibuang.`, 'info');
+                }
+            );
+        }
 
             loadCalendarNotes();
             loadDatabase();
