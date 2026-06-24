@@ -1219,75 +1219,67 @@
 
     <!-- MODAL MAINTENANCE ADD / EDIT -->
     <div id="modal-maintenance" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm hidden">
-        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full border border-slate-200 dark:border-slate-800 shadow-2xl max-h-[90vh] flex flex-col overflow-hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col" style="max-height:90vh;">
+            <!-- Header — sentiasa nampak -->
             <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center shrink-0">
                 <h3 class="font-extrabold text-lg text-slate-900 dark:text-white" id="modal-maint-title">Tambah Rekod Servis</h3>
-                <button onclick="closeMaintenanceModal()" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600">
+                <button type="button" onclick="closeMaintenanceModal()" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
-            <form id="form-maintenance" onsubmit="saveMaintenanceForm(event)" class="overflow-y-auto p-5 space-y-4">
-                <input type="hidden" id="maint-edit-id" value="">
-                <input type="hidden" id="maint-edit-sheetrow" value="">
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <!-- Nama Aset -->
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Nama Aset <span class="text-rose-500">*</span></label>
-                        <input type="text" id="maint-namaAset" required placeholder="Cth: Proton Saga, Aircond Bilik 3" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+            <!-- Form fields — scrollable -->
+            <div class="overflow-y-auto flex-1 min-h-0 p-5 space-y-4">
+                <form id="form-maintenance" onsubmit="saveMaintenanceForm(event)" class="space-y-4">
+                    <input type="hidden" id="maint-edit-id" value="">
+                    <input type="hidden" id="maint-edit-sheetrow" value="">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Nama Aset <span class="text-rose-500">*</span></label>
+                            <input type="text" id="maint-namaAset" required placeholder="Cth: Proton Saga, Aircond Bilik 3" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Jenis Aset <span class="text-rose-500">*</span></label>
+                            <select id="maint-jenisAset" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                                <option value="Kenderaan">Kenderaan</option>
+                                <option value="Peralatan">Peralatan</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Jenis Servis <span class="text-rose-500">*</span></label>
+                            <input type="text" id="maint-jenisServis" required placeholder="Cth: Tukar Minyak, Servis AC, Cuci Filter" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Bengkel / Pembekal</label>
+                            <input type="text" id="maint-bengkel" placeholder="Cth: KK Auto, Pendingin Hawa Murah" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Tarikh Servis <span class="text-rose-500">*</span></label>
+                            <input type="date" id="maint-tarikhServis" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Tarikh Servis Seterusnya</label>
+                            <input type="date" id="maint-tarikhSeterusnya" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300">KM / Jam Operasi</label>
+                            <input type="number" id="maint-km" min="0" placeholder="Cth: 85000" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Kos Servis (RM)</label>
+                            <input type="number" id="maint-kos" min="0" step="0.01" placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                        </div>
                     </div>
-                    <!-- Jenis Aset -->
                     <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Jenis Aset <span class="text-rose-500">*</span></label>
-                        <select id="maint-jenisAset" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                            <option value="Kenderaan">Kenderaan</option>
-                            <option value="Peralatan">Peralatan</option>
-                        </select>
+                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Catatan</label>
+                        <textarea id="maint-catatan" rows="2" placeholder="Butiran tambahan servis..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100 resize-none"></textarea>
                     </div>
-                    <!-- Jenis Servis -->
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Jenis Servis <span class="text-rose-500">*</span></label>
-                        <input type="text" id="maint-jenisServis" required placeholder="Cth: Tukar Minyak, Servis AC, Cuci Filter" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-                    <!-- Bengkel / Pembekal -->
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Bengkel / Pembekal</label>
-                        <input type="text" id="maint-bengkel" placeholder="Cth: KK Auto, Pendingin Hawa Murah" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-                    <!-- Tarikh Servis -->
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Tarikh Servis <span class="text-rose-500">*</span></label>
-                        <input type="date" id="maint-tarikhServis" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-                    <!-- Tarikh Servis Seterusnya -->
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Tarikh Servis Seterusnya</label>
-                        <input type="date" id="maint-tarikhSeterusnya" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-                    <!-- KM / Jam Operasi -->
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">KM / Jam Operasi</label>
-                        <input type="number" id="maint-km" min="0" placeholder="Cth: 85000" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-                    <!-- Kos -->
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Kos Servis (RM)</label>
-                        <input type="number" id="maint-kos" min="0" step="0.01" placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-                </div>
-
-                <!-- Catatan -->
-                <div class="space-y-1.5">
-                    <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Catatan</label>
-                    <textarea id="maint-catatan" rows="2" placeholder="Butiran tambahan servis..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100 resize-none"></textarea>
-                </div>
-
-                <!-- Buttons -->
-                <div class="flex gap-3 pt-2">
-                    <button type="button" onclick="closeMaintenanceModal()" class="flex-1 h-10 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Batal</button>
-                    <button type="submit" class="flex-1 h-10 rounded-xl text-sm font-bold bg-primary-600 hover:bg-primary-700 text-white shadow-md shadow-primary-600/20 transition-all">Simpan Rekod</button>
-                </div>
-            </form>
+                </form>
+            </div>
+            <!-- Butang — sentiasa nampak di bawah, TIDAK terpotong -->
+            <div class="p-5 pt-4 border-t border-slate-100 dark:border-slate-800 flex gap-3 shrink-0">
+                <button type="button" onclick="closeMaintenanceModal()" class="flex-1 h-10 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Batal</button>
+                <button type="button" onclick="saveMaintenanceForm(event)" id="maint-submit-btn" class="flex-1 h-10 rounded-xl text-sm font-bold bg-primary-600 hover:bg-primary-700 text-white shadow-md shadow-primary-600/20 transition-all">Simpan Rekod</button>
+            </div>
         </div>
     </div>
 
@@ -3591,60 +3583,57 @@
             document.getElementById('modal-maintenance').classList.add('hidden');
         }
 
-        async function saveMaintenanceForm(event) {
-            event.preventDefault();
-            const editId   = document.getElementById('maint-edit-id').value;
+        async function saveMaintenanceForm(e) {
+            if (e && e.preventDefault) e.preventDefault();
+
+            // Validasi manual
+            const namaAset     = document.getElementById('maint-namaAset').value.trim();
+            const jenisServis  = document.getElementById('maint-jenisServis').value.trim();
+            const tarikhServis = document.getElementById('maint-tarikhServis').value;
+            if (!namaAset || !jenisServis || !tarikhServis) {
+                showToast('Medan Wajib', 'Sila isi Nama Aset, Jenis Servis dan Tarikh Servis.', 'error');
+                return;
+            }
+
+            const editId       = document.getElementById('maint-edit-id').value;
             const editSheetRow = document.getElementById('maint-edit-sheetrow').value;
 
             const payload = {
-                namaAset:         document.getElementById('maint-namaAset').value.trim(),
+                namaAset,
                 jenisAset:        document.getElementById('maint-jenisAset').value,
-                jenisServis:      document.getElementById('maint-jenisServis').value.trim(),
+                jenisServis,
                 bengkel:          document.getElementById('maint-bengkel').value.trim(),
-                tarikhServis:     document.getElementById('maint-tarikhServis').value,
+                tarikhServis,
                 tarikhSeterusnya: document.getElementById('maint-tarikhSeterusnya').value,
                 km:               parseFloat(document.getElementById('maint-km').value) || 0,
                 kos:              parseFloat(document.getElementById('maint-kos').value) || 0,
                 catatan:          document.getElementById('maint-catatan').value.trim()
             };
 
-            const submitBtn = document.querySelector('#form-maintenance button[type="submit"]');
+            const submitBtn = document.getElementById('maint-submit-btn');
             if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = 'Menyimpan...'; }
 
             try {
                 if (editId) {
-                    // ── EDIT ─────────────────────────────────────────────────
                     const idx = maintenanceDatabase.findIndex(i => i.id === parseInt(editId));
                     if (idx >= 0) {
                         maintenanceDatabase[idx] = { ...maintenanceDatabase[idx], ...payload };
-                        // SIMPAN TEMPATAN DULU
                         saveToLocalStorage();
                         renderMaintenanceView();
                         closeMaintenanceModal();
                         showToast('Rekod Dikemaskini', `${payload.namaAset} — servis berjaya dikemaskini.`, 'success');
-                        // Push ke sheet (silent) — kegagalan tidak padam data tempatan
                         if (editSheetRow) {
                             pushDataToSheet('UPDATE_MAINTENANCE', { sheetRow: parseInt(editSheetRow), ...payload }, true);
                         }
                     }
                 } else {
-                    // ── TAMBAH BAHARU ─────────────────────────────────────────
-                    const newId = Date.now();
-                    const newRecord = { id: newId, sheetRow: null, ...payload };
-
-                    // 1. Simpan ke localStorage & papar dalam jadual DAHULU
-                    maintenanceDatabase.unshift(newRecord);
+                    maintenanceDatabase.unshift({ id: Date.now(), sheetRow: null, ...payload });
                     saveToLocalStorage();
                     renderMaintenanceView();
                     closeMaintenanceModal();
                     showToast('Rekod Ditambah', `${payload.namaAset} — rekod servis baharu disimpan.`, 'success');
-
-                    // 2. Push ke Apps Script (async, tak blok paparan)
                     const pushed = await pushDataToSheet('ADD_MAINTENANCE', payload, true);
-                    if (pushed) {
-                        // Beri masa 5 saat untuk Google Sheet tulis + update CSV
-                        setTimeout(syncWithGoogleSheet, 5000);
-                    }
+                    if (pushed) setTimeout(syncWithGoogleSheet, 5000);
                 }
             } catch (err) {
                 console.error('saveMaintenanceForm error:', err);
@@ -3675,6 +3664,9 @@
             loadCalendarNotes();
             loadDatabase();
             syncWithGoogleSheet();
+
+            // Auto-refresh setiap 5 minit (300000ms)
+            setInterval(syncWithGoogleSheet, 300000);
         }
     </script>
 </body>
