@@ -1358,6 +1358,7 @@
         const INCOME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=142125272";
         const SIMPANAN_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=611554426";
         const CALENDAR_NOTES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=1513581026";
+        const MAINTENANCE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=771418915";
         
         const CATEGORY_COLORS = {
             'Komitmen': '#f59e0b',  // Amber
@@ -1384,12 +1385,13 @@
             statusText.innerText = "Menghubung ke Google Sheet...";
             
             try {
-                // Fetch direct published CSV output for all four sheets
-                const [budgetResponse, simpResponse, incResponse, noteResponse] = await Promise.all([
+                // Fetch direct published CSV output for all five sheets
+                const [budgetResponse, simpResponse, incResponse, noteResponse, maintResponse] = await Promise.all([
                     fetch(GOOGLE_SHEET_CSV_URL),
                     fetch(SIMPANAN_CSV_URL).catch(() => null),
                     fetch(INCOME_CSV_URL).catch(() => null),
-                    fetch(CALENDAR_NOTES_CSV_URL).catch(() => null)
+                    fetch(CALENDAR_NOTES_CSV_URL).catch(() => null),
+                    fetch(MAINTENANCE_CSV_URL).catch(() => null)
                 ]);
                 
                 if (!budgetResponse.ok) throw new Error("CORS or Connection Error from Google Spreadsheet.");
@@ -1411,12 +1413,9 @@
                     const noteCsvText = await noteResponse.text();
                     const parsedNotes = parseCalendarNotesCSV(noteCsvText);
                     // MERGE: kekalkan nota tempatan (local-*) yang belum tersync ke sheet.
-                    // Ini elak nota baru dipadam semula oleh sync sekiranya sheet masih kosong
-                    // atau Apps Script belum redeploy dengan betul.
                     Object.keys(calendarNotesDB).forEach(dateKey => {
                         (calendarNotesDB[dateKey] || []).forEach(localNote => {
                             if (localNote.id && localNote.id.startsWith('local-')) {
-                                // Semak nota ini belum ada dalam data sheet (elak duplikasi)
                                 const alreadyInSheet = (parsedNotes[dateKey] || []).some(
                                     sn => sn.text.trim() === localNote.text.trim()
                                 );
@@ -1427,9 +1426,14 @@
                             }
                         });
                     });
-
                     calendarNotesDB = parsedNotes;
                     saveCalendarNotes();
+                }
+
+                if (maintResponse && maintResponse.ok) {
+                    const maintCsvText = await maintResponse.text();
+                    maintenanceDatabase = parseMaintenanceCSV(maintCsvText);
+                    localStorage.setItem('maintenance', JSON.stringify(maintenanceDatabase));
                 }
                 
                 // Commit to localStorage
@@ -3354,6 +3358,49 @@
                     renderDashboard();
                 }
             });
+
+        // CSV PARSER — Tab "Rekod Penyelenggaraan"
+        // Lajur: Nama Aset | Jenis Aset | Jenis Servis | Bengkel | Tarikh Servis | Tarikh Seterusnya | KM/Jam | Kos (RM) | Catatan
+        function parseMaintenanceCSV(csvText) {
+            const rows = parseCSVToArray(csvText);
+            const results = [];
+            if (rows.length < 2) return results;
+
+            const headers = rows[0].map(h => h.toLowerCase().trim());
+            const col = name => headers.findIndex(h => h.includes(name));
+
+            const iNama      = col('nama aset');
+            const iJenisAset = col('jenis aset');
+            const iServis    = col('jenis servis');
+            const iBengkel   = col('bengkel');
+            const iTarikh    = col('tarikh servis');
+            const iSeterus   = col('tarikh seterusnya');
+            const iKm        = col('km');
+            const iKos       = col('kos');
+            const iCatatan   = col('catatan');
+
+            for (let i = 1; i < rows.length; i++) {
+                const r = rows[i];
+                const namaAset = iNama >= 0 && r[iNama] ? r[iNama].trim() : '';
+                if (!namaAset) continue; // skip empty rows
+
+                const sheetRow = i + 1; // row 1 = header
+                results.push({
+                    id:               sheetRow * 10000 + i, // stable unique local id
+                    sheetRow,
+                    namaAset,
+                    jenisAset:        iJenisAset >= 0 && r[iJenisAset] ? r[iJenisAset].trim() : 'Peralatan',
+                    jenisServis:      iServis    >= 0 && r[iServis]    ? r[iServis].trim()    : '',
+                    bengkel:          iBengkel   >= 0 && r[iBengkel]   ? r[iBengkel].trim()   : '',
+                    tarikhServis:     iTarikh    >= 0 && r[iTarikh]    ? r[iTarikh].trim()    : '',
+                    tarikhSeterusnya: iSeterus   >= 0 && r[iSeterus]   ? r[iSeterus].trim()   : '',
+                    km:               iKm        >= 0 && r[iKm]        ? parseFloat(r[iKm])   : 0,
+                    kos:              iKos       >= 0 && r[iKos]       ? parseFloat(r[iKos])  : 0,
+                    catatan:          iCatatan   >= 0 && r[iCatatan]   ? r[iCatatan].trim()   : ''
+                });
+            }
+            return results;
+        }
 
         // ==================== MAINTENANCE MODULE ====================
 
