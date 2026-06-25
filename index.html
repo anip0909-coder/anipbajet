@@ -1162,19 +1162,38 @@
             const rows = parseCSVToArray(csvText); const budgetList = [];
             if (rows.length < 2) return [];
             const headers = rows[0].map(h => h.trim().toLowerCase());
-            const bIdx=headers.indexOf('bulan'), tIdx=headers.indexOf('tahun'), kIdx=headers.indexOf('kategori'), nIdx=headers.findIndex(h=>h.includes('nama item')), aIdx=headers.findIndex(h=>h.includes('anggaran')), sIdx=headers.indexOf('status'), sebIdx=headers.findIndex(h=>h.includes('sebenar'));
+            
+            // Pencarian indeks lajur yang lebih fleksibel dan selamat (Case-Insensitive & Partial Match)
+            const bIdx = headers.findIndex(h => h.includes('bulan'));
+            const tIdx = headers.findIndex(h => h.includes('tahun'));
+            const kIdx = headers.findIndex(h => h.includes('kategori'));
+            const nIdx = headers.findIndex(h => h.includes('nama item') || h.includes('nama'));
+            const aIdx = headers.findIndex(h => h.includes('anggaran'));
+            const sIdx = headers.findIndex(h => h.includes('status'));
+            const sebIdx = headers.findIndex(h => h.includes('sebenar'));
+            
             for (let i = 1; i < rows.length; i++) {
                 const r = rows[i]; if (r.length < headers.length) continue;
                 const sheetRowNumber = i + 1;
+                
+                // Menentukan nilai status selesai/belum secara tepat dan selamat
+                let statusVal = 'Belum';
+                if (sIdx !== -1 && r[sIdx]) {
+                    const cleanStatus = r[sIdx].trim().toLowerCase();
+                    if (cleanStatus === 'selesai' || cleanStatus === 'paid') {
+                        statusVal = 'Selesai';
+                    }
+                }
+                
                 budgetList.push({
                     id: sheetRowNumber, sheetRow: sheetRowNumber,
-                    bulan: r[bIdx] ? r[bIdx].trim() : 'Januari',
-                    tahun: r[tIdx] ? parseInt(r[tIdx].trim(), 10) || 2026 : 2026,
-                    kategori: r[kIdx] ? r[kIdx].trim() : 'Lain-lain',
-                    namaItem: r[nIdx] ? r[nIdx].trim() : '',
-                    anggaranKos: parseFloat(r[aIdx] ? r[aIdx].trim().replace(/[^\d.]/g, '') : '0') || 0,
-                    status: r[sIdx] && (r[sIdx].trim().toLowerCase()==='selesai' || r[sIdx].trim().toLowerCase()==='paid') ? 'Selesai' : 'Belum',
-                    jumlahSebenar: parseFloat(r[sebIdx] ? r[sebIdx].trim().replace(/[^\d.]/g, '') : '0') || 0
+                    bulan: (bIdx !== -1 && r[bIdx]) ? r[bIdx].trim() : 'Januari',
+                    tahun: (tIdx !== -1 && r[tIdx]) ? parseInt(r[tIdx].trim(), 10) || 2026 : 2026,
+                    kategori: (kIdx !== -1 && r[kIdx]) ? r[kIdx].trim() : 'Lain-lain',
+                    namaItem: (nIdx !== -1 && r[nIdx]) ? r[nIdx].trim() : '',
+                    anggaranKos: parseFloat((aIdx !== -1 && r[aIdx]) ? r[aIdx].trim().replace(/[^\d.]/g, '') : '0') || 0,
+                    status: statusVal,
+                    jumlahSebenar: parseFloat((sebIdx !== -1 && r[sebIdx]) ? r[sebIdx].trim().replace(/[^\d.]/g, '') : '0') || 0
                 });
             }
             return budgetList;
