@@ -1646,7 +1646,12 @@
             document.getElementById('form-simpanan').reset(); document.getElementById('simpanan-id').value = '';
             if (id) {
                 const i = simpananDatabase.find(x => x.id === id);
-                ['id','bulan','tahun','kategori','namaItem','anggaran','status','masuk','keluar'].forEach(k => { if(document.getElementById(`simp-${k}`)) document.getElementById(`simp-${k}`).value = i[k]; });
+                if (i) {
+                    document.getElementById('simpanan-id').value = i.id;
+                    ['bulan','tahun','kategori','namaItem','anggaran','status','masuk','keluar'].forEach(k => { 
+                        if(document.getElementById(`simp-${k}`)) document.getElementById(`simp-${k}`).value = i[k]; 
+                    });
+                }
             }
             document.getElementById('modal-simpanan').classList.remove('hidden');
         }
@@ -1659,6 +1664,7 @@
             if (ex) { Object.assign(ex, pl); if (ex.sheetRow) await pushDataToSheet("UPDATE_SIMPANAN", {sheetRow: ex.sheetRow, ...pl}); } 
             else { simpananDatabase.push({id: Date.now(), sheetRow: null, ...pl}); await pushDataToSheet("ADD_SIMPANAN", pl); }
             saveToLocalStorage(); closeSimpananModal(); refreshAllViews();
+            setTimeout(syncWithGoogleSheet, 2000);
         }
         function editSimpananItem(id) { openSimpananModal('edit', id); }
         function deleteSimpananItem(id) { showConfirmDialog("Padam?", "Adakah pasti?", async () => { const i = simpananDatabase.find(x => x.id === id); simpananDatabase = simpananDatabase.filter(x => x.id !== id); if (i && i.sheetRow) await pushDataToSheet("DELETE_ROW", { sheetType: 'simpanan', sheetRow: i.sheetRow }); saveToLocalStorage(); refreshAllViews(); }); }
