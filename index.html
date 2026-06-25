@@ -86,7 +86,7 @@
         
         <!-- TAB NAVIGATION -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 border-b border-slate-200 dark:border-slate-800 pb-4">
-            <nav class="flex space-x-1 p-1 bg-slate-200/60 dark:bg-slate-900/60 rounded-xl max-w-md w-full sm:w-auto" aria-label="Tabs">
+            <nav class="flex flex-wrap sm:flex-nowrap gap-1 p-1 bg-slate-200/60 dark:bg-slate-900/60 rounded-xl max-w-2xl w-full sm:w-auto" aria-label="Tabs">
                 <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-transition flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-white dark:bg-slate-800 text-primary-600 dark:text-primary-400 shadow-sm">
                     <i class="fa-solid fa-chart-pie"></i> <span class="hidden sm:inline">Dashboard Utama</span>
                 </button>
@@ -101,6 +101,9 @@
                 </button>
                 <button onclick="switchTab('maintenance')" id="tab-maintenance" class="tab-transition flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
                     <i class="fa-solid fa-screwdriver-wrench"></i> <span class="hidden sm:inline">Servis</span>
+                </button>
+                <button onclick="switchTab('settings')" id="tab-settings" class="tab-transition flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
+                    <i class="fa-solid fa-gear"></i> <span class="hidden sm:inline">Tetapan</span>
                 </button>
             </nav>
 
@@ -703,6 +706,44 @@
                 </div>
             </div>
         </section>
+
+        <!-- ==================== TAB 6: SETTINGS ==================== -->
+        <section id="pane-settings" class="tab-pane hidden space-y-6">
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+                <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+                    <div class="p-2 bg-primary-50 dark:bg-primary-950/50 text-primary-600 dark:text-primary-400 rounded-lg">
+                        <i class="fa-solid fa-gear text-lg"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-slate-900 dark:text-slate-100">Tetapan Paparan & Aplikasi</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Sesuaikan aplikasi UrusDuit mengikut gaya kegemaran anda.</p>
+                    </div>
+                </div>
+
+                <!-- Custom Background Color Selector -->
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                            <i class="fa-solid fa-palette text-primary-500"></i> Warna Latar Belakang (Mod Terang / Light Mode)
+                        </h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                            Pilih warna latar belakang tersuai untuk paparan Mod Terang. Sistem akan secara automatik beralih ke Mod Terang untuk memberikan pratonton apabila warna dipilih.
+                        </p>
+                    </div>
+
+                    <!-- Grid of Allowed Color Hexes -->
+                    <div class="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-13 gap-3" id="color-palette-container">
+                        <!-- Dynamic color selection buttons will be rendered here -->
+                    </div>
+
+                    <div class="pt-2 flex flex-wrap gap-2">
+                        <button onclick="resetBgColor()" class="text-xs font-semibold px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-arrow-rotate-left"></i> Set Semula Warna Lalai
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- FOOTER SECTION -->
@@ -990,6 +1031,8 @@
         let summaryChartInstance = null;
         let isGoogleSheetConnected = false;
 
+        const allowedColors = ["#FFB8B8", "#EEF495", "#CBF495", "#9DF495", "#95F4C9", "#95EEF4", "#95CFF4", "#C3BEF8", "#E4BEF8", "#F8BEEF", "#F495AE", "#FFFFFF", "#CFCFCF"];
+
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=914475172";
         const INCOME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=142125272";
         const SIMPANAN_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=611554426";
@@ -1014,6 +1057,9 @@
             } else {
                 document.documentElement.classList.add('dark');
             }
+            
+            applyCustomBgColor();
+
             themeToggleBtn.addEventListener('click', () => {
                 if (document.documentElement.classList.contains('dark')) {
                     document.documentElement.classList.remove('dark');
@@ -1022,12 +1068,14 @@
                     document.documentElement.classList.add('dark');
                     localStorage.setItem('theme', 'dark');
                 }
+                applyCustomBgColor();
                 if (currentTab === 'dashboard') renderDashboard();
             });
 
             loadCalendarNotes();
             loadDatabase();
             syncWithGoogleSheet();
+            renderColorPalette();
         };
 
         // FETCH DATA
@@ -1240,17 +1288,22 @@
         // GLOBALS / UI STATE
         function switchTab(tabId) {
             currentTab = tabId;
-            ['dashboard', 'category', 'income', 'simpanan', 'maintenance'].forEach(t => {
+            ['dashboard', 'category', 'income', 'simpanan', 'maintenance', 'settings'].forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
-                btn.className = t === tabId ? "tab-transition flex-grow sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-white dark:bg-slate-800 text-primary-600 dark:text-primary-400 shadow-sm" : "tab-transition flex-grow sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100";
+                if (btn) {
+                    btn.className = t === tabId ? "tab-transition flex-grow sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-white dark:bg-slate-800 text-primary-600 dark:text-primary-400 shadow-sm" : "tab-transition flex-grow sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100";
+                }
                 const pane = document.getElementById(`pane-${t}`);
-                if (t === tabId) pane.classList.remove('hidden'); else pane.classList.add('hidden');
+                if (pane) {
+                    if (t === tabId) pane.classList.remove('hidden'); else pane.classList.add('hidden');
+                }
             });
             if (tabId === 'dashboard') renderDashboard();
             if (tabId === 'category') renderCategoryView();
             if (tabId === 'income') renderIncomeView();
             if (tabId === 'simpanan') renderSimpananView();
             if (tabId === 'maintenance') renderMaintenanceView();
+            if (tabId === 'settings') renderColorPalette();
         }
 
         function refreshAllViews() {
@@ -1262,6 +1315,7 @@
             renderMaintenanceView();
             populateCategoryFilterDropdown();
             renderCalendar();
+            renderColorPalette();
             if (currentCalendarDateKey && !document.getElementById('modal-calendar-day').classList.contains('hidden')) {
                 renderCalendarDayNotesList();
             }
@@ -1734,6 +1788,56 @@
                 if (i && i.sheetRow) await pushDataToSheet('DELETE_ROW', { sheetType: 'maintenance', sheetRow: i.sheetRow }, true);
                 saveToLocalStorage(); renderMaintenanceView();
             });
+        }
+
+        function applyCustomBgColor() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const customBg = localStorage.getItem('customBgColor');
+            
+            if (!isDark && customBg) {
+                document.body.classList.remove('bg-slate-50');
+                document.body.style.setProperty('background-color', customBg, 'important');
+            } else {
+                document.body.classList.add('bg-slate-50');
+                document.body.style.removeProperty('background-color');
+            }
+        }
+
+        function selectBgColor(hex) {
+            localStorage.setItem('customBgColor', hex);
+            // Secara automatik beralih ke Mod Terang untuk memberikan pratonton visual yang tepat
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+            applyCustomBgColor();
+            renderColorPalette();
+            showToast("Warna Latar Terpilih", `Latar belakang ditukar ke ${hex}`, "success");
+        }
+
+        function resetBgColor() {
+            localStorage.removeItem('customBgColor');
+            applyCustomBgColor();
+            renderColorPalette();
+            showToast("Warna Semula Lalai", "Warna latar belakang kembali kepada asal.", "info");
+        }
+
+        function renderColorPalette() {
+            const container = document.getElementById('color-palette-container');
+            if (!container) return;
+            const activeColor = localStorage.getItem('customBgColor') || "#FFFFFF";
+            
+            container.innerHTML = allowedColors.map(color => {
+                const isActive = (activeColor.toLowerCase() === color.toLowerCase());
+                return `
+                    <button onclick="selectBgColor('${color}')" 
+                        class="h-12 w-full rounded-xl border-2 transition-all flex items-center justify-center relative hover:scale-105 shadow-sm" 
+                        style="background-color: ${color}; border-color: ${isActive ? '#22c55e' : '#cbd5e1'}" 
+                        title="${color}">
+                        ${isActive ? '<i class="fa-solid fa-circle-check text-emerald-600 bg-white rounded-full p-0.5 text-xs shadow"></i>' : ''}
+                    </button>
+                `;
+            }).join('');
         }
     </script>
 </body>
