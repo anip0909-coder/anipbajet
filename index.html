@@ -1663,24 +1663,24 @@
         function editSimpananItem(id) { openSimpananModal('edit', id); }
         function deleteSimpananItem(id) { showConfirmDialog("Padam?", "Adakah pasti?", async () => { const i = simpananDatabase.find(x => x.id === id); simpananDatabase = simpananDatabase.filter(x => x.id !== id); if (i && i.sheetRow) await pushDataToSheet("DELETE_ROW", { sheetType: 'simpanan', sheetRow: i.sheetRow }); saveToLocalStorage(); refreshAllViews(); }); }
 
-        function openSimpananModal(act, id=null) {
-            document.getElementById('form-simpanan').reset(); 
-            document.getElementById('simpanan-id').value = '';
-            if (id) {
-                const i = simpananDatabase.find(x => x.id === id);
-                if (i) {
-                    document.getElementById('simpanan-id').value = i.id;
-                    ['bulan','tahun','kategori','namaItem','anggaran','status','masuk','keluar'].forEach(k => { 
-                        if(document.getElementById(`simp-${k}`)) {
-                            document.getElementById(`simp-${k}`).value = i[k]; 
-                        }
-                    });
-                }
-            }
-            document.getElementById('modal-simpanan').classList.remove('hidden');
-        }
-        function closeSimpananModal() { document.getElementById('modal-simpanan').classList.add('hidden'); }
-        async function saveSimpananForm(e) {
+        // CALENDAR TAB
+        function loadCalendarNotes() { const s = localStorage.getItem('calendarNotes'); calendarNotesDB = s ? JSON.parse(s) : {}; }
+        function saveCalendarNotes() { localStorage.setItem('calendarNotes', JSON.stringify(calendarNotesDB)); }
+        function formatCalendarDateKey(y, m, d) { return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`; }
+        function changeCalendarYear(d) { calendarViewDate.setFullYear(calendarViewDate.getFullYear() + d); renderCalendar(); }
+        function goToCalendarToday() { calendarViewDate = new Date(); renderCalendar(); }
+        function renderCalendar() {
+            const vY = calendarViewDate.getFullYear(); if(document.getElementById('calendar-year-label')) document.getElementById('calendar-year-label').innerText = vY;
+            const yG = document.getElementById('calendar-year-grid'); if (!yG) return;
+            const td = new Date(), tk = formatCalendarDateKey(td.getFullYear(), td.getMonth(), td.getDate());
+            let html = '';
+            for (let m = 0; m < 12; m++) {
+                const fDay = new Date(vY, m, 1).getDay(), dInM = new Date(vY, m + 1, 0).getDate();
+                html += `<div class="rounded-xl border border-slate-100 dark:border-slate-800"><div class="px-2.5 py-2 bg-slate-50 dark:bg-slate-800/60 flex items-center justify-between"><span class="text-[11px] font-extrabold uppercase">${calendarBulanList[m]}</span></div><div class="p-1.5"><div class="grid grid-cols-7 mb-0.5">${['A','I','S','R','K','J','S'].map(d=>`<div class="text-center text-[8px] font-bold text-slate-400">${d}</div>`).join('')}</div><div class="grid grid-cols-7 gap-0.5">`;
+                for (let i = 0; i < fDay; i++) html += `<div></div>`;
+                for (let d = 1; d <= dInM; d++) {
+                    const dk = formatCalendarDateKey(vY, m, d), hn = (calendarNotesDB[dk] || []).length > 0;
+                    const dc = hn ? (dk === tk ? '#0ED100' : dk > tk ? '#FF4D2E' : '#0099FF') : '';
                     html += `<div class="relative flex items-center justify-center rounded text-[10px] font-semibold cursor-pointer aspect-square ${dk === tk ? 'bg-primary-600 text-white hover:bg-primary-700' : 'hover:bg-primary-50 hover:text-primary-600'}" onclick="openCalendarDayModal('${dk}')">${d}${hn ? `<span class="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full" style="background:${dc};"></span>` : ''}</div>`;
                 }
                 html += `</div></div></div>`;
