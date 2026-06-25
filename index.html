@@ -39,78 +39,142 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .tab-transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .glass-panel { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+
+        /* Sidebar mobile: hidden off-screen by default on small screens */
+        @media (max-width: 1023px) {
+            #sidebar { position: fixed; top: 0; left: 0; height: 100%; z-index: 30; transform: translateX(-100%); }
+            #sidebar.open { transform: translateX(0); }
+        }
+        @media (min-width: 1024px) {
+            #sidebar { position: relative; transform: none !important; }
+            #sidebar-overlay { display: none !important; }
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 min-h-screen antialiased">
 
     <!-- TOAST NOTIFICATION SYSTEM -->
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm"></div>
 
-    <!-- MAIN NAVBAR -->
-    <header class="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 glass-panel">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <!-- APP SHELL: sidebar + main -->
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- ===== LEFT SIDEBAR ===== -->
+        <aside id="sidebar" class="flex flex-col w-64 shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transition-all duration-300 z-30">
+
             <!-- Brand Logo -->
-            <div class="flex items-center gap-3">
-                <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-primary-600 to-emerald-400 flex items-center justify-center text-white shadow-lg shadow-primary-500/20">
-                    <i class="fa-solid fa-wallet text-lg"></i>
+            <div class="h-16 flex items-center gap-3 px-5 border-b border-slate-200 dark:border-slate-800 shrink-0">
+                <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-primary-600 to-emerald-400 flex items-center justify-center text-white shadow-lg shadow-primary-500/20 shrink-0">
+                    <i class="fa-solid fa-wallet text-base"></i>
                 </div>
+                <div class="min-w-0">
+                    <span class="text-base font-extrabold tracking-tight bg-gradient-to-r from-primary-600 to-emerald-500 dark:from-primary-400 dark:to-emerald-300 bg-clip-text text-transparent block">UrusDuit</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider block">Urus &amp; Rekod Kewangan</span>
+                </div>
+            </div>
+
+            <!-- NAV LINKS -->
+            <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+
+                <!-- Dashboard Utama -->
+                <button onclick="switchTab('dashboard')" id="tab-dashboard"
+                    class="sidebar-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/40">
+                    <i class="fa-solid fa-chart-pie w-4 text-center"></i>
+                    <span>Dashboard Utama</span>
+                </button>
+
+                <!-- Money Management (collapsible) -->
                 <div>
-                    <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-primary-600 to-emerald-500 dark:from-primary-400 dark:to-emerald-300 bg-clip-text text-transparent">UrusDuit</span>
-                    <span class="text-xs block text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">Urus & Rekod Kewangan</span>
+                    <button onclick="toggleMoneyMenu()" id="tab-money-parent"
+                        class="sidebar-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100">
+                        <i class="fa-solid fa-money-bill-wave w-4 text-center"></i>
+                        <span class="flex-1 text-left">Money Management</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200" id="money-chevron"></i>
+                    </button>
+                    <!-- Sub-tabs -->
+                    <div id="money-submenu" class="mt-1 ml-4 pl-3 border-l border-slate-200 dark:border-slate-700 space-y-0.5 hidden">
+                        <button onclick="switchTab('category')" id="tab-category"
+                            class="sidebar-sub-btn w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100">
+                            <i class="fa-solid fa-tags w-3.5 text-center text-xs"></i>
+                            <span>Kategori</span>
+                        </button>
+                        <button onclick="switchTab('income')" id="tab-income"
+                            class="sidebar-sub-btn w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100">
+                            <i class="fa-solid fa-coins w-3.5 text-center text-xs"></i>
+                            <span>Pendapatan</span>
+                        </button>
+                        <button onclick="switchTab('simpanan')" id="tab-simpanan"
+                            class="sidebar-sub-btn w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100">
+                            <i class="fa-solid fa-building-columns w-3.5 text-center text-xs"></i>
+                            <span>Simpanan</span>
+                        </button>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Global Action Controls & Mode Switcher -->
-            <div class="flex items-center gap-2 sm:gap-4">
-                <!-- Google Sheets Status Indicator -->
-                <div id="sheet-status" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                    <span class="h-2.5 w-2.5 rounded-full bg-yellow-400 animate-pulse" id="status-dot"></span>
-                    <span id="status-text">Menyambung...</span>
-                </div>
-
-                <button onclick="syncWithGoogleSheet()" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary-500 hover:text-white dark:hover:bg-primary-600 transition-colors" title="Muat Semula Google Sheet">
-                    <i class="fa-solid fa-rotate" id="sync-icon"></i>
+                <!-- Servis -->
+                <button onclick="switchTab('maintenance')" id="tab-maintenance"
+                    class="sidebar-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100">
+                    <i class="fa-solid fa-screwdriver-wrench w-4 text-center"></i>
+                    <span>Servis</span>
                 </button>
 
-                <!-- Theme Toggle Button -->
-                <button id="theme-toggle" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all" aria-label="Tukar Mod Tema">
-                    <i class="fa-solid fa-moon dark:hidden text-lg"></i>
-                    <i class="fa-solid fa-sun hidden dark:block text-lg text-yellow-400"></i>
+                <!-- Health (placeholder) -->
+                <button onclick="switchTab('health')" id="tab-health"
+                    class="sidebar-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100">
+                    <i class="fa-solid fa-heart-pulse w-4 text-center"></i>
+                    <span>Health</span>
                 </button>
-            </div>
-        </div>
-    </header>
 
-    <!-- MAIN APP CONTAINER -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        
-        <!-- TAB NAVIGATION -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 border-b border-slate-200 dark:border-slate-800 pb-4">
-            <nav class="flex flex-wrap sm:flex-nowrap gap-1 p-1 bg-slate-200/60 dark:bg-slate-900/60 rounded-xl max-w-2xl w-full sm:w-auto" aria-label="Tabs">
-                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-transition flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-white dark:bg-slate-800 text-primary-600 dark:text-primary-400 shadow-sm">
-                    <i class="fa-solid fa-chart-pie"></i> <span class="hidden sm:inline">Dashboard Utama</span>
+                <!-- Tetapan -->
+                <button onclick="switchTab('settings')" id="tab-settings"
+                    class="sidebar-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100">
+                    <i class="fa-solid fa-gear w-4 text-center"></i>
+                    <span>Tetapan</span>
                 </button>
-                <button onclick="switchTab('category')" id="tab-category" class="tab-transition flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
-                    <i class="fa-solid fa-tags"></i> <span class="hidden sm:inline">Kategori</span>
-                </button>
-                <button onclick="switchTab('income')" id="tab-income" class="tab-transition flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
-                    <i class="fa-solid fa-coins"></i> <span class="hidden sm:inline">Pendapatan</span>
-                </button>
-                <button onclick="switchTab('simpanan')" id="tab-simpanan" class="tab-transition flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
-                    <i class="fa-solid fa-building-columns"></i> <span class="hidden sm:inline">Simpanan</span>
-                </button>
-                <button onclick="switchTab('maintenance')" id="tab-maintenance" class="tab-transition flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
-                    <i class="fa-solid fa-screwdriver-wrench"></i> <span class="hidden sm:inline">Servis</span>
-                </button>
-                <button onclick="switchTab('settings')" id="tab-settings" class="tab-transition flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
-                    <i class="fa-solid fa-gear"></i> <span class="hidden sm:inline">Tetapan</span>
-                </button>
+
             </nav>
 
-            <button onclick="confirmResetToDefault()" class="text-xs font-semibold px-3 py-2 rounded-lg bg-red-500/10 text-red-600 hover:bg-red-500 hover:text-white transition-all self-end sm:self-auto flex items-center gap-1.5">
-                <i class="fa-solid fa-trash-can"></i> Set Semula
-            </button>
-        </div>
+            <!-- Sidebar Footer: sync + theme -->
+            <div class="px-3 py-4 border-t border-slate-200 dark:border-slate-800 space-y-2 shrink-0">
+                <!-- Sheet Status -->
+                <div id="sheet-status" class="hidden flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                    <span class="h-2 w-2 rounded-full bg-yellow-400 animate-pulse shrink-0" id="status-dot"></span>
+                    <span id="status-text" class="truncate">Menyambung...</span>
+                </div>
+                <!-- Bottom action buttons -->
+                <div class="flex gap-2">
+                    <button onclick="syncWithGoogleSheet()" class="flex-1 flex items-center justify-center gap-2 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary-500 hover:text-white transition-colors text-xs font-semibold">
+                        <i class="fa-solid fa-rotate" id="sync-icon"></i>
+                        <span>Sync</span>
+                    </button>
+                    <button id="theme-toggle" class="h-9 w-9 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all" aria-label="Tukar Tema">
+                        <i class="fa-solid fa-moon dark:hidden"></i>
+                        <i class="fa-solid fa-sun hidden dark:block text-yellow-400"></i>
+                    </button>
+                    <button onclick="confirmResetToDefault()" class="h-9 w-9 flex items-center justify-center rounded-xl bg-red-50 dark:bg-red-950/30 text-red-500 hover:bg-red-500 hover:text-white transition-all" title="Set Semula">
+                        <i class="fa-solid fa-trash-can text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ===== MAIN CONTENT AREA ===== -->
+        <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
+
+            <!-- Top bar (mobile hamburger + breadcrumb) -->
+            <header class="h-16 flex items-center gap-3 px-4 sm:px-6 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 shrink-0 backdrop-blur-sm">
+                <button onclick="toggleSidebar()" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all lg:hidden">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                    <i class="fa-solid fa-house text-xs"></i>
+                    <span>/</span>
+                    <span id="breadcrumb-label" class="font-semibold text-slate-800 dark:text-slate-100">Dashboard Utama</span>
+                </div>
+            </header>
+
+            <!-- Scrollable content -->
+            <main class="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
         <!-- ==================== TAB 1: MAIN DASHBOARD ==================== -->
         <section id="pane-dashboard" class="tab-pane space-y-6">
@@ -744,7 +808,24 @@
                 </div>
             </div>
         </section>
-    </main>
+        <!-- ==================== TAB 7: HEALTH (placeholder) ==================== -->
+        <section id="pane-health" class="tab-pane hidden space-y-6">
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-12 flex flex-col items-center justify-center text-center gap-4">
+                <div class="h-16 w-16 rounded-2xl bg-rose-50 dark:bg-rose-950/40 flex items-center justify-center">
+                    <i class="fa-solid fa-heart-pulse text-2xl text-rose-500"></i>
+                </div>
+                <h2 class="text-xl font-extrabold text-slate-800 dark:text-slate-100">Health</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 max-w-sm">Modul ini sedang dalam pembangunan. Ciri-ciri rekod kesihatan, ubatan, dan temujanji akan ditambah di sini.</p>
+                <span class="text-xs font-bold px-3 py-1.5 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400">Akan Datang</span>
+            </div>
+        </section>
+
+        </main><!-- end scrollable content -->
+        </div><!-- end main content area -->
+    </div><!-- end app shell -->
+
+    <!-- Mobile sidebar overlay -->
+    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/50 z-20 hidden lg:hidden"></div>
 
     <!-- FOOTER SECTION -->
     <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 py-6 bg-white dark:bg-slate-900 text-center">
@@ -1031,7 +1112,7 @@
         let summaryChartInstance = null;
         let isGoogleSheetConnected = false;
 
-        const allowedColors = ["#FFB8B8", "#EEF495", "#CBF495", "#A38000", "#9DF495", "#95F4C9", "#007564", "#007517", "#95EEF4", "#95CFF4", "#C3BEF8", "#E4BEF8", "#F8BEEF", "#F495AE", "#FFFFFF", "#CFCFCF"];
+        const allowedColors = ["#FFB8B8", "#EEF495", "#CBF495", "#9DF495", "#95F4C9", "#95EEF4", "#95CFF4", "#C3BEF8", "#E4BEF8", "#F8BEEF", "#F495AE", "#FFFFFF", "#CFCFCF"];
 
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=914475172";
         const INCOME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=142125272";
@@ -1305,24 +1386,87 @@
         }
 
         // GLOBALS / UI STATE
+        // ===== SIDEBAR HELPERS =====
+        const SIDEBAR_LABELS = {
+            dashboard: 'Dashboard Utama',
+            category:  'Money Management › Kategori',
+            income:    'Money Management › Pendapatan',
+            simpanan:  'Money Management › Simpanan',
+            maintenance: 'Servis',
+            health:    'Health',
+            settings:  'Tetapan'
+        };
+        const MONEY_SUB_TABS = ['category', 'income', 'simpanan'];
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const isOpen = sidebar.classList.toggle('open');
+            overlay.classList.toggle('hidden', !isOpen);
+        }
+
+        function toggleMoneyMenu(forceOpen) {
+            const submenu = document.getElementById('money-submenu');
+            const chevron = document.getElementById('money-chevron');
+            const open = forceOpen !== undefined ? forceOpen : submenu.classList.contains('hidden');
+            if (open) {
+                submenu.classList.remove('hidden');
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                submenu.classList.add('hidden');
+                chevron.style.transform = 'rotate(0deg)';
+            }
+        }
+
         function switchTab(tabId) {
             currentTab = tabId;
-            ['dashboard', 'category', 'income', 'simpanan', 'maintenance', 'settings'].forEach(t => {
-                const btn = document.getElementById(`tab-${t}`);
-                if (btn) {
-                    btn.className = t === tabId ? "tab-transition flex-grow sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-white dark:bg-slate-800 text-primary-600 dark:text-primary-400 shadow-sm" : "tab-transition flex-grow sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100";
-                }
+            const allTabs = ['dashboard', 'category', 'income', 'simpanan', 'maintenance', 'health', 'settings'];
+
+            // ── Update pane visibility ──
+            allTabs.forEach(t => {
                 const pane = document.getElementById(`pane-${t}`);
-                if (pane) {
-                    if (t === tabId) pane.classList.remove('hidden'); else pane.classList.add('hidden');
-                }
+                if (pane) pane.classList.toggle('hidden', t !== tabId);
             });
-            if (tabId === 'dashboard') renderDashboard();
-            if (tabId === 'category') renderCategoryView();
-            if (tabId === 'income') renderIncomeView();
-            if (tabId === 'simpanan') renderSimpananView();
-            if (tabId === 'maintenance') renderMaintenanceView();
-            if (tabId === 'settings') renderColorPalette();
+
+            // ── Update sidebar button styles ──
+            const ACTIVE_MAIN   = 'sidebar-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/40';
+            const INACTIVE_MAIN = 'sidebar-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100';
+            const ACTIVE_SUB    = 'sidebar-sub-btn w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-semibold text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/40';
+            const INACTIVE_SUB  = 'sidebar-sub-btn w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100';
+
+            ['dashboard', 'maintenance', 'health', 'settings'].forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (btn) btn.className = (t === tabId) ? ACTIVE_MAIN : INACTIVE_MAIN;
+            });
+
+            MONEY_SUB_TABS.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (btn) btn.className = (t === tabId) ? ACTIVE_SUB : INACTIVE_SUB;
+            });
+
+            // Highlight parent "Money Management" when sub-tab active
+            const moneyParent = document.getElementById('tab-money-parent');
+            const isMoneyTab = MONEY_SUB_TABS.includes(tabId);
+            if (moneyParent) {
+                moneyParent.className = isMoneyTab
+                    ? 'sidebar-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-primary-600 dark:text-primary-400 bg-primary-50/60 dark:bg-primary-950/20'
+                    : INACTIVE_MAIN;
+            }
+
+            // Auto-open/close money submenu
+            if (isMoneyTab) toggleMoneyMenu(true);
+
+            // ── Breadcrumb ──
+            const bc = document.getElementById('breadcrumb-label');
+            if (bc) bc.innerText = SIDEBAR_LABELS[tabId] || tabId;
+
+            // ── Render content ──
+            if (tabId === 'dashboard')    renderDashboard();
+            if (tabId === 'category')     renderCategoryView();
+            if (tabId === 'income')       renderIncomeView();
+            if (tabId === 'simpanan')     renderSimpananView();
+            if (tabId === 'maintenance')  renderMaintenanceView();
+            if (tabId === 'settings')     renderColorPalette();
         }
 
         function refreshAllViews() {
