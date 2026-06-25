@@ -1219,75 +1219,67 @@
 
     <!-- MODAL MAINTENANCE ADD / EDIT -->
     <div id="modal-maintenance" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm hidden">
-        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full border border-slate-200 dark:border-slate-800 shadow-2xl max-h-[90vh] flex flex-col overflow-hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col" style="max-height:90vh;">
+            <!-- Header — sentiasa nampak -->
             <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center shrink-0">
                 <h3 class="font-extrabold text-lg text-slate-900 dark:text-white" id="modal-maint-title">Tambah Rekod Servis</h3>
-                <button onclick="closeMaintenanceModal()" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600">
+                <button type="button" onclick="closeMaintenanceModal()" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
-            <form id="form-maintenance" onsubmit="saveMaintenanceForm(event)" class="overflow-y-auto p-5 space-y-4">
-                <input type="hidden" id="maint-edit-id" value="">
-                <input type="hidden" id="maint-edit-sheetrow" value="">
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <!-- Nama Aset -->
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Nama Aset <span class="text-rose-500">*</span></label>
-                        <input type="text" id="maint-namaAset" required placeholder="Cth: Proton Saga, Aircond Bilik 3" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+            <!-- Form fields — scrollable -->
+            <div class="overflow-y-auto flex-1 min-h-0 p-5 space-y-4">
+                <form id="form-maintenance" onsubmit="saveMaintenanceForm(event)" class="space-y-4">
+                    <input type="hidden" id="maint-edit-id" value="">
+                    <input type="hidden" id="maint-edit-sheetrow" value="">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Nama Aset <span class="text-rose-500">*</span></label>
+                            <input type="text" id="maint-namaAset" required placeholder="Cth: Proton Saga, Aircond Bilik 3" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Jenis Aset <span class="text-rose-500">*</span></label>
+                            <select id="maint-jenisAset" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                                <option value="Kenderaan">Kenderaan</option>
+                                <option value="Peralatan">Peralatan</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Jenis Servis <span class="text-rose-500">*</span></label>
+                            <input type="text" id="maint-jenisServis" required placeholder="Cth: Tukar Minyak, Servis AC, Cuci Filter" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Bengkel / Pembekal</label>
+                            <input type="text" id="maint-bengkel" placeholder="Cth: KK Auto, Pendingin Hawa Murah" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Tarikh Servis <span class="text-rose-500">*</span></label>
+                            <input type="date" id="maint-tarikhServis" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Tarikh Servis Seterusnya</label>
+                            <input type="date" id="maint-tarikhSeterusnya" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300">KM / Jam Operasi</label>
+                            <input type="number" id="maint-km" min="0" placeholder="Cth: 85000" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Kos Servis (RM)</label>
+                            <input type="number" id="maint-kos" min="0" step="0.01" placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                        </div>
                     </div>
-                    <!-- Jenis Aset -->
                     <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Jenis Aset <span class="text-rose-500">*</span></label>
-                        <select id="maint-jenisAset" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                            <option value="Kenderaan">Kenderaan</option>
-                            <option value="Peralatan">Peralatan</option>
-                        </select>
+                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Catatan</label>
+                        <textarea id="maint-catatan" rows="2" placeholder="Butiran tambahan servis..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100 resize-none"></textarea>
                     </div>
-                    <!-- Jenis Servis -->
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Jenis Servis <span class="text-rose-500">*</span></label>
-                        <input type="text" id="maint-jenisServis" required placeholder="Cth: Tukar Minyak, Servis AC, Cuci Filter" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-                    <!-- Bengkel / Pembekal -->
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Bengkel / Pembekal</label>
-                        <input type="text" id="maint-bengkel" placeholder="Cth: KK Auto, Pendingin Hawa Murah" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-                    <!-- Tarikh Servis -->
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Tarikh Servis <span class="text-rose-500">*</span></label>
-                        <input type="date" id="maint-tarikhServis" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-                    <!-- Tarikh Servis Seterusnya -->
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Tarikh Servis Seterusnya</label>
-                        <input type="date" id="maint-tarikhSeterusnya" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-                    <!-- KM / Jam Operasi -->
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">KM / Jam Operasi</label>
-                        <input type="number" id="maint-km" min="0" placeholder="Cth: 85000" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-                    <!-- Kos -->
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Kos Servis (RM)</label>
-                        <input type="number" id="maint-kos" min="0" step="0.01" placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-                </div>
-
-                <!-- Catatan -->
-                <div class="space-y-1.5">
-                    <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Catatan</label>
-                    <textarea id="maint-catatan" rows="2" placeholder="Butiran tambahan servis..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100 resize-none"></textarea>
-                </div>
-
-                <!-- Buttons -->
-                <div class="flex gap-3 pt-2">
-                    <button type="button" onclick="closeMaintenanceModal()" class="flex-1 h-10 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Batal</button>
-                    <button type="submit" class="flex-1 h-10 rounded-xl text-sm font-bold bg-primary-600 hover:bg-primary-700 text-white shadow-md shadow-primary-600/20 transition-all">Simpan Rekod</button>
-                </div>
-            </form>
+                </form>
+            </div>
+            <!-- Butang — sentiasa nampak di bawah, TIDAK terpotong -->
+            <div class="p-5 pt-4 border-t border-slate-100 dark:border-slate-800 flex gap-3 shrink-0">
+                <button type="button" onclick="closeMaintenanceModal()" class="flex-1 h-10 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Batal</button>
+                <button type="button" onclick="saveMaintenanceForm(event)" id="maint-submit-btn" class="flex-1 h-10 rounded-xl text-sm font-bold bg-primary-600 hover:bg-primary-700 text-white shadow-md shadow-primary-600/20 transition-all">Simpan Rekod</button>
+            </div>
         </div>
     </div>
 
@@ -1309,7 +1301,7 @@
     <!-- JAVASCRIPT LOGIC SECTION -->
     <script>
         // URL WEB APP GOOGLE APPS SCRIPT (Sila tampal Web App URL anda dari Apps Script di sini)
-        const APPSCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyc3tQ7n2raSmjGUWv2FaIGUyy7LpK_670d4i-SZxDi9KfMbzua09rr4b5i0Uny9Jb3/exec/exec"; 
+        const APPSCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyc3tQ7n2raSmjGUWv2FaIGUyy7LpK_670d4i-SZxDi9KfMbzua09rr4b5i0Uny9Jb3/exec"; 
         
         // DEFAULT SEED DATA (Used if Google Sheet cannot be loaded or is offline)
         const defaultBudgetItems = [
@@ -1373,51 +1365,51 @@
 
         // FETCH DATA FROM GOOGLE SHEETS
         async function syncWithGoogleSheet() {
-            const syncIcon = document.getElementById('sync-icon');
-            const statusDot = document.getElementById('status-dot');
+            const syncIcon   = document.getElementById('sync-icon');
+            const statusDot  = document.getElementById('status-dot');
             const statusText = document.getElementById('status-text');
             const statusBadge = document.getElementById('sheet-status');
-            
-            // Start loading state visual feedback
+
             statusBadge.classList.remove('hidden');
             syncIcon.classList.add('fa-spin');
             statusDot.className = "h-2.5 w-2.5 rounded-full bg-yellow-400 animate-pulse";
             statusText.innerText = "Menghubung ke Google Sheet...";
-            
+
+            let anySuccess = false;
+
+            // credentials:'omit' wajib — elak browser lekatkan Google cookie pada request
+            // yang menyebabkan CORS preflight gagal untuk published CSV Google Sheets.
+            // cache:'no-cache' elak browser guna respons lama yang mungkin sudah expired.
+            const fetchSheet = (url) => fetch(url, {
+                method: 'GET',
+                mode: 'cors',
+                credentials: 'omit',
+                cache: 'no-cache'
+            }).then(r => r.ok ? r.text() : null).catch(() => null);
+
+            const [budgetCsv, simpCsv, incCsv, noteCsv, maintCsv] = await Promise.all([
+                fetchSheet(GOOGLE_SHEET_CSV_URL),
+                fetchSheet(SIMPANAN_CSV_URL),
+                fetchSheet(INCOME_CSV_URL),
+                fetchSheet(CALENDAR_NOTES_CSV_URL),
+                fetchSheet(MAINTENANCE_CSV_URL)
+            ]);
+
             try {
-                // Fetch direct published CSV output for all five sheets
-                const [budgetResponse, simpResponse, incResponse, noteResponse, maintResponse] = await Promise.all([
-                    fetch(GOOGLE_SHEET_CSV_URL).catch(() => null),
-                    fetch(SIMPANAN_CSV_URL).catch(() => null),
-                    fetch(INCOME_CSV_URL).catch(() => null),
-                    fetch(CALENDAR_NOTES_CSV_URL).catch(() => null),
-                    fetch(MAINTENANCE_CSV_URL).catch(() => null)
-                ]);
-                
-                let successCount = 0;
-
-                if (budgetResponse && budgetResponse.ok) {
-                    const budgetCsvText = await budgetResponse.text();
-                    budgetDatabase = parseGoogleSheetCSV(budgetCsvText);
-                    successCount++;
+                if (budgetCsv) {
+                    budgetDatabase = parseGoogleSheetCSV(budgetCsv);
+                    anySuccess = true;
                 }
-
-                if (simpResponse && simpResponse.ok) {
-                    const simpCsvText = await simpResponse.text();
-                    simpananDatabase = parseSimpananCSV(simpCsvText);
-                    successCount++;
+                if (simpCsv) {
+                    simpananDatabase = parseSimpananCSV(simpCsv);
+                    anySuccess = true;
                 }
-                
-                if (incResponse && incResponse.ok) {
-                    const incCsvText = await incResponse.text();
-                    incomeDatabase = parseIncomeCSV(incCsvText);
-                    successCount++;
+                if (incCsv) {
+                    incomeDatabase = parseIncomeCSV(incCsv);
+                    anySuccess = true;
                 }
-
-                if (noteResponse && noteResponse.ok) {
-                    const noteCsvText = await noteResponse.text();
-                    const parsedNotes = parseCalendarNotesCSV(noteCsvText);
-                    // Merge local
+                if (noteCsv) {
+                    const parsedNotes = parseCalendarNotesCSV(noteCsv);
                     Object.keys(calendarNotesDB).forEach(dateKey => {
                         (calendarNotesDB[dateKey] || []).forEach(localNote => {
                             if (localNote.id && localNote.id.startsWith('local-')) {
@@ -1433,33 +1425,42 @@
                     });
                     calendarNotesDB = parsedNotes;
                     saveCalendarNotes();
-                    successCount++;
+                    anySuccess = true;
+                }
+                if (maintCsv) {
+                    const sheetMaint = parseMaintenanceCSV(maintCsv);
+                    // Kekalkan rekod tempatan (sheetRow: null) yang BELUM wujud dalam sheet CSV
+                    // — elak duplikasi bila sheet CSV sudah update dengan rekod baru
+                    const localUnsync = maintenanceDatabase.filter(local => {
+                        if (local.sheetRow) return false; // sudah ada dalam sheet, buang
+                        // Semak sama ada rekod ini sudah ada dalam sheet (match by 3 medan kunci)
+                        const alreadyInSheet = sheetMaint.some(s =>
+                            s.namaAset === local.namaAset &&
+                            s.jenisServis === local.jenisServis &&
+                            s.tarikhServis === local.tarikhServis
+                        );
+                        return !alreadyInSheet; // kekal hanya yang betul-betul belum sync
+                    });
+                    maintenanceDatabase = [...sheetMaint, ...localUnsync];
+                    anySuccess = true;
                 }
 
-                if (maintResponse && maintResponse.ok) {
-                    const maintCsvText = await maintResponse.text();
-                    maintenanceDatabase = parseMaintenanceCSV(maintCsvText);
-                    localStorage.setItem('maintenance', JSON.stringify(maintenanceDatabase));
-                    successCount++;
-                }
-                
-                if (successCount === 0) {
-                     throw new Error("Gagal menyambung ke semua tab Google Sheet.");
-                }
-
-                // Commit to localStorage
                 saveToLocalStorage();
-                
-                isGoogleSheetConnected = true;
-                statusDot.className = "h-2.5 w-2.5 rounded-full bg-emerald-500";
-                statusText.innerText = "Google Sheet Terhubung!";
-                showToast("Sambungan Berjaya!", "Data telah berjaya dimuat turun daripada Google Sheet anda.", "success");
+
+                if (anySuccess) {
+                    isGoogleSheetConnected = true;
+                    statusDot.className = "h-2.5 w-2.5 rounded-full bg-emerald-500";
+                    statusText.innerText = "Google Sheet Terhubung!";
+                    showToast("Sambungan Berjaya!", "Data telah berjaya dimuat turun daripada Google Sheet anda.", "success");
+                } else {
+                    throw new Error("Semua sumber CSV gagal dimuatkan.");
+                }
             } catch (error) {
-                console.warn("Using fallback local database due to CORS or connection issue:", error);
+                console.warn("Sync error:", error);
                 isGoogleSheetConnected = false;
                 statusDot.className = "h-2.5 w-2.5 rounded-full bg-rose-500";
                 statusText.innerText = "Data Tempatan Berfungsi";
-                showToast("Menggunakan Data Tempatan", "Gagal memuat turun data Google Sheet secara terus (CORS atau luar talian). Sila gunakan storan tempatan.", "info");
+                showToast("Menggunakan Data Tempatan", "Gagal memuat turun data Google Sheet (CORS atau luar talian). Data tempatan digunakan.", "info");
             } finally {
                 syncIcon.classList.remove('fa-spin');
                 refreshAllViews();
@@ -1645,6 +1646,7 @@
         }
 
         // CSV PARSER ENGINE specifically for Nota Kalendar tab
+        // Tahun/Bulan/Hari disimpan berasingan (bukan Date) untuk elak isu auto-format Google Sheets
         function parseCalendarNotesCSV(csvText) {
             const rows = parseCSVToArray(csvText);
             const notesMap = {};
@@ -1681,7 +1683,7 @@
             return notesMap;
         }
 
-        // PUSH DATA TO APPS SCRIPT (AUTO SYNC)
+
         async function pushDataToSheet(action, payload, silent = false) {
             if (!APPSCRIPT_WEB_APP_URL || APPSCRIPT_WEB_APP_URL === "YOUR_APPSCRIPT_WEB_APP_URL") {
                 console.warn("URL Apps Script tiada. Disimpan ke storan tempatan sahaja.");
@@ -1692,6 +1694,9 @@
                 if(!silent) showToast("Menyegerak...", "Menghantar data terus ke Google Sheet...", "info");
                 const response = await fetch(APPSCRIPT_WEB_APP_URL, {
                     method: 'POST',
+                    mode: 'cors',
+                    credentials: 'omit',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ action, payload })
                 });
 
@@ -1776,6 +1781,377 @@
             localStorage.setItem('maintenance', JSON.stringify(maintenanceDatabase));
         }
 
+        // ==================== ANNUAL CALENDAR & NOTES ====================
+        let calendarViewDate = new Date();
+        let calendarNotesDB = {};
+        let currentCalendarDateKey = null;
+
+        const calendarBulanList = ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"];
+
+        function loadCalendarNotes() {
+            const stored = localStorage.getItem('calendarNotes');
+            calendarNotesDB = stored ? JSON.parse(stored) : {};
+        }
+
+        function saveCalendarNotes() {
+            localStorage.setItem('calendarNotes', JSON.stringify(calendarNotesDB));
+        }
+
+        function formatCalendarDateKey(year, month, day) {
+            return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        }
+
+        function changeCalendarYear(delta) {
+            calendarViewDate.setFullYear(calendarViewDate.getFullYear() + delta);
+            renderCalendar();
+        }
+
+        function goToCalendarToday() {
+            calendarViewDate = new Date();
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            const viewYear = calendarViewDate.getFullYear();
+            const yearLabel = document.getElementById('calendar-year-label');
+            if (yearLabel) yearLabel.innerText = viewYear;
+
+            const today = new Date();
+            const todayKey = formatCalendarDateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+            const yearGrid = document.getElementById('calendar-year-grid');
+            if (!yearGrid) return;
+
+            const shortDay = ['A', 'I', 'S', 'R', 'K', 'J', 'S'];
+
+            let yearHtml = '';
+            for (let m = 0; m < 12; m++) {
+                const firstDay = new Date(viewYear, m, 1).getDay(); // 0=Sun
+                const daysInMonth = new Date(viewYear, m + 1, 0).getDate();
+                const isCurrentMonth = today.getFullYear() === viewYear && today.getMonth() === m;
+
+                // Day header row
+                let monthHtml = `
+                    <div class="rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden">
+                        <div class="px-2.5 py-2 bg-slate-50 dark:bg-slate-800/60 flex items-center justify-between">
+                            <span class="text-[11px] font-extrabold text-slate-700 dark:text-slate-200 uppercase tracking-wide">${calendarBulanList[m]}</span>
+                            ${isCurrentMonth ? '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400">Bulan Ini</span>' : ''}
+                        </div>
+                        <div class="p-1.5">
+                            <div class="grid grid-cols-7 mb-0.5">
+                                ${shortDay.map(d => `<div class="text-center text-[8px] font-bold text-slate-400 py-0.5">${d}</div>`).join('')}
+                            </div>
+                            <div class="grid grid-cols-7 gap-0.5">`;
+
+                // Leading blank cells
+                for (let i = 0; i < firstDay; i++) {
+                    monthHtml += `<div></div>`;
+                }
+
+                // Day cells
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const dateKey = formatCalendarDateKey(viewYear, m, d);
+                    const hasNote = (calendarNotesDB[dateKey] || []).length > 0;
+                    const isToday = dateKey === todayKey;
+                    const isFuture = dateKey > todayKey;
+                    // isPast = dateKey < todayKey
+
+                    let cls = 'relative flex items-center justify-center rounded text-[10px] font-semibold cursor-pointer transition-colors aspect-square ';
+                    if (isToday) {
+                        cls += 'bg-primary-600 text-white hover:bg-primary-700';
+                    } else {
+                        cls += 'text-slate-600 dark:text-slate-300 hover:bg-primary-50 dark:hover:bg-primary-950/30 hover:text-primary-600 dark:hover:text-primary-400';
+                    }
+
+                    // Dot colour: #0ED100 hari ini | #FF4D2E akan datang | #0099FF hari lepas
+                    let dotColor = '';
+                    if (hasNote) {
+                        if (isToday)       dotColor = '#0ED100';
+                        else if (isFuture) dotColor = '#FF4D2E';
+                        else               dotColor = '#0099FF';
+                    }
+
+                    const dot = hasNote
+                        ? `<span class="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full" style="background:${dotColor};"></span>`
+                        : '';
+
+                    monthHtml += `<div class="${cls}" onclick="openCalendarDayModal('${dateKey}')">${d}${dot}</div>`;
+                }
+
+                monthHtml += `</div></div></div>`;
+                yearHtml += monthHtml;
+            }
+
+            yearGrid.innerHTML = yearHtml;
+            renderUpcomingCalendarNotes();
+            renderDashboardNotesPanel();
+        }
+
+        // Render nota pada panel standalone dashboard (kad Nota & Peringatan)
+        function renderDashboardNotesPanel() {
+            const panel = document.getElementById('dashboard-notes-panel');
+            if (!panel) return;
+
+            const today = new Date();
+            const todayKey = formatCalendarDateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+            // Kumpul nota hari ini ke hadapan, susun ikut tarikh
+            const upcoming = [];
+            Object.keys(calendarNotesDB).forEach(dateKey => {
+                if (dateKey >= todayKey) {
+                    (calendarNotesDB[dateKey] || []).forEach(note => {
+                        upcoming.push({ dateKey, ...note });
+                    });
+                }
+            });
+            upcoming.sort((a, b) => a.dateKey.localeCompare(b.dateKey));
+
+            if (upcoming.length === 0) {
+                panel.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-6 gap-2">
+                        <i class="fa-regular fa-calendar-check text-2xl text-slate-300 dark:text-slate-700"></i>
+                        <p class="text-xs text-slate-400 dark:text-slate-500">Tiada nota atau peringatan. Klik <strong>Tambah</strong> atau tekan mana-mana tarikh dalam kalendar di bawah.</p>
+                    </div>`;
+                return;
+            }
+
+            const weekdayNames = ["Ahd", "Isn", "Sel", "Rab", "Kha", "Jum", "Sab"];
+            let lastDateKey = null;
+
+            panel.innerHTML = upcoming.map(note => {
+                const [y, m, d] = note.dateKey.split('-').map(Number);
+                const dateObj = new Date(y, m - 1, d);
+                const isToday = note.dateKey === todayKey;
+                const isTomorrow = (() => {
+                    const t = new Date(today); t.setDate(t.getDate() + 1);
+                    return formatCalendarDateKey(t.getFullYear(), t.getMonth(), t.getDate()) === note.dateKey;
+                })();
+
+                let dateBadgeText, dateBadgeClass;
+                if (isToday) {
+                    dateBadgeText = 'Hari Ini';
+                    dateBadgeClass = 'bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300';
+                } else if (isTomorrow) {
+                    dateBadgeText = 'Esok';
+                    dateBadgeClass = 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400';
+                } else {
+                    dateBadgeText = `${weekdayNames[dateObj.getDay()]} ${d} ${calendarBulanList[m - 1].slice(0, 3)}`;
+                    dateBadgeClass = 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400';
+                }
+
+                const isNewDate = note.dateKey !== lastDateKey;
+                lastDateKey = note.dateKey;
+
+                return `
+                    <div onclick="openCalendarDayModal('${note.dateKey}')" class="flex items-start gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+                        <span class="shrink-0 text-[10px] font-bold px-2 py-1 rounded-lg ${dateBadgeClass} leading-tight mt-0.5">${dateBadgeText}</span>
+                        <p class="text-sm text-slate-700 dark:text-slate-200 leading-snug flex-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">${escapeCalendarNoteHtml(note.text)}</p>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 dark:text-slate-600 mt-1 shrink-0 group-hover:text-primary-400 transition-colors"></i>
+                    </div>`;
+            }).join('');
+        }
+
+        // Tunjukkan senarai nota akan datang (termasuk hari ini) terus pada skrin dashboard
+        function renderUpcomingCalendarNotes() {
+            const container = document.getElementById('calendar-upcoming-notes-list');
+            if (!container) return;
+
+            const today = new Date();
+            const todayKey = formatCalendarDateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+            // Kumpulkan semua nota dari hari ini ke hadapan, susun ikut tarikh
+            const upcoming = [];
+            Object.keys(calendarNotesDB).forEach(dateKey => {
+                if (dateKey >= todayKey) {
+                    (calendarNotesDB[dateKey] || []).forEach(note => {
+                        upcoming.push({ dateKey, ...note });
+                    });
+                }
+            });
+            upcoming.sort((a, b) => a.dateKey.localeCompare(b.dateKey));
+
+            const limited = upcoming.slice(0, 6);
+
+            if (limited.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 dark:text-slate-500 py-2">Tiada nota atau peringatan akan datang.</p>`;
+                return;
+            }
+
+            const weekdayNames = ["Ahad", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu"];
+
+            container.innerHTML = limited.map(note => {
+                const [y, m, d] = note.dateKey.split('-').map(Number);
+                const dateObj = new Date(y, m - 1, d);
+                const isToday = note.dateKey === todayKey;
+                const dateLabel = isToday ? 'Hari Ini' : `${d} ${calendarBulanList[m - 1].slice(0, 3)}`;
+
+                return `
+                    <div onclick="openCalendarDayModal('${note.dateKey}')" class="flex items-center gap-3 p-2.5 rounded-xl border ${isToday ? 'border-primary-200 dark:border-primary-900/40 bg-primary-50/50 dark:bg-primary-950/20' : 'border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40'} cursor-pointer transition-colors">
+                        <div class="shrink-0 w-14 text-center">
+                            <span class="text-[10px] font-bold uppercase tracking-wide ${isToday ? 'text-primary-600 dark:text-primary-400' : 'text-slate-400 dark:text-slate-500'}">${dateLabel}</span>
+                        </div>
+                        <p class="text-xs text-slate-700 dark:text-slate-200 truncate flex-1">${escapeCalendarNoteHtml(note.text)}</p>
+                    </div>`;
+            }).join('');
+        }
+
+        function openCalendarDayModal(dateKey) {
+            currentCalendarDateKey = dateKey;
+            const [y, m, d] = dateKey.split('-').map(Number);
+            const dateObj = new Date(y, m - 1, d);
+            const weekdayNames = ["Ahad", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu"];
+
+            document.getElementById('modal-calendar-day-title').innerText = `${d} ${calendarBulanList[m - 1]} ${y}`;
+            document.getElementById('modal-calendar-day-subtitle').innerText = weekdayNames[dateObj.getDay()];
+            document.getElementById('calendar-note-input').value = '';
+
+            renderCalendarDayNotesList();
+            document.getElementById('modal-calendar-day').classList.remove('hidden');
+        }
+
+        function closeCalendarDayModal() {
+            document.getElementById('modal-calendar-day').classList.add('hidden');
+            currentCalendarDateKey = null;
+            renderCalendar();
+        }
+
+        function renderCalendarDayNotesList() {
+            const list = document.getElementById('calendar-day-notes-list');
+            const notes = calendarNotesDB[currentCalendarDateKey] || [];
+
+            if (notes.length === 0) {
+                list.innerHTML = `<p class="text-xs text-slate-400 dark:text-slate-500 text-center py-4">Tiada nota untuk tarikh ini lagi.</p>`;
+                return;
+            }
+
+            list.innerHTML = notes.map(note => `
+                <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-3 group" id="note-row-${note.id}">
+                    <div class="flex items-start justify-between gap-2">
+                        <p class="text-sm text-slate-700 dark:text-slate-200 whitespace-pre-wrap flex-1" id="note-text-${note.id}">${escapeCalendarNoteHtml(note.text)}</p>
+                        <div class="flex items-center gap-1 shrink-0">
+                            <button onclick="startEditCalendarNote('${note.id}')" class="h-7 w-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950/50 dark:hover:text-primary-400 transition-colors">
+                                <i class="fa-solid fa-pen text-xs"></i>
+                            </button>
+                            <button onclick="deleteCalendarNote('${note.id}')" class="h-7 w-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 dark:hover:text-rose-400 transition-colors">
+                                <i class="fa-solid fa-trash text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function escapeCalendarNoteHtml(text) {
+            const div = document.createElement('div');
+            div.innerText = text;
+            return div.innerHTML;
+        }
+
+        async function addCalendarNote(event) {
+            event.preventDefault();
+            const input = document.getElementById('calendar-note-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+
+            const [y, m, d] = currentCalendarDateKey.split('-').map(Number);
+
+            if (!calendarNotesDB[currentCalendarDateKey]) {
+                calendarNotesDB[currentCalendarDateKey] = [];
+            }
+            const tempId = 'local-' + Date.now().toString();
+            calendarNotesDB[currentCalendarDateKey].push({
+                id: tempId,
+                sheetRow: null,
+                text: text
+            });
+
+            saveCalendarNotes();
+            input.value = '';
+            renderCalendarDayNotesList();
+            renderUpcomingCalendarNotes();
+            renderDashboardNotesPanel();
+
+            const successPush = await pushDataToSheet("ADD_NOTE", {
+                tahun: y, bulan: calendarBulanList[m - 1], hari: d, text
+            }, false); // false = tunjuk toast kejayaan/ralat
+
+            submitBtn.disabled = false;
+            if (successPush) setTimeout(syncWithGoogleSheet, 2000);
+        }
+
+        function startEditCalendarNote(noteId) {
+            const notes = calendarNotesDB[currentCalendarDateKey] || [];
+            const note = notes.find(n => n.id === noteId);
+            if (!note) return;
+
+            const row = document.getElementById(`note-row-${noteId}`);
+            row.innerHTML = `
+                <div class="space-y-2">
+                    <textarea id="edit-note-input-${noteId}" rows="2" class="w-full bg-white dark:bg-slate-900 border border-primary-300 dark:border-primary-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100 resize-none">${note.text}</textarea>
+                    <div class="flex justify-end gap-2">
+                        <button onclick="renderCalendarDayNotesList()" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 dark:text-slate-400 transition-colors">Batal</button>
+                        <button onclick="saveEditCalendarNote('${noteId}')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary-600 hover:bg-primary-700 text-white transition-colors">Simpan</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById(`edit-note-input-${noteId}`).focus();
+        }
+
+        async function saveEditCalendarNote(noteId) {
+            const newText = document.getElementById(`edit-note-input-${noteId}`).value.trim();
+            if (!newText) return;
+
+            const notes = calendarNotesDB[currentCalendarDateKey] || [];
+            const note = notes.find(n => n.id === noteId);
+            if (!note) return;
+
+            note.text = newText;
+            saveCalendarNotes();
+            renderCalendarDayNotesList();
+            renderUpcomingCalendarNotes();
+            renderDashboardNotesPanel();
+
+            if (note.sheetRow) {
+                const [y, m, d] = currentCalendarDateKey.split('-').map(Number);
+                const successPush = await pushDataToSheet("UPDATE_NOTE", {
+                    sheetRow: note.sheetRow, tahun: y, bulan: calendarBulanList[m - 1], hari: d, text: newText
+                }, false);
+                if (successPush) setTimeout(syncWithGoogleSheet, 2000);
+            } else {
+                // Note not yet in sheet (still local) — push as new row
+                const [y, m, d] = currentCalendarDateKey.split('-').map(Number);
+                const successPush = await pushDataToSheet("ADD_NOTE", {
+                    tahun: y, bulan: calendarBulanList[m - 1], hari: d, text: newText
+                }, false);
+                if (successPush) setTimeout(syncWithGoogleSheet, 2000);
+            }
+        }
+
+        function deleteCalendarNote(noteId) {
+            showConfirmDialog(
+                "Padam Nota Ini?",
+                "Tindakan ini tidak boleh diundur. Nota akan dipadam secara kekal.",
+                async () => {
+                    const notes = calendarNotesDB[currentCalendarDateKey] || [];
+                    const note = notes.find(n => n.id === noteId);
+
+                    calendarNotesDB[currentCalendarDateKey] = notes.filter(n => n.id !== noteId);
+                    saveCalendarNotes();
+                    renderCalendarDayNotesList();
+                    renderUpcomingCalendarNotes();
+                    renderDashboardNotesPanel();
+
+                    if (note && note.sheetRow) {
+                        const successPush = await pushDataToSheet("DELETE_ROW", { sheetType: 'calendar', sheetRow: note.sheetRow }, false);
+                        if (successPush) setTimeout(syncWithGoogleSheet, 2000);
+                    }
+                }
+            );
+        }
+
         function confirmResetToDefault() {
             showConfirmDialog(
                 "Set Semula Stor Peranti?",
@@ -1784,11 +2160,9 @@
                     localStorage.removeItem('bajet');
                     localStorage.removeItem('pendapatan');
                     localStorage.removeItem('simpanan');
-                    localStorage.removeItem('maintenance');
                     budgetDatabase = [...defaultBudgetItems];
                     incomeDatabase = [...defaultIncomeItems];
                     simpananDatabase = [...defaultSimpananItems];
-                    maintenanceDatabase = [];
                     saveToLocalStorage();
                     refreshAllViews();
                     showToast("Tetapan Berjaya Diubah", "Aplikasi telah dikembalikan ke data lalai.", "info");
@@ -1945,6 +2319,8 @@
             const filterTahun = document.getElementById('dash-filter-tahun').value;
             
             document.getElementById('chart-filtered-by').innerText = `Tapis: ${filterBulan} ${filterTahun}`;
+
+            renderCalendar();
 
             const filteredBudget = budgetDatabase.filter(item => {
                 const matchBulan = filterBulan === 'Semua' || item.bulan === filterBulan;
@@ -2997,12 +3373,8 @@
                 }
             });
 
-            loadCalendarNotes();
-            loadDatabase();
-            syncWithGoogleSheet();
-        }; // <-- PENAMBAHAN KURUNG PENUTUP YANG HILANG DI SINI
-
         // CSV PARSER — Tab "Rekod Penyelenggaraan"
+        // Lajur: Nama Aset | Jenis Aset | Jenis Servis | Bengkel | Tarikh Servis | Tarikh Seterusnya | KM/Jam | Kos (RM) | Catatan
         function parseMaintenanceCSV(csvText) {
             const rows = parseCSVToArray(csvText);
             const results = [];
@@ -3220,43 +3592,64 @@
             document.getElementById('modal-maintenance').classList.add('hidden');
         }
 
-        async function saveMaintenanceForm(event) {
-            event.preventDefault();
-            const editId = document.getElementById('maint-edit-id').value;
+        async function saveMaintenanceForm(e) {
+            if (e && e.preventDefault) e.preventDefault();
+
+            // Validasi manual
+            const namaAset     = document.getElementById('maint-namaAset').value.trim();
+            const jenisServis  = document.getElementById('maint-jenisServis').value.trim();
+            const tarikhServis = document.getElementById('maint-tarikhServis').value;
+            if (!namaAset || !jenisServis || !tarikhServis) {
+                showToast('Medan Wajib', 'Sila isi Nama Aset, Jenis Servis dan Tarikh Servis.', 'error');
+                return;
+            }
+
+            const editId       = document.getElementById('maint-edit-id').value;
             const editSheetRow = document.getElementById('maint-edit-sheetrow').value;
 
             const payload = {
-                namaAset:         document.getElementById('maint-namaAset').value.trim(),
+                namaAset,
                 jenisAset:        document.getElementById('maint-jenisAset').value,
-                jenisServis:      document.getElementById('maint-jenisServis').value.trim(),
+                jenisServis,
                 bengkel:          document.getElementById('maint-bengkel').value.trim(),
-                tarikhServis:     document.getElementById('maint-tarikhServis').value,
+                tarikhServis,
                 tarikhSeterusnya: document.getElementById('maint-tarikhSeterusnya').value,
                 km:               parseFloat(document.getElementById('maint-km').value) || 0,
                 kos:              parseFloat(document.getElementById('maint-kos').value) || 0,
                 catatan:          document.getElementById('maint-catatan').value.trim()
             };
 
-            if (editId) {
-                const idx = maintenanceDatabase.findIndex(i => i.id === parseInt(editId));
-                if (idx >= 0) {
-                    maintenanceDatabase[idx] = { ...maintenanceDatabase[idx], ...payload };
-                    if (editSheetRow) {
-                        await pushDataToSheet('UPDATE_MAINTENANCE', { sheetRow: parseInt(editSheetRow), ...payload }, true);
-                    }
-                    showToast('Rekod Dikemaskini', `${payload.namaAset} — servis berjaya dikemaskini.`, 'success');
-                }
-            } else {
-                const newId = Date.now();
-                maintenanceDatabase.push({ id: newId, sheetRow: null, ...payload });
-                const pushed = await pushDataToSheet('ADD_MAINTENANCE', payload, true);
-                if (pushed) setTimeout(syncWithGoogleSheet, 2000);
-                showToast('Rekod Ditambah', `${payload.namaAset} — rekod servis baharu disimpan.`, 'success');
-            }
+            const submitBtn = document.getElementById('maint-submit-btn');
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = 'Menyimpan...'; }
 
-            saveToLocalStorage();
-            closeMaintenanceModal();
-            renderMaintenanceView();
+            try {
+                if (editId) {
+                    const idx = maintenanceDatabase.findIndex(i => i.id === parseInt(editId));
+                    if (idx >= 0) {
+                        maintenanceDatabase[idx] = { ...maintenanceDatabase[idx], ...payload };
+                        saveToLocalStorage();
+                        renderMaintenanceView();
+                        closeMaintenanceModal();
+                        showToast('Rekod Dikemaskini', `${payload.namaAset} — servis berjaya dikemaskini.`, 'success');
+                        if (editSheetRow) {
+                            pushDataToSheet('UPDATE_MAINTENANCE', { sheetRow: parseInt(editSheetRow), ...payload }, true);
+                        }
+                    }
+                } else {
+                    maintenanceDatabase.unshift({ id: Date.now(), sheetRow: null, ...payload });
+                    saveToLocalStorage();
+                    renderMaintenanceView();
+                    closeMaintenanceModal();
+                    showToast('Rekod Ditambah', `${payload.namaAset} — rekod servis baharu disimpan.`, 'success');
+                    const pushed = await pushDataToSheet('ADD_MAINTENANCE', payload, true);
+                    if (pushed) setTimeout(syncWithGoogleSheet, 5000);
+                }
+            } catch (err) {
+                console.error('saveMaintenanceForm error:', err);
+                showToast('Ralat', 'Gagal menyimpan rekod. Cuba semula.', 'error');
+            } finally {
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Simpan Rekod'; }
+            }
         }
 
         function deleteMaintenanceItem(id) {
@@ -3275,6 +3668,14 @@
                     showToast('Rekod Dipadam', `${item.namaAset} — rekod telah dibuang.`, 'info');
                 }
             );
+        }
+
+            loadCalendarNotes();
+            loadDatabase();
+            syncWithGoogleSheet();
+
+            // Auto-refresh setiap 5 minit (300000ms)
+            setInterval(syncWithGoogleSheet, 300000);
         }
     </script>
 </body>
