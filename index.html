@@ -808,123 +808,15 @@
                 </div>
             </div>
         </section>
-        <!-- ==================== TAB 7: HEALTH MONITORING ==================== -->
+        <!-- ==================== TAB 7: HEALTH (placeholder) ==================== -->
         <section id="pane-health" class="tab-pane hidden space-y-6">
-
-            <!-- SUMMARY CARDS — nilai terkini -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3" id="health-summary-cards">
-                <!-- Dynamic cards injected by renderHealthView() -->
-            </div>
-
-            <!-- TREND CHART + LATEST SNAPSHOT -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                <!-- Latest Snapshot Panel -->
-                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-5 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <div class="p-1.5 bg-rose-50 dark:bg-rose-950/40 rounded-lg">
-                                <i class="fa-solid fa-clipboard-list text-rose-500 text-sm"></i>
-                            </div>
-                            <h3 class="font-bold text-sm text-slate-900 dark:text-slate-100">Status Terkini</h3>
-                        </div>
-                        <button onclick="openHealthModal()" class="flex items-center gap-1.5 px-3 h-8 rounded-lg bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold transition-all shadow-sm">
-                            <i class="fa-solid fa-plus text-[10px]"></i> Tambah
-                        </button>
-                    </div>
-                    <div id="health-latest-panel" class="space-y-2 text-sm">
-                        <p class="text-xs text-slate-400 text-center py-4">Tiada rekod. Tambah rekod pertama anda.</p>
-                    </div>
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-12 flex flex-col items-center justify-center text-center gap-4">
+                <div class="h-16 w-16 rounded-2xl bg-rose-50 dark:bg-rose-950/40 flex items-center justify-center">
+                    <i class="fa-solid fa-heart-pulse text-2xl text-rose-500"></i>
                 </div>
-
-                <!-- Reference Range Guide -->
-                <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-5">
-                    <div class="flex items-center gap-2 mb-4">
-                        <div class="p-1.5 bg-blue-50 dark:bg-blue-950/40 rounded-lg">
-                            <i class="fa-solid fa-book-medical text-blue-500 text-sm"></i>
-                        </div>
-                        <h3 class="font-bold text-sm text-slate-900 dark:text-slate-100">Rujukan Julat Normal</h3>
-                    </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[11px]">
-                        <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 space-y-1">
-                            <p class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5"><i class="fa-solid fa-weight-scale text-violet-500"></i> BMI</p>
-                            <p class="text-slate-500">Kurus: &lt;18.5</p>
-                            <p class="text-emerald-600 font-semibold">Normal: 18.5–24.9</p>
-                            <p class="text-amber-600">Lebih berat: 25–29.9</p>
-                            <p class="text-rose-600">Obes: ≥30</p>
-                        </div>
-                        <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 space-y-1">
-                            <p class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5"><i class="fa-solid fa-flask text-purple-500"></i> Tiroid</p>
-                            <p class="text-slate-500">TSH: 0.4–4.0 mIU/L</p>
-                            <p class="text-slate-500">T3: 3.1–6.8 pmol/L</p>
-                            <p class="text-slate-500">T4: 12.0–22.0 pmol/L</p>
-                        </div>
-                        <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 space-y-1">
-                            <p class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5"><i class="fa-solid fa-droplet text-red-500"></i> Kolesterol</p>
-                            <p class="text-slate-500">Jumlah: &lt;5.2 mmol/L</p>
-                            <p class="text-slate-500">HDL: &gt;1.0 mmol/L</p>
-                            <p class="text-slate-500">LDL: &lt;3.4 mmol/L</p>
-                        </div>
-                        <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 space-y-1">
-                            <p class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5"><i class="fa-solid fa-candy-cane text-amber-500"></i> Gula Puasa</p>
-                            <p class="text-emerald-600 font-semibold">Normal: 3.9–6.1</p>
-                            <p class="text-amber-600">Pra-diabetes: 6.1–7.0</p>
-                            <p class="text-rose-600">Diabetes: &gt;7.0 mmol/L</p>
-                        </div>
-                        <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 space-y-1">
-                            <p class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5"><i class="fa-solid fa-heart-pulse text-rose-500"></i> Tekanan Darah</p>
-                            <p class="text-emerald-600 font-semibold">Normal: &lt;120/80</p>
-                            <p class="text-amber-600">Tinggi Tahap 1: 130–139/80–89</p>
-                            <p class="text-rose-600">Tinggi Tahap 2: ≥140/≥90</p>
-                        </div>
-                        <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 space-y-1">
-                            <p class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5"><i class="fa-solid fa-ruler-vertical text-teal-500"></i> Tinggi / Berat</p>
-                            <p class="text-slate-500">Berat: kg</p>
-                            <p class="text-slate-500">Tinggi: cm</p>
-                            <p class="text-slate-500">BMI dikira auto</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- REKOD LENGKAP TABLE -->
-            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-                <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center gap-3">
-                    <div class="flex items-center gap-2 flex-1">
-                        <div class="p-1.5 bg-rose-50 dark:bg-rose-950/40 rounded-lg">
-                            <i class="fa-solid fa-table-list text-rose-500 text-sm"></i>
-                        </div>
-                        <h3 class="font-bold text-sm text-slate-900 dark:text-slate-100">Rekod Pemantauan Kesihatan</h3>
-                    </div>
-                    <div class="flex flex-wrap gap-2 items-center">
-                        <select id="health-filter-year" onchange="renderHealthView()" class="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-rose-400 outline-none">
-                            <option value="Semua">Semua Tahun</option>
-                        </select>
-                        <button onclick="openHealthModal()" class="flex items-center gap-1.5 px-4 h-9 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-sm font-bold shadow-md transition-all">
-                            <i class="fa-solid fa-plus text-xs"></i> Tambah Rekod
-                        </button>
-                    </div>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-xs">
-                        <thead>
-                            <tr class="bg-slate-50 dark:bg-slate-800/60 text-left">
-                                <th class="px-3 py-3 font-bold text-slate-500 uppercase tracking-wide whitespace-nowrap">Tarikh</th>
-                                <th class="px-3 py-3 font-bold text-slate-500 uppercase tracking-wide whitespace-nowrap">Berat/Tinggi</th>
-                                <th class="px-3 py-3 font-bold text-slate-500 uppercase tracking-wide whitespace-nowrap">BMI</th>
-                                <th class="px-3 py-3 font-bold text-slate-500 uppercase tracking-wide whitespace-nowrap">TSH / T3 / T4</th>
-                                <th class="px-3 py-3 font-bold text-slate-500 uppercase tracking-wide whitespace-nowrap">Kol. / HDL / LDL</th>
-                                <th class="px-3 py-3 font-bold text-slate-500 uppercase tracking-wide whitespace-nowrap">Gula Puasa</th>
-                                <th class="px-3 py-3 font-bold text-slate-500 uppercase tracking-wide whitespace-nowrap">BP</th>
-                                <th class="px-3 py-3 font-bold text-slate-500 uppercase tracking-wide text-center">Tindakan</th>
-                            </tr>
-                        </thead>
-                        <tbody id="health-table-body" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
-                    </table>
-                    <div id="health-empty-state" class="hidden text-center py-12">
-                        <i class="fa-solid fa-heart-pulse text-3xl text-slate-300 dark:text-slate-700 mb-3 block"></i>
-                        <p class="text-sm text-slate-400">Tiada rekod kesihatan. Klik <strong>Tambah Rekod</strong> untuk mula.</p>
-                    </div>
-                </div>
+                <h2 class="text-xl font-extrabold text-slate-800 dark:text-slate-100">Health</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 max-w-sm">Modul ini sedang dalam pembangunan. Ciri-ciri rekod kesihatan, ubatan, dan temujanji akan ditambah di sini.</p>
+                <span class="text-xs font-bold px-3 py-1.5 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400">Akan Datang</span>
             </div>
         </section>
 
@@ -1179,126 +1071,6 @@
         </div>
     </div>
 
-    <!-- MODAL HEALTH ADD / EDIT -->
-    <div id="modal-health" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm hidden">
-        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col" style="max-height:92vh;">
-            <!-- Header -->
-            <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center shrink-0">
-                <div class="flex items-center gap-2">
-                    <div class="p-1.5 bg-rose-50 dark:bg-rose-950/40 rounded-lg">
-                        <i class="fa-solid fa-heart-pulse text-rose-500 text-sm"></i>
-                    </div>
-                    <h3 class="font-extrabold text-base text-slate-900 dark:text-white" id="modal-health-title">Tambah Rekod Kesihatan</h3>
-                </div>
-                <button type="button" onclick="closeHealthModal()" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-            <!-- Scrollable form fields -->
-            <div class="overflow-y-auto flex-1 min-h-0 px-6 py-5">
-                <form id="form-health" class="space-y-5">
-                    <input type="hidden" id="health-edit-id">
-                    <input type="hidden" id="health-edit-sheetrow">
-
-                    <!-- Tarikh -->
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Tarikh Pemeriksaan <span class="text-rose-500">*</span></label>
-                        <input type="date" id="health-tarikh" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-
-                    <!-- Berat / Tinggi / BMI -->
-                    <fieldset class="border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-3">
-                        <legend class="text-xs font-extrabold text-slate-600 dark:text-slate-300 px-1 flex items-center gap-1.5"><i class="fa-solid fa-weight-scale text-violet-500"></i> Berat Badan & BMI</legend>
-                        <div class="grid grid-cols-3 gap-3">
-                            <div class="space-y-1">
-                                <label class="text-[11px] font-semibold text-slate-500">Berat (kg)</label>
-                                <input type="number" id="health-berat" step="0.1" min="20" max="300" placeholder="68.5" oninput="calcBMI()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-[11px] font-semibold text-slate-500">Tinggi (cm)</label>
-                                <input type="number" id="health-tinggi" step="0.5" min="100" max="250" placeholder="165" oninput="calcBMI()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-[11px] font-semibold text-slate-500">BMI (auto)</label>
-                                <div id="bmi-display" class="w-full bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-800 rounded-lg px-3 py-2 text-sm font-bold text-violet-700 dark:text-violet-300 min-h-[38px] flex items-center">—</div>
-                            </div>
-                        </div>
-                    </fieldset>
-
-                    <!-- Tiroid -->
-                    <fieldset class="border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-3">
-                        <legend class="text-xs font-extrabold text-slate-600 dark:text-slate-300 px-1 flex items-center gap-1.5"><i class="fa-solid fa-flask text-purple-500"></i> Tiroid</legend>
-                        <div class="grid grid-cols-3 gap-3">
-                            <div class="space-y-1">
-                                <label class="text-[11px] font-semibold text-slate-500">TSH (mIU/L)</label>
-                                <input type="number" id="health-tsh" step="0.01" min="0" placeholder="2.50" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-[11px] font-semibold text-slate-500">T3 (pmol/L)</label>
-                                <input type="number" id="health-t3" step="0.01" min="0" placeholder="4.50" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-[11px] font-semibold text-slate-500">T4 (pmol/L)</label>
-                                <input type="number" id="health-t4" step="0.01" min="0" placeholder="15.0" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
-                            </div>
-                        </div>
-                    </fieldset>
-
-                    <!-- Kolesterol -->
-                    <fieldset class="border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-3">
-                        <legend class="text-xs font-extrabold text-slate-600 dark:text-slate-300 px-1 flex items-center gap-1.5"><i class="fa-solid fa-droplet text-red-500"></i> Kolesterol (mmol/L)</legend>
-                        <div class="grid grid-cols-3 gap-3">
-                            <div class="space-y-1">
-                                <label class="text-[11px] font-semibold text-slate-500">Keseluruhan</label>
-                                <input type="number" id="health-kolKesuruhan" step="0.01" min="0" placeholder="5.20" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-[11px] font-semibold text-slate-500">HDL</label>
-                                <input type="number" id="health-hdl" step="0.01" min="0" placeholder="1.30" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-[11px] font-semibold text-slate-500">LDL</label>
-                                <input type="number" id="health-ldl" step="0.01" min="0" placeholder="3.20" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
-                            </div>
-                        </div>
-                    </fieldset>
-
-                    <!-- Gula + BP -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <fieldset class="border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-2">
-                            <legend class="text-xs font-extrabold text-slate-600 dark:text-slate-300 px-1 flex items-center gap-1.5"><i class="fa-solid fa-candy-cane text-amber-500"></i> Gula Puasa (mmol/L)</legend>
-                            <input type="number" id="health-gulaPuasa" step="0.1" min="0" placeholder="5.5" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
-                        </fieldset>
-                        <fieldset class="border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-2">
-                            <legend class="text-xs font-extrabold text-slate-600 dark:text-slate-300 px-1 flex items-center gap-1.5"><i class="fa-solid fa-heart-pulse text-rose-500"></i> Tekanan Darah (mmHg)</legend>
-                            <div class="grid grid-cols-2 gap-2">
-                                <div class="space-y-1">
-                                    <label class="text-[11px] font-semibold text-slate-500">Sistolik</label>
-                                    <input type="number" id="health-bpSis" min="60" max="250" placeholder="120" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
-                                </div>
-                                <div class="space-y-1">
-                                    <label class="text-[11px] font-semibold text-slate-500">Diastolik</label>
-                                    <input type="number" id="health-bpDia" min="40" max="150" placeholder="80" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
-
-                    <!-- Catatan -->
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Catatan / Doktor</label>
-                        <textarea id="health-catatan" rows="2" placeholder="Cth: Jumpa Dr. Azlan, ambil ubat Thyroxine 50mcg..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100 resize-none"></textarea>
-                    </div>
-                </form>
-            </div>
-            <!-- Footer buttons — always visible -->
-            <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-800 flex gap-3 shrink-0">
-                <button type="button" onclick="closeHealthModal()" class="flex-1 h-10 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Batal</button>
-                <button type="button" onclick="saveHealthRecord()" id="health-submit-btn" class="flex-1 h-10 rounded-xl text-sm font-bold bg-rose-500 hover:bg-rose-600 text-white shadow-md transition-all">Simpan Rekod</button>
-            </div>
-        </div>
-    </div>
-
     <!-- CUSTOM CONFIRMATION DIALOG -->
     <div id="modal-confirm" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm hidden">
         <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-sm w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl animate-in fade-in zoom-in duration-200 text-center">
@@ -1340,7 +1112,7 @@
         let summaryChartInstance = null;
         let isGoogleSheetConnected = false;
 
-        const allowedColors = ["#FFB8B8", "#EEF495", "#CBF495", "#9DF495", "#95F4C9", "#95EEF4", "#95CFF4", "#C3BEF8", "#E4BEF8", "#F8BEEF", "#F495AE", "#FFFFFF", "#CFCFCF"];
+        const allowedColors = ["#FFB8B8", "#EEF495", "#750000", "#756C00", "#CBF495", "#9DF495", "#127500", "#00754E", "#006875", "#0034A3", "#600075", "#95F4C9", "#95EEF4", "#95CFF4", "#C3BEF8", "#E4BEF8", "#F8BEEF", "#F495AE", "#FFFFFF", "#CFCFCF"];
 
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=914475172";
         const INCOME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=142125272";
@@ -1704,7 +1476,6 @@
             populateSimpananCategoryFilterDropdown();
             renderSimpananView();
             renderMaintenanceView();
-            renderHealthView();
             populateCategoryFilterDropdown();
             renderCalendar();
             renderColorPalette();
@@ -1714,11 +1485,10 @@
         }
 
         function loadDatabase() {
-            const sb = localStorage.getItem('bajet'), si = localStorage.getItem('pendapatan'), ss = localStorage.getItem('simpanan'), sm = localStorage.getItem('maintenance'), sh = localStorage.getItem('health');
+            const sb = localStorage.getItem('bajet'), si = localStorage.getItem('pendapatan'), ss = localStorage.getItem('simpanan'), sm = localStorage.getItem('maintenance');
             if (sb && si) { budgetDatabase = JSON.parse(sb); incomeDatabase = JSON.parse(si); simpananDatabase = ss ? JSON.parse(ss) : [...defaultSimpananItems]; } 
             else { budgetDatabase = [...defaultBudgetItems]; incomeDatabase = [...defaultIncomeItems]; simpananDatabase = [...defaultSimpananItems]; saveToLocalStorage(); }
             maintenanceDatabase = sm ? JSON.parse(sm) : [];
-            healthDatabase = sh ? JSON.parse(sh) : [];
             refreshAllViews();
         }
 
@@ -2237,225 +2007,6 @@
                     </button>
                 `;
             }).join('');
-        }
-
-        // ==================== HEALTH MODULE ====================
-
-        let healthDatabase = [];
-
-        function healthStatus(field, val) {
-            if (val === null || val === undefined || val === '') return null;
-            const v = parseFloat(val); if (isNaN(v)) return null;
-            const R = {
-                bmi:          [18.5, 24.9, 35],
-                tsh:          [0.4,  4.0,  10],
-                t3:           [3.1,  6.8,  10],
-                t4:           [12.0, 22.0, 30],
-                kolKesuruhan: [null, 5.2,  7.0],
-                hdl:          [1.0,  99,   null],
-                ldl:          [null, 3.4,  5.0],
-                gulaPuasa:    [3.9,  6.1,  11.1],
-                bpSis:        [90,   129,  160],
-                bpDia:        [60,   84,   100]
-            };
-            const r = R[field]; if (!r) return null;
-            const [low, high, crit] = r;
-            if (crit !== null && v >= crit)  return 'kritikal';
-            if (high !== null && v > high)   return 'tinggi';
-            if (low  !== null && v < low)    return 'rendah';
-            return 'normal';
-        }
-
-        function statusBadge(field, val) {
-            if (val === null || val === undefined || val === '') return `<span class="text-slate-400">—</span>`;
-            const st = healthStatus(field, val);
-            const display = parseFloat(val).toFixed(1);
-            const cls = {
-                normal:   'text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30',
-                tinggi:   'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30',
-                rendah:   'text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30',
-                kritikal: 'text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/30 font-extrabold'
-            }[st] || 'text-slate-600 dark:text-slate-300';
-            return `<span class="inline-block text-[10px] font-bold px-1.5 py-0.5 rounded ${cls}">${display}</span>`;
-        }
-
-        function bmiLabel(b) {
-            if (b < 18.5) return 'Kurus'; if (b < 25) return 'Normal';
-            if (b < 30)   return 'Lebih Berat'; return 'Obes';
-        }
-
-        function calcBMI() {
-            const berat = parseFloat(document.getElementById('health-berat').value);
-            const tinggi = parseFloat(document.getElementById('health-tinggi').value);
-            const el = document.getElementById('bmi-display');
-            if (berat > 0 && tinggi > 0) {
-                const bmi = berat / ((tinggi / 100) ** 2);
-                const st  = healthStatus('bmi', bmi);
-                const c   = { normal:'text-emerald-600', tinggi:'text-amber-600', rendah:'text-blue-600', kritikal:'text-rose-600' }[st] || '';
-                el.innerHTML = `<span class="${c}">${bmi.toFixed(1)} <span class="text-[10px] opacity-60">${bmiLabel(bmi)}</span></span>`;
-            } else { el.innerHTML = '—'; }
-        }
-
-        function renderHealthView() {
-            const db = [...healthDatabase].sort((a, b) => (b.tarikh || '').localeCompare(a.tarikh || ''));
-            const latest = db[0] || null;
-
-            // Year filter populate
-            const ySel = document.getElementById('health-filter-year');
-            const curY = ySel ? ySel.value : 'Semua';
-            const years = [...new Set(db.map(r => r.tarikh?.slice(0,4)).filter(Boolean))].sort((a,b) => b-a);
-            if (ySel) ySel.innerHTML = `<option value="Semua">Semua Tahun</option>` + years.map(y => `<option value="${y}" ${y===curY?'selected':''}>${y}</option>`).join('');
-            const filtered = curY === 'Semua' ? db : db.filter(r => r.tarikh?.startsWith(curY));
-
-            // Summary cards
-            const sc = document.getElementById('health-summary-cards');
-            if (sc) {
-                if (!latest) { sc.innerHTML = ''; }
-                else {
-                    const bmiVal = (latest.berat && latest.tinggi) ? +(latest.berat / ((latest.tinggi/100)**2)).toFixed(1) : null;
-                    const cards = [
-                        {icon:'fa-weight-scale', label:'Berat', val:latest.berat, unit:'kg', field:null},
-                        {icon:'fa-chart-simple',  label:'BMI',   val:bmiVal, unit:'',field:'bmi'},
-                        {icon:'fa-flask',         label:'TSH',   val:latest.tsh, unit:'mIU/L', field:'tsh'},
-                        {icon:'fa-droplet',       label:'Kolesterol', val:latest.kolKesuruhan, unit:'mmol/L', field:'kolKesuruhan'},
-                        {icon:'fa-candy-cane',    label:'Gula Puasa', val:latest.gulaPuasa, unit:'mmol/L', field:'gulaPuasa'},
-                        {icon:'fa-heart-pulse',   label:'BP', val:(latest.bpSis&&latest.bpDia)?`${latest.bpSis}/${latest.bpDia}`:null, unit:'mmHg', field:'bpSis'}
-                    ];
-                    const dotCls = {normal:'bg-emerald-400',tinggi:'bg-amber-400',rendah:'bg-blue-400',kritikal:'bg-rose-500'};
-                    sc.innerHTML = cards.map(c => {
-                        const st  = c.field ? healthStatus(c.field, typeof c.val === 'string' ? c.val.split('/')[0] : c.val) : null;
-                        const dot = dotCls[st] ? `<span class="h-2 w-2 rounded-full ${dotCls[st]} shrink-0"></span>` : '';
-                        const disp = (c.val !== null && c.val !== undefined) ? `${c.val}` : '—';
-                        return `<div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4">
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">${c.label}</span>${dot}
-                            </div>
-                            <p class="text-sm font-black text-slate-900 dark:text-white">${disp} ${c.unit ? `<span class="text-[9px] font-normal text-slate-400">${c.unit}</span>` : ''}</p>
-                        </div>`;
-                    }).join('');
-                }
-            }
-
-            // Latest snapshot
-            const lp = document.getElementById('health-latest-panel');
-            if (lp) {
-                if (!latest) {
-                    lp.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">Tiada rekod. Tambah rekod pertama anda.</p>`;
-                } else {
-                    const bmi = (latest.berat && latest.tinggi) ? (latest.berat / ((latest.tinggi/100)**2)) : null;
-                    const rows = [
-                        ['Tarikh', latest.tarikh?.split('-').reverse().join('/') || '—', null, null],
-                        ['Berat / Tinggi', latest.berat ? `${latest.berat}kg / ${latest.tinggi||'?'}cm` : '—', null, null],
-                        ['BMI', bmi ? `${bmi.toFixed(1)} (${bmiLabel(bmi)})` : '—', 'bmi', bmi],
-                        ['TSH', latest.tsh ? `${latest.tsh} mIU/L` : '—', 'tsh', latest.tsh],
-                        ['T3 / T4', (latest.t3||latest.t4) ? `${latest.t3??'—'}/${latest.t4??'—'} pmol/L` : '—', null, null],
-                        ['Kolesterol', latest.kolKesuruhan ? `${latest.kolKesuruhan} mmol/L` : '—', 'kolKesuruhan', latest.kolKesuruhan],
-                        ['HDL / LDL', (latest.hdl||latest.ldl) ? `${latest.hdl??'—'}/${latest.ldl??'—'}` : '—', null, null],
-                        ['Gula Puasa', latest.gulaPuasa ? `${latest.gulaPuasa} mmol/L` : '—', 'gulaPuasa', latest.gulaPuasa],
-                        ['Tekanan Darah', (latest.bpSis&&latest.bpDia) ? `${latest.bpSis}/${latest.bpDia} mmHg` : '—', 'bpSis', latest.bpSis],
-                    ];
-                    const dotChar = {normal:'🟢',tinggi:'🟡',rendah:'🔵',kritikal:'🔴'};
-                    lp.innerHTML = rows.map(([label, value, field, raw]) => {
-                        const st = field ? healthStatus(field, raw) : null;
-                        return `<div class="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800 last:border-0">
-                            <span class="text-[11px] text-slate-500">${label}</span>
-                            <span class="text-[11px] font-bold text-slate-800 dark:text-slate-100">${st ? dotChar[st]+' ' : ''}${value}</span>
-                        </div>`;
-                    }).join('');
-                }
-            }
-
-            // Table
-            const tbody = document.getElementById('health-table-body');
-            const empty = document.getElementById('health-empty-state');
-            if (!tbody) return;
-            if (!filtered.length) { tbody.innerHTML=''; if(empty) empty.classList.remove('hidden'); return; }
-            if (empty) empty.classList.add('hidden');
-            tbody.innerHTML = filtered.map(r => {
-                const bmi = (r.berat&&r.tinggi) ? (r.berat/((r.tinggi/100)**2)) : null;
-                const bmiSt = bmi ? healthStatus('bmi', bmi) : null;
-                const bmiCls = {normal:'text-emerald-600',tinggi:'text-amber-600',rendah:'text-blue-600',kritikal:'text-rose-600 font-extrabold'}[bmiSt] || 'text-slate-500';
-                return `<tr class="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 text-xs">
-                    <td class="px-3 py-3 font-semibold text-slate-700 dark:text-slate-200 whitespace-nowrap">${r.tarikh?.split('-').reverse().join('/')||'—'}</td>
-                    <td class="px-3 py-3 whitespace-nowrap">${r.berat?`${r.berat}/${r.tinggi||'?'}`:'<span class="text-slate-400">—</span>'}</td>
-                    <td class="px-3 py-3 whitespace-nowrap"><span class="${bmiCls}">${bmi?bmi.toFixed(1):'—'}</span></td>
-                    <td class="px-3 py-3 whitespace-nowrap">${statusBadge('tsh',r.tsh)} / ${statusBadge('t3',r.t3)} / ${statusBadge('t4',r.t4)}</td>
-                    <td class="px-3 py-3 whitespace-nowrap">${statusBadge('kolKesuruhan',r.kolKesuruhan)} / ${statusBadge('hdl',r.hdl)} / ${statusBadge('ldl',r.ldl)}</td>
-                    <td class="px-3 py-3 whitespace-nowrap">${statusBadge('gulaPuasa',r.gulaPuasa)}</td>
-                    <td class="px-3 py-3 whitespace-nowrap">${(r.bpSis&&r.bpDia)?`${statusBadge('bpSis',r.bpSis)}/${statusBadge('bpDia',r.bpDia)}`:'<span class="text-slate-400">—</span>'}</td>
-                    <td class="px-3 py-3">
-                        <div class="flex justify-center gap-1.5">
-                            <button onclick="openHealthModal(${r.id})" class="h-7 w-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30"><i class="fa-solid fa-pen text-xs"></i></button>
-                            <button onclick="deleteHealthRecord(${r.id})" class="h-7 w-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30"><i class="fa-solid fa-trash text-xs"></i></button>
-                        </div>
-                    </td>
-                </tr>${r.catatan?`<tr><td colspan="8" class="px-3 pb-2 text-[10px] text-slate-400 italic"><i class="fa-solid fa-note-sticky mr-1"></i>${r.catatan}</td></tr>`:''}`;
-            }).join('');
-        }
-
-        function openHealthModal(id = null) {
-            document.getElementById('form-health').reset();
-            document.getElementById('health-edit-id').value = '';
-            document.getElementById('health-edit-sheetrow').value = '';
-            document.getElementById('bmi-display').innerHTML = '—';
-            document.getElementById('modal-health-title').innerText = 'Tambah Rekod Kesihatan';
-            if (id) {
-                const r = healthDatabase.find(i => i.id === id);
-                if (!r) return;
-                document.getElementById('modal-health-title').innerText = 'Edit Rekod Kesihatan';
-                document.getElementById('health-edit-id').value = r.id;
-                ['tarikh','berat','tinggi','tsh','t3','t4','kolKesuruhan','hdl','ldl','gulaPuasa','bpSis','bpDia','catatan'].forEach(f => {
-                    const el = document.getElementById(`health-${f}`);
-                    if (el && r[f] !== null && r[f] !== undefined) el.value = r[f];
-                });
-                calcBMI();
-            }
-            document.getElementById('modal-health').classList.remove('hidden');
-        }
-
-        function closeHealthModal() { document.getElementById('modal-health').classList.add('hidden'); }
-
-        function saveHealthRecord() {
-            const tarikh = document.getElementById('health-tarikh').value;
-            if (!tarikh) { showToast('Medan Wajib', 'Sila pilih tarikh pemeriksaan.', 'error'); return; }
-            const g  = id => { const e = document.getElementById(id); return e && e.value !== '' ? parseFloat(e.value) : null; };
-            const berat = g('health-berat'), tinggi = g('health-tinggi');
-            const bmi = (berat && tinggi) ? +((berat/((tinggi/100)**2)).toFixed(2)) : null;
-            const rec = { tarikh, berat, tinggi, bmi,
-                tsh: g('health-tsh'), t3: g('health-t3'), t4: g('health-t4'),
-                kolKesuruhan: g('health-kolKesuruhan'), hdl: g('health-hdl'), ldl: g('health-ldl'),
-                gulaPuasa: g('health-gulaPuasa'), bpSis: g('health-bpSis'), bpDia: g('health-bpDia'),
-                catatan: document.getElementById('health-catatan').value.trim()
-            };
-            const editId = document.getElementById('health-edit-id').value;
-            const btn = document.getElementById('health-submit-btn');
-            if (btn) { btn.disabled = true; btn.innerText = 'Menyimpan...'; }
-            try {
-                if (editId) {
-                    const idx = healthDatabase.findIndex(i => i.id === parseInt(editId));
-                    if (idx >= 0) healthDatabase[idx] = { ...healthDatabase[idx], ...rec };
-                    showToast('Rekod Dikemaskini', `Rekod ${tarikh} berjaya dikemaskini.`, 'success');
-                } else {
-                    healthDatabase.unshift({ id: Date.now(), sheetRow: null, ...rec });
-                    showToast('Rekod Ditambah', `Rekod kesihatan ${tarikh} disimpan.`, 'success');
-                }
-                localStorage.setItem('health', JSON.stringify(healthDatabase));
-                renderHealthView();
-                closeHealthModal();
-            } finally {
-                if (btn) { btn.disabled = false; btn.innerText = 'Simpan Rekod'; }
-            }
-        }
-
-        function deleteHealthRecord(id) {
-            const r = healthDatabase.find(i => i.id === id);
-            if (!r) return;
-            showConfirmDialog('Padam Rekod Ini?', `Rekod ${r.tarikh||''} akan dipadam secara kekal.`, () => {
-                healthDatabase = healthDatabase.filter(i => i.id !== id);
-                localStorage.setItem('health', JSON.stringify(healthDatabase));
-                renderHealthView();
-                showToast('Rekod Dipadam', 'Rekod kesihatan telah dibuang.', 'info');
-            });
         }
     </script>
 </body>
