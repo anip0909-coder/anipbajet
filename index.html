@@ -244,7 +244,7 @@
                         </div>
                     </div>
                     <h3 class="text-2xl font-black text-slate-900 dark:text-white" id="card-commitments">RM 0.00</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" id="card-commitments-sub">Anggaran Komitmen Bulanan</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" id="card-commitments-sub">Anggaran Komitmen + Utiliti</p>
                 </div>
 
                 <div class="bg-gradient-to-br from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
@@ -314,7 +314,7 @@
                             <i class="fa-solid fa-chart-simple text-amber-500"></i>
                             <h3 class="font-bold text-slate-900 dark:text-slate-100">Status Bayaran Komitmen</h3>
                         </div>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Statistik pematuhan bayaran komitmen bulanan penting.</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Statistik pematuhan bayaran merangkumi semua kategori.</p>
                     </div>
 
                     <!-- Progress Cards Breakdown -->
@@ -1846,7 +1846,7 @@
             const fi = incomeDatabase.filter(i => (fBulan === 'Semua' || i.bulan === fBulan) && (fTahun === 'Semua' || String(i.tahun) === fTahun));
             
             const totalIncome = fi.reduce((s, i) => s + i.pendapatanBersih, 0);
-            const totalCommitments = fb.filter(i => i.kategori === 'Komitmen').reduce((s, i) => s + i.anggaranKos, 0);
+            const totalCommitments = fb.filter(i => i.kategori === 'Komitmen' || i.kategori === 'Utiliti').reduce((s, i) => s + i.anggaranKos, 0);
             const totalExpenses = fb.reduce((s, i) => s + i.jumlahSebenar, 0);
             const monthlyBalance = totalIncome - totalExpenses;
 
@@ -1865,7 +1865,7 @@
             renderCategoryChart(cats, amts);
             document.getElementById('category-legend-list').innerHTML = cats.length === 0 ? `<div class="text-center text-sm text-slate-400 py-6">Tiada Rekod Pengeluaran Sebenar</div>` : cats.map((cat, i) => `<div class="flex justify-between text-xs p-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-lg"><span class="flex items-center gap-2 font-medium"><span class="w-3 h-3 rounded-full" style="background-color: ${CATEGORY_COLORS[cat]||'#64748b'}"></span>${cat}</span><span class="font-extrabold">RM ${amts[i].toLocaleString('en-MY', {minimumFractionDigits: 2})} <span class="text-slate-400 font-medium ml-1">(${(amts[i]/gTotal*100).toFixed(1)}%)</span></span></div>`).join('');
 
-            const coms = fb.filter(i => i.kategori === 'Komitmen');
+            const coms = fb; // Semua kategori
             const pCount = coms.filter(i => i.status === 'Selesai').length, uCount = coms.length - pCount;
             document.getElementById('stat-paid-text').innerText = `${pCount} / ${coms.length} (${coms.length?Math.round(pCount/coms.length*100):0}%)`;
             document.getElementById('stat-paid-bar').style.width = `${coms.length?Math.round(pCount/coms.length*100):0}%`;
