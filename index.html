@@ -178,6 +178,35 @@
 
         <!-- ==================== TAB 1: MAIN DASHBOARD ==================== -->
         <section id="pane-dashboard" class="tab-pane space-y-6">
+
+            <!-- Greeting & Profile Header -->
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm px-5 py-4 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-4 min-w-0">
+                    <!-- Profile Picture -->
+                    <div class="relative shrink-0 group cursor-pointer" onclick="document.getElementById('profile-pic-input').click()" title="Klik untuk tukar gambar profil">
+                        <div id="profile-pic-wrapper" class="h-14 w-14 rounded-2xl bg-primary-100 dark:bg-primary-950/50 border-2 border-primary-200 dark:border-primary-800 overflow-hidden flex items-center justify-center transition-all group-hover:border-primary-400">
+                            <img id="profile-pic-img" src="" alt="Profil" class="h-full w-full object-cover hidden">
+                            <i id="profile-pic-icon" class="fa-solid fa-user text-2xl text-primary-400 dark:text-primary-600"></i>
+                        </div>
+                        <div class="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-primary-500 border-2 border-white dark:border-slate-900 flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fa-solid fa-camera text-[8px] text-white"></i>
+                        </div>
+                        <input type="file" id="profile-pic-input" accept="image/*" class="hidden" onchange="handleProfilePicUpload(event)">
+                    </div>
+                    <!-- Greeting Text -->
+                    <div class="min-w-0">
+                        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Selamat Datang</p>
+                        <h1 class="text-xl font-extrabold text-slate-900 dark:text-white truncate" id="dashboard-greeting">Hi, Hanif 👋</h1>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" id="dashboard-title-sub">Urus kewangan anda dengan bijak.</p>
+                    </div>
+                </div>
+                <!-- Dashboard Title (right side) -->
+                <div class="text-right shrink-0 hidden sm:block">
+                    <p id="dashboard-main-title" class="text-sm font-bold text-primary-600 dark:text-primary-400 truncate max-w-[180px]">Dashboard Kewangan</p>
+                    <p class="text-[11px] text-slate-400 dark:text-slate-500" id="dash-current-date"></p>
+                </div>
+            </div>
+
             <!-- Filter Bar -->
             <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div class="flex items-center gap-3">
@@ -773,13 +802,39 @@
 
         <!-- ==================== TAB 6: SETTINGS ==================== -->
         <section id="pane-settings" class="tab-pane hidden space-y-6">
+            <!-- Edit Dashboard Title Card -->
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
+                <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+                    <div class="p-2 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 rounded-lg">
+                        <i class="fa-solid fa-pen-to-square text-base"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 dark:text-slate-100">Edit Tajuk Dashboard</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Tajuk yang diubah akan dikemas kini pada Dashboard Utama secara automatik.</p>
+                    </div>
+                </div>
+                <div class="space-y-3 max-w-md">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Tajuk Dashboard</label>
+                        <input type="text" id="settings-dashboard-title" maxlength="60" placeholder="Cth: Dashboard Kewangan Keluarga" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-semibold focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Sub-tajuk / Keterangan</label>
+                        <input type="text" id="settings-dashboard-subtitle" maxlength="80" placeholder="Cth: Urus kewangan anda dengan bijak." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                    </div>
+                    <button onclick="saveDashboardTitle()" class="flex items-center gap-2 px-5 h-10 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold shadow-md shadow-primary-600/20 transition-all">
+                        <i class="fa-solid fa-floppy-disk text-xs"></i> Simpan &amp; Kemaskini
+                    </button>
+                </div>
+            </div>
+
             <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
                 <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
                     <div class="p-2 bg-primary-50 dark:bg-primary-950/50 text-primary-600 dark:text-primary-400 rounded-lg">
                         <i class="fa-solid fa-gear text-lg"></i>
                     </div>
                     <div>
-                        <h2 class="font-bold text-slate-900 dark:text-slate-100">Tetapan Paparan & Aplikasi</h2>
+                        <h2 class="font-bold text-slate-900 dark:text-slate-100">Tetapan Paparan &amp; Aplikasi</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400">Sesuaikan aplikasi UrusDuit mengikut gaya kegemaran anda.</p>
                     </div>
                 </div>
@@ -1266,7 +1321,7 @@
                             </div>
                             <div class="space-y-1">
                                 <label class="text-[11px] font-semibold text-slate-500">Tinggi (cm)</label>
-                                <div class="w-full bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 text-sm font-bold text-slate-500 dark:text-slate-400 select-none">167 cm <span class="text-[9px] font-normal opacity-60">Tetap</span></div>
+                                <input type="number" id="health-tinggi" step="0.5" min="100" max="250" placeholder="165" oninput="calcBMI()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
                             </div>
                             <div class="space-y-1">
                                 <label class="text-[11px] font-semibold text-slate-500">BMI (auto)</label>
@@ -1320,8 +1375,8 @@
                             <input type="number" id="health-gulaPuasa" step="0.1" min="0" placeholder="5.5" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
                         </fieldset>
                         <fieldset class="border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-2">
-                            <legend class="text-xs font-extrabold text-slate-600 dark:text-slate-300 px-1 flex items-center gap-1.5"><i class="fa-solid fa-heart-pulse text-rose-500"></i> Tekanan Darah &amp; Nadi</legend>
-                            <div class="grid grid-cols-3 gap-2">
+                            <legend class="text-xs font-extrabold text-slate-600 dark:text-slate-300 px-1 flex items-center gap-1.5"><i class="fa-solid fa-heart-pulse text-rose-500"></i> Tekanan Darah (mmHg)</legend>
+                            <div class="grid grid-cols-2 gap-2">
                                 <div class="space-y-1">
                                     <label class="text-[11px] font-semibold text-slate-500">Sistolik</label>
                                     <input type="number" id="health-bpSis" min="60" max="250" placeholder="120" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
@@ -1329,10 +1384,6 @@
                                 <div class="space-y-1">
                                     <label class="text-[11px] font-semibold text-slate-500">Diastolik</label>
                                     <input type="number" id="health-bpDia" min="40" max="150" placeholder="80" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
-                                </div>
-                                <div class="space-y-1">
-                                    <label class="text-[11px] font-semibold text-slate-500">Nadi (bpm)</label>
-                                    <input type="number" id="health-nadi" min="30" max="250" placeholder="72" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
                                 </div>
                             </div>
                         </fieldset>
@@ -1401,8 +1452,6 @@
         const SIMPANAN_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=611554426";
         const CALENDAR_NOTES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=1513581026";
         const MAINTENANCE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=771418915";
-        const HEALTH_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=772571104";
-        const HEALTH_HEIGHT_CM = 167; // Tinggi tetap untuk pengiraan BMI
         
         const CATEGORY_COLORS = {
             'Komitmen': '#f59e0b', 'Keperluan': '#10b981', 'Kehendak': '#f43f5e', 'Hutang': '#dc2626',
@@ -1443,6 +1492,7 @@
             loadDatabase();
             syncWithGoogleSheet();
             renderColorPalette();
+            loadDashboardPersonalisation();
         };
 
         // FETCH DATA
@@ -1458,13 +1508,12 @@
             statusText.innerText = "Menghubung...";
             
             try {
-                const [budgetRes, simpRes, incRes, noteRes, maintRes, healthRes] = await Promise.all([
+                const [budgetRes, simpRes, incRes, noteRes, maintRes] = await Promise.all([
                     fetch(GOOGLE_SHEET_CSV_URL).catch(() => null),
                     fetch(SIMPANAN_CSV_URL).catch(() => null),
                     fetch(INCOME_CSV_URL).catch(() => null),
                     fetch(CALENDAR_NOTES_CSV_URL).catch(() => null),
-                    fetch(MAINTENANCE_CSV_URL).catch(() => null),
-                    fetch(HEALTH_CSV_URL).catch(() => null)
+                    fetch(MAINTENANCE_CSV_URL).catch(() => null)
                 ]);
                 
                 let successCount = 0;
@@ -1473,17 +1522,6 @@
                 if (simpRes && simpRes.ok) { simpananDatabase = parseSimpananCSV(await simpRes.text()); successCount++; }
                 if (incRes && incRes.ok) { incomeDatabase = parseIncomeCSV(await incRes.text()); successCount++; }
                 if (maintRes && maintRes.ok) { maintenanceDatabase = parseMaintenanceCSV(await maintRes.text()); successCount++; }
-                if (healthRes && healthRes.ok) {
-                    const parsedHealth = parseHealthCSV(await healthRes.text());
-                    // Kekalkan rekod tempatan yang belum sync (sheetRow: null)
-                    const localOnly = healthDatabase.filter(local => {
-                        if (local.sheetRow) return false;
-                        return !parsedHealth.some(s => s.tarikh === local.tarikh);
-                    });
-                    healthDatabase = [...parsedHealth, ...localOnly];
-                    localStorage.setItem('health', JSON.stringify(healthDatabase));
-                    successCount++;
-                }
 
                 if (noteRes && noteRes.ok) {
                     const parsedNotes = parseCalendarNotesCSV(await noteRes.text());
@@ -2313,59 +2351,6 @@
 
         let healthDatabase = [];
 
-        // CSV PARSER — Tab "Health" (Rekod Pemantauan Kesihatan)
-        // Lajur sheet: Tarikh, Berat, BMI, TSH, T3, T4, Kolestrol Keseluruhan, HDL, LDL, Gula, BP Sistolik, BP Diastolik, Nadi, Catatan
-        function parseHealthCSV(csvText) {
-            const rows = parseCSVToArray(csvText);
-            if (rows.length < 2) return [];
-            const h = rows[0].map(x => x.trim().toLowerCase());
-            const col = name => h.findIndex(x => x.includes(name));
-
-            const iDate  = col('tarikh');
-            const iBerat = col('berat');
-            const iBmi   = col('bmi');
-            const iTsh   = col('tsh');
-            const iT3    = col('t3');
-            const iT4    = col('t4');
-            const iKol   = col('kolestrol') !== -1 ? col('kolestrol') : col('kol');
-            const iHdl   = col('hdl');
-            const iLdl   = col('ldl');
-            const iGula  = col('gula');
-            const iBpSis = col('sistolik');
-            const iBpDia = col('diastolik');
-            const iNadi  = col('nadi');
-            const iCat   = col('cat');
-
-            const results = [];
-            for (let i = 1; i < rows.length; i++) {
-                const r = rows[i];
-                const tarikh = iDate >= 0 && r[iDate] ? r[iDate].trim() : '';
-                if (!tarikh) continue;
-                const sheetRow = i + 1;
-                const n = (idx) => idx >= 0 && r[idx] && r[idx].trim() !== '' ? parseFloat(r[idx]) : null;
-                results.push({
-                    id:           sheetRow * 10000 + i,
-                    sheetRow,
-                    tarikh,
-                    berat:        n(iBerat),
-                    tinggi:       HEALTH_HEIGHT_CM,
-                    bmi:          n(iBmi),
-                    tsh:          n(iTsh),
-                    t3:           n(iT3),
-                    t4:           n(iT4),
-                    kolKesuruhan: n(iKol),
-                    hdl:          n(iHdl),
-                    ldl:          n(iLdl),
-                    gulaPuasa:    n(iGula),
-                    bpSis:        n(iBpSis),
-                    bpDia:        n(iBpDia),
-                    nadi:         n(iNadi),
-                    catatan:      iCat >= 0 && r[iCat] ? r[iCat].trim() : ''
-                });
-            }
-            return results;
-        }
-
         function healthStatus(field, val) {
             if (val === null || val === undefined || val === '') return null;
             const v = parseFloat(val); if (isNaN(v)) return null;
@@ -2409,9 +2394,10 @@
 
         function calcBMI() {
             const berat = parseFloat(document.getElementById('health-berat').value);
+            const tinggi = parseFloat(document.getElementById('health-tinggi').value);
             const el = document.getElementById('bmi-display');
-            if (berat > 0) {
-                const bmi = berat / ((HEALTH_HEIGHT_CM / 100) ** 2);
+            if (berat > 0 && tinggi > 0) {
+                const bmi = berat / ((tinggi / 100) ** 2);
                 const st  = healthStatus('bmi', bmi);
                 const c   = { normal:'text-emerald-600', tinggi:'text-amber-600', rendah:'text-blue-600', kritikal:'text-rose-600' }[st] || '';
                 el.innerHTML = `<span class="${c}">${bmi.toFixed(1)} <span class="text-[10px] opacity-60">${bmiLabel(bmi)}</span></span>`;
@@ -2716,15 +2702,14 @@
             document.getElementById('form-health').reset();
             document.getElementById('health-edit-id').value = '';
             document.getElementById('health-edit-sheetrow').value = '';
-            document.getElementById('bmi-display').innerHTML = `<span class="text-[10px] text-slate-400">Tinggi tetap: ${HEALTH_HEIGHT_CM}cm</span>`;
+            document.getElementById('bmi-display').innerHTML = '—';
             document.getElementById('modal-health-title').innerText = 'Tambah Rekod Kesihatan';
             if (id) {
                 const r = healthDatabase.find(i => i.id === id);
                 if (!r) return;
                 document.getElementById('modal-health-title').innerText = 'Edit Rekod Kesihatan';
                 document.getElementById('health-edit-id').value = r.id;
-                document.getElementById('health-edit-sheetrow').value = r.sheetRow || '';
-                ['tarikh','berat','tsh','t3','t4','kolKesuruhan','hdl','ldl','gulaPuasa','bpSis','bpDia','nadi','catatan'].forEach(f => {
+                ['tarikh','berat','tinggi','tsh','t3','t4','kolKesuruhan','hdl','ldl','gulaPuasa','bpSis','bpDia','catatan'].forEach(f => {
                     const el = document.getElementById(`health-${f}`);
                     if (el && r[f] !== null && r[f] !== undefined) el.value = r[f];
                 });
@@ -2735,48 +2720,33 @@
 
         function closeHealthModal() { document.getElementById('modal-health').classList.add('hidden'); }
 
-        async function saveHealthRecord() {
+        function saveHealthRecord() {
             const tarikh = document.getElementById('health-tarikh').value;
             if (!tarikh) { showToast('Medan Wajib', 'Sila pilih tarikh pemeriksaan.', 'error'); return; }
             const g  = id => { const e = document.getElementById(id); return e && e.value !== '' ? parseFloat(e.value) : null; };
-            const berat = g('health-berat');
-            // Tinggi tetap 167cm — BMI dikira automatik
-            const bmi = berat ? +((berat / ((HEALTH_HEIGHT_CM / 100) ** 2)).toFixed(2)) : null;
-            const rec = {
-                tarikh, berat, tinggi: HEALTH_HEIGHT_CM, bmi,
+            const berat = g('health-berat'), tinggi = g('health-tinggi');
+            const bmi = (berat && tinggi) ? +((berat/((tinggi/100)**2)).toFixed(2)) : null;
+            const rec = { tarikh, berat, tinggi, bmi,
                 tsh: g('health-tsh'), t3: g('health-t3'), t4: g('health-t4'),
                 kolKesuruhan: g('health-kolKesuruhan'), hdl: g('health-hdl'), ldl: g('health-ldl'),
                 gulaPuasa: g('health-gulaPuasa'), bpSis: g('health-bpSis'), bpDia: g('health-bpDia'),
-                nadi: g('health-nadi'),
                 catatan: document.getElementById('health-catatan').value.trim()
             };
             const editId = document.getElementById('health-edit-id').value;
-            const editSheetRow = document.getElementById('health-edit-sheetrow').value;
             const btn = document.getElementById('health-submit-btn');
             if (btn) { btn.disabled = true; btn.innerText = 'Menyimpan...'; }
             try {
                 if (editId) {
                     const idx = healthDatabase.findIndex(i => i.id === parseInt(editId));
                     if (idx >= 0) healthDatabase[idx] = { ...healthDatabase[idx], ...rec };
-                    localStorage.setItem('health', JSON.stringify(healthDatabase));
-                    renderHealthView();
-                    closeHealthModal();
                     showToast('Rekod Dikemaskini', `Rekod ${tarikh} berjaya dikemaskini.`, 'success');
-                    if (editSheetRow) {
-                        pushDataToSheet('UPDATE_HEALTH', { sheetRow: parseInt(editSheetRow), ...rec }, true);
-                    }
                 } else {
                     healthDatabase.unshift({ id: Date.now(), sheetRow: null, ...rec });
-                    localStorage.setItem('health', JSON.stringify(healthDatabase));
-                    renderHealthView();
-                    closeHealthModal();
                     showToast('Rekod Ditambah', `Rekod kesihatan ${tarikh} disimpan.`, 'success');
-                    const pushed = await pushDataToSheet('ADD_HEALTH', rec, true);
-                    if (pushed) setTimeout(syncWithGoogleSheet, 5000);
                 }
-            } catch(err) {
-                console.error('saveHealthRecord error:', err);
-                showToast('Ralat', 'Gagal menyimpan rekod.', 'error');
+                localStorage.setItem('health', JSON.stringify(healthDatabase));
+                renderHealthView();
+                closeHealthModal();
             } finally {
                 if (btn) { btn.disabled = false; btn.innerText = 'Simpan Rekod'; }
             }
@@ -2785,15 +2755,89 @@
         function deleteHealthRecord(id) {
             const r = healthDatabase.find(i => i.id === id);
             if (!r) return;
-            showConfirmDialog('Padam Rekod Ini?', `Rekod ${r.tarikh||''} akan dipadam secara kekal.`, async () => {
+            showConfirmDialog('Padam Rekod Ini?', `Rekod ${r.tarikh||''} akan dipadam secara kekal.`, () => {
                 healthDatabase = healthDatabase.filter(i => i.id !== id);
                 localStorage.setItem('health', JSON.stringify(healthDatabase));
                 renderHealthView();
                 showToast('Rekod Dipadam', 'Rekod kesihatan telah dibuang.', 'info');
-                if (r.sheetRow) {
-                    await pushDataToSheet('DELETE_ROW', { sheetType: 'health', sheetRow: r.sheetRow }, true);
-                }
             });
+        }
+
+        // ==================== DASHBOARD TITLE & GREETING ====================
+
+        function loadDashboardPersonalisation() {
+            const savedTitle    = localStorage.getItem('dashboardTitle')    || 'Dashboard Kewangan';
+            const savedSubtitle = localStorage.getItem('dashboardSubtitle') || 'Urus kewangan anda dengan bijak.';
+            applyDashboardTitle(savedTitle, savedSubtitle);
+
+            const tInput = document.getElementById('settings-dashboard-title');
+            const sInput = document.getElementById('settings-dashboard-subtitle');
+            if (tInput) tInput.value = savedTitle;
+            if (sInput) sInput.value = savedSubtitle;
+
+            const datEl = document.getElementById('dash-current-date');
+            if (datEl) {
+                const now = new Date();
+                datEl.innerText = now.toLocaleDateString('ms-MY', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+            }
+
+            const savedPic = localStorage.getItem('profilePicData');
+            if (savedPic) applyProfilePic(savedPic);
+        }
+
+        function applyDashboardTitle(title, subtitle) {
+            const el    = document.getElementById('dashboard-main-title');
+            const subEl = document.getElementById('dashboard-title-sub');
+            if (el)    el.innerText    = title;
+            if (subEl) subEl.innerText = subtitle;
+        }
+
+        function saveDashboardTitle() {
+            const title    = (document.getElementById('settings-dashboard-title').value    || '').trim();
+            const subtitle = (document.getElementById('settings-dashboard-subtitle').value || '').trim();
+            if (!title) { showToast('Sila isi tajuk', 'Medan tajuk tidak boleh kosong.', 'error'); return; }
+            localStorage.setItem('dashboardTitle',    title);
+            localStorage.setItem('dashboardSubtitle', subtitle || 'Urus kewangan anda dengan bijak.');
+            applyDashboardTitle(title, subtitle || 'Urus kewangan anda dengan bijak.');
+            showToast('Tajuk Dikemaskini', `Dashboard kini bertajuk "${title}".`, 'success');
+        }
+
+        // ==================== PROFILE PICTURE ====================
+
+        function handleProfilePicUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) { showToast('Fail Tidak Sah', 'Sila pilih fail imej (JPG, PNG, WebP).', 'error'); return; }
+            if (file.size > 2 * 1024 * 1024) { showToast('Fail Terlalu Besar', 'Saiz gambar tidak boleh melebihi 2MB.', 'error'); return; }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const max = 200;
+                    const scale = Math.min(max / img.width, max / img.height, 1);
+                    canvas.width  = Math.round(img.width  * scale);
+                    canvas.height = Math.round(img.height * scale);
+                    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                    const compressed = canvas.toDataURL('image/jpeg', 0.82);
+                    localStorage.setItem('profilePicData', compressed);
+                    applyProfilePic(compressed);
+                    showToast('Gambar Dikemas kini', 'Gambar profil berjaya dimuatnaik.', 'success');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+            event.target.value = '';
+        }
+
+        function applyProfilePic(dataUrl) {
+            const img  = document.getElementById('profile-pic-img');
+            const icon = document.getElementById('profile-pic-icon');
+            if (img && icon) {
+                img.src = dataUrl;
+                img.classList.remove('hidden');
+                icon.classList.add('hidden');
+            }
         }
     </script>
 </body>
