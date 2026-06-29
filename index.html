@@ -1256,7 +1256,7 @@
                         <input type="date" id="health-tarikh" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
                     </div>
 
-                    <!-- Berat / Tinggi (Tetap) / BMI -->
+                    <!-- Berat / Tinggi / BMI -->
                     <fieldset class="border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-3">
                         <legend class="text-xs font-extrabold text-slate-600 dark:text-slate-300 px-1 flex items-center gap-1.5"><i class="fa-solid fa-weight-scale text-violet-500"></i> Berat Badan & BMI</legend>
                         <div class="grid grid-cols-3 gap-3">
@@ -1266,9 +1266,7 @@
                             </div>
                             <div class="space-y-1">
                                 <label class="text-[11px] font-semibold text-slate-500">Tinggi (cm)</label>
-                                <div class="w-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-bold text-slate-500 dark:text-slate-400 min-h-[38px] flex items-center gap-1">
-                                    <i class="fa-solid fa-lock text-[10px]"></i> 167 cm
-                                </div>
+                                <div class="w-full bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 text-sm font-bold text-slate-500 dark:text-slate-400 select-none">167 cm <span class="text-[9px] font-normal opacity-60">Tetap</span></div>
                             </div>
                             <div class="space-y-1">
                                 <label class="text-[11px] font-semibold text-slate-500">BMI (auto)</label>
@@ -1315,15 +1313,28 @@
                         </div>
                     </fieldset>
 
-                    <!-- Gula + Nadi -->
+                    <!-- Gula + BP -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <fieldset class="border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-2">
                             <legend class="text-xs font-extrabold text-slate-600 dark:text-slate-300 px-1 flex items-center gap-1.5"><i class="fa-solid fa-candy-cane text-amber-500"></i> Gula Puasa (mmol/L)</legend>
                             <input type="number" id="health-gulaPuasa" step="0.1" min="0" placeholder="5.5" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
                         </fieldset>
                         <fieldset class="border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-2">
-                            <legend class="text-xs font-extrabold text-slate-600 dark:text-slate-300 px-1 flex items-center gap-1.5"><i class="fa-solid fa-heart-pulse text-rose-500"></i> Nadi (bpm)</legend>
-                            <input type="number" id="health-nadi" min="30" max="250" placeholder="72" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
+                            <legend class="text-xs font-extrabold text-slate-600 dark:text-slate-300 px-1 flex items-center gap-1.5"><i class="fa-solid fa-heart-pulse text-rose-500"></i> Tekanan Darah &amp; Nadi</legend>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div class="space-y-1">
+                                    <label class="text-[11px] font-semibold text-slate-500">Sistolik</label>
+                                    <input type="number" id="health-bpSis" min="60" max="250" placeholder="120" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[11px] font-semibold text-slate-500">Diastolik</label>
+                                    <input type="number" id="health-bpDia" min="40" max="150" placeholder="80" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[11px] font-semibold text-slate-500">Nadi (bpm)</label>
+                                    <input type="number" id="health-nadi" min="30" max="250" placeholder="72" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100">
+                                </div>
+                            </div>
                         </fieldset>
                     </div>
 
@@ -1391,7 +1402,7 @@
         const CALENDAR_NOTES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=1513581026";
         const MAINTENANCE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=771418915";
         const HEALTH_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-9fPCuOvh1yyY7jIb36Ku7vgUlVKaQWsoTxmZA6gDJSmaQ1IdXcOLSGThOmhP64ZFBd2todX3oPZ-/pub?output=csv&gid=253348409";
-        const HEALTH_FIXED_TINGGI = 167; // Tinggi tetap 167cm untuk pengiraan BMI
+        const HEALTH_HEIGHT_CM = 167; // Tinggi tetap untuk pengiraan BMI
         
         const CATEGORY_COLORS = {
             'Komitmen': '#f59e0b', 'Keperluan': '#10b981', 'Kehendak': '#f43f5e', 'Hutang': '#dc2626',
@@ -1464,12 +1475,12 @@
                 if (maintRes && maintRes.ok) { maintenanceDatabase = parseMaintenanceCSV(await maintRes.text()); successCount++; }
                 if (healthRes && healthRes.ok) {
                     const parsedHealth = parseHealthCSV(await healthRes.text());
-                    // Kekalkan rekod tempatan yang belum tersync (sheetRow: null) dan tiada duplikasi
-                    const localUnsync = healthDatabase.filter(local => {
+                    // Kekalkan rekod tempatan yang belum sync (sheetRow: null)
+                    const localOnly = healthDatabase.filter(local => {
                         if (local.sheetRow) return false;
                         return !parsedHealth.some(s => s.tarikh === local.tarikh);
                     });
-                    healthDatabase = [...parsedHealth, ...localUnsync];
+                    healthDatabase = [...parsedHealth, ...localOnly];
                     localStorage.setItem('health', JSON.stringify(healthDatabase));
                     successCount++;
                 }
@@ -1652,59 +1663,6 @@
                 }
             }
             return notesMap;
-        }
-
-        // CSV PARSER — Tab "Health"
-        // Lajur: Tarikh | Berat | BMI | TSH | T3 | T4 | Kolestrol Keseluruhan | HDL | LDL | Gula | Nadi | Catatan
-        function parseHealthCSV(csvText) {
-            const rows = parseCSVToArray(csvText);
-            const results = [];
-            if (rows.length < 2) return results;
-            const h = rows[0].map(c => c.toLowerCase().trim());
-            const col = kw => h.findIndex(c => c.includes(kw));
-            const iD   = col('tarikh');
-            const iBrt = col('berat');
-            const iBMI = col('bmi');
-            const iTSH = col('tsh');
-            const iT3  = col('t3');
-            const iT4  = col('t4');
-            const iKol = col('kolest');
-            const iHDL = col('hdl');
-            const iLDL = col('ldl');
-            const iGul = col('gula');
-            const iNad = col('nadi');
-            const iCat = col('catatan');
-            for (let i = 1; i < rows.length; i++) {
-                const r = rows[i];
-                const tarikh = iD >= 0 && r[iD] ? r[iD].trim() : '';
-                if (!tarikh) continue;
-                const g = idx => (idx >= 0 && r[idx] && r[idx].trim() !== '') ? parseFloat(r[idx]) : null;
-                const sheetRow = i + 1;
-                const berat = g(iBrt);
-                // BMI dari sheet atau dikira semula dengan tinggi tetap 167cm
-                const bmiFromSheet = g(iBMI);
-                const bmi = bmiFromSheet ?? (berat ? parseFloat((berat / ((HEALTH_FIXED_TINGGI / 100) ** 2)).toFixed(2)) : null);
-                results.push({
-                    id: sheetRow * 100000 + i,
-                    sheetRow,
-                    tarikh,
-                    berat,
-                    tinggi: HEALTH_FIXED_TINGGI,
-                    bmi,
-                    tsh:          g(iTSH),
-                    t3:           g(iT3),
-                    t4:           g(iT4),
-                    kolKesuruhan: g(iKol),
-                    hdl:          g(iHDL),
-                    ldl:          g(iLDL),
-                    gulaPuasa:    g(iGul),
-                    nadi:         g(iNad),
-                    bpSis:        null,
-                    bpDia:        null,
-                    catatan:      iCat >= 0 && r[iCat] ? r[iCat].trim() : ''
-                });
-            }
-            return results;
         }
 
         async function pushDataToSheet(action, payload, silent = false) {
@@ -2355,6 +2313,59 @@
 
         let healthDatabase = [];
 
+        // CSV PARSER — Tab "Health" (Rekod Pemantauan Kesihatan)
+        // Lajur sheet: Tarikh, Berat, BMI, TSH, T3, T4, Kolestrol Keseluruhan, HDL, LDL, Gula, BP Sistolik, BP Diastolik, Nadi, Catatan
+        function parseHealthCSV(csvText) {
+            const rows = parseCSVToArray(csvText);
+            if (rows.length < 2) return [];
+            const h = rows[0].map(x => x.trim().toLowerCase());
+            const col = name => h.findIndex(x => x.includes(name));
+
+            const iDate  = col('tarikh');
+            const iBerat = col('berat');
+            const iBmi   = col('bmi');
+            const iTsh   = col('tsh');
+            const iT3    = col('t3');
+            const iT4    = col('t4');
+            const iKol   = col('kolestrol') !== -1 ? col('kolestrol') : col('kol');
+            const iHdl   = col('hdl');
+            const iLdl   = col('ldl');
+            const iGula  = col('gula');
+            const iBpSis = col('sistolik');
+            const iBpDia = col('diastolik');
+            const iNadi  = col('nadi');
+            const iCat   = col('cat');
+
+            const results = [];
+            for (let i = 1; i < rows.length; i++) {
+                const r = rows[i];
+                const tarikh = iDate >= 0 && r[iDate] ? r[iDate].trim() : '';
+                if (!tarikh) continue;
+                const sheetRow = i + 1;
+                const n = (idx) => idx >= 0 && r[idx] && r[idx].trim() !== '' ? parseFloat(r[idx]) : null;
+                results.push({
+                    id:           sheetRow * 10000 + i,
+                    sheetRow,
+                    tarikh,
+                    berat:        n(iBerat),
+                    tinggi:       HEALTH_HEIGHT_CM,
+                    bmi:          n(iBmi),
+                    tsh:          n(iTsh),
+                    t3:           n(iT3),
+                    t4:           n(iT4),
+                    kolKesuruhan: n(iKol),
+                    hdl:          n(iHdl),
+                    ldl:          n(iLdl),
+                    gulaPuasa:    n(iGula),
+                    bpSis:        n(iBpSis),
+                    bpDia:        n(iBpDia),
+                    nadi:         n(iNadi),
+                    catatan:      iCat >= 0 && r[iCat] ? r[iCat].trim() : ''
+                });
+            }
+            return results;
+        }
+
         function healthStatus(field, val) {
             if (val === null || val === undefined || val === '') return null;
             const v = parseFloat(val); if (isNaN(v)) return null;
@@ -2400,7 +2411,7 @@
             const berat = parseFloat(document.getElementById('health-berat').value);
             const el = document.getElementById('bmi-display');
             if (berat > 0) {
-                const bmi = berat / ((HEALTH_FIXED_TINGGI / 100) ** 2);
+                const bmi = berat / ((HEALTH_HEIGHT_CM / 100) ** 2);
                 const st  = healthStatus('bmi', bmi);
                 const c   = { normal:'text-emerald-600', tinggi:'text-amber-600', rendah:'text-blue-600', kritikal:'text-rose-600' }[st] || '';
                 el.innerHTML = `<span class="${c}">${bmi.toFixed(1)} <span class="text-[10px] opacity-60">${bmiLabel(bmi)}</span></span>`;
@@ -2705,7 +2716,7 @@
             document.getElementById('form-health').reset();
             document.getElementById('health-edit-id').value = '';
             document.getElementById('health-edit-sheetrow').value = '';
-            document.getElementById('bmi-display').innerHTML = '—';
+            document.getElementById('bmi-display').innerHTML = `<span class="text-[10px] text-slate-400">Tinggi tetap: ${HEALTH_HEIGHT_CM}cm</span>`;
             document.getElementById('modal-health-title').innerText = 'Tambah Rekod Kesihatan';
             if (id) {
                 const r = healthDatabase.find(i => i.id === id);
@@ -2713,7 +2724,7 @@
                 document.getElementById('modal-health-title').innerText = 'Edit Rekod Kesihatan';
                 document.getElementById('health-edit-id').value = r.id;
                 document.getElementById('health-edit-sheetrow').value = r.sheetRow || '';
-                ['tarikh','berat','tsh','t3','t4','kolKesuruhan','hdl','ldl','gulaPuasa','nadi','catatan'].forEach(f => {
+                ['tarikh','berat','tsh','t3','t4','kolKesuruhan','hdl','ldl','gulaPuasa','bpSis','bpDia','nadi','catatan'].forEach(f => {
                     const el = document.getElementById(`health-${f}`);
                     if (el && r[f] !== null && r[f] !== undefined) el.value = r[f];
                 });
@@ -2724,43 +2735,20 @@
 
         function closeHealthModal() { document.getElementById('modal-health').classList.add('hidden'); }
 
-        function saveHealthRecord() {
+        async function saveHealthRecord() {
             const tarikh = document.getElementById('health-tarikh').value;
             if (!tarikh) { showToast('Medan Wajib', 'Sila pilih tarikh pemeriksaan.', 'error'); return; }
             const g  = id => { const e = document.getElementById(id); return e && e.value !== '' ? parseFloat(e.value) : null; };
             const berat = g('health-berat');
-            const bmi = berat ? +((berat / ((HEALTH_FIXED_TINGGI / 100) ** 2)).toFixed(2)) : null;
+            // Tinggi tetap 167cm — BMI dikira automatik
+            const bmi = berat ? +((berat / ((HEALTH_HEIGHT_CM / 100) ** 2)).toFixed(2)) : null;
             const rec = {
-                tarikh,
-                berat,
-                tinggi: HEALTH_FIXED_TINGGI,
-                bmi,
-                tsh:          g('health-tsh'),
-                t3:           g('health-t3'),
-                t4:           g('health-t4'),
-                kolKesuruhan: g('health-kolKesuruhan'),
-                hdl:          g('health-hdl'),
-                ldl:          g('health-ldl'),
-                gulaPuasa:    g('health-gulaPuasa'),
-                nadi:         g('health-nadi'),
-                bpSis:        null,
-                bpDia:        null,
-                catatan:      document.getElementById('health-catatan').value.trim()
-            };
-            // Payload untuk Google Sheet — ikut susunan lajur sheet
-            const sheetPayload = {
-                tarikh:       rec.tarikh,
-                berat:        rec.berat,
-                bmi:          rec.bmi,
-                tsh:          rec.tsh,
-                t3:           rec.t3,
-                t4:           rec.t4,
-                kolKesuruhan: rec.kolKesuruhan,
-                hdl:          rec.hdl,
-                ldl:          rec.ldl,
-                gulaPuasa:    rec.gulaPuasa,
-                nadi:         rec.nadi,
-                catatan:      rec.catatan
+                tarikh, berat, tinggi: HEALTH_HEIGHT_CM, bmi,
+                tsh: g('health-tsh'), t3: g('health-t3'), t4: g('health-t4'),
+                kolKesuruhan: g('health-kolKesuruhan'), hdl: g('health-hdl'), ldl: g('health-ldl'),
+                gulaPuasa: g('health-gulaPuasa'), bpSis: g('health-bpSis'), bpDia: g('health-bpDia'),
+                nadi: g('health-nadi'),
+                catatan: document.getElementById('health-catatan').value.trim()
             };
             const editId = document.getElementById('health-edit-id').value;
             const editSheetRow = document.getElementById('health-edit-sheetrow').value;
@@ -2775,7 +2763,7 @@
                     closeHealthModal();
                     showToast('Rekod Dikemaskini', `Rekod ${tarikh} berjaya dikemaskini.`, 'success');
                     if (editSheetRow) {
-                        pushDataToSheet('UPDATE_HEALTH', { sheetRow: parseInt(editSheetRow), ...sheetPayload }, true);
+                        pushDataToSheet('UPDATE_HEALTH', { sheetRow: parseInt(editSheetRow), ...rec }, true);
                     }
                 } else {
                     healthDatabase.unshift({ id: Date.now(), sheetRow: null, ...rec });
@@ -2783,10 +2771,12 @@
                     renderHealthView();
                     closeHealthModal();
                     showToast('Rekod Ditambah', `Rekod kesihatan ${tarikh} disimpan.`, 'success');
-                    pushDataToSheet('ADD_HEALTH', sheetPayload, true).then(pushed => {
-                        if (pushed) setTimeout(syncWithGoogleSheet, 5000);
-                    });
+                    const pushed = await pushDataToSheet('ADD_HEALTH', rec, true);
+                    if (pushed) setTimeout(syncWithGoogleSheet, 5000);
                 }
+            } catch(err) {
+                console.error('saveHealthRecord error:', err);
+                showToast('Ralat', 'Gagal menyimpan rekod.', 'error');
             } finally {
                 if (btn) { btn.disabled = false; btn.innerText = 'Simpan Rekod'; }
             }
@@ -2795,14 +2785,14 @@
         function deleteHealthRecord(id) {
             const r = healthDatabase.find(i => i.id === id);
             if (!r) return;
-            showConfirmDialog('Padam Rekod Ini?', `Rekod ${r.tarikh||''} akan dipadam secara kekal.`, () => {
+            showConfirmDialog('Padam Rekod Ini?', `Rekod ${r.tarikh||''} akan dipadam secara kekal.`, async () => {
                 healthDatabase = healthDatabase.filter(i => i.id !== id);
                 localStorage.setItem('health', JSON.stringify(healthDatabase));
-                if (r.sheetRow) {
-                    pushDataToSheet('DELETE_ROW', { sheetType: 'health', sheetRow: r.sheetRow }, true);
-                }
                 renderHealthView();
                 showToast('Rekod Dipadam', 'Rekod kesihatan telah dibuang.', 'info');
+                if (r.sheetRow) {
+                    await pushDataToSheet('DELETE_ROW', { sheetType: 'health', sheetRow: r.sheetRow }, true);
+                }
             });
         }
     </script>
