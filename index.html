@@ -2,8 +2,36 @@
 <html lang="ms" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>UrusDuit - Dashboard Pengurusan Kewangan</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Theme colour (browser chrome / address bar) -->
+    <meta name="theme-color" content="#16a34a" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+
+    <!-- iOS / Safari PWA support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="UrusDuit">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+    <!-- Android / Chrome PWA -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="UrusDuit">
+
+    <!-- Windows tile -->
+    <meta name="msapplication-TileColor" content="#16a34a">
+    <meta name="msapplication-TileImage" content="icons/icon-144x144.png">
+
+    <!-- SEO / Social -->
+    <meta name="description" content="Aplikasi pengurusan kewangan peribadi — bajet, simpanan, servis & kesihatan.">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-72x72.png">
     
     <!-- Google Fonts & Font Awesome Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -178,35 +206,6 @@
 
         <!-- ==================== TAB 1: MAIN DASHBOARD ==================== -->
         <section id="pane-dashboard" class="tab-pane space-y-6">
-
-            <!-- Greeting & Profile Header -->
-            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm px-5 py-4 flex items-center justify-between gap-4">
-                <div class="flex items-center gap-4 min-w-0">
-                    <!-- Profile Picture -->
-                    <div class="relative shrink-0 group cursor-pointer" onclick="document.getElementById('profile-pic-input').click()" title="Klik untuk tukar gambar profil">
-                        <div id="profile-pic-wrapper" class="h-14 w-14 rounded-2xl bg-primary-100 dark:bg-primary-950/50 border-2 border-primary-200 dark:border-primary-800 overflow-hidden flex items-center justify-center transition-all group-hover:border-primary-400">
-                            <img id="profile-pic-img" src="" alt="Profil" class="h-full w-full object-cover hidden">
-                            <i id="profile-pic-icon" class="fa-solid fa-user text-2xl text-primary-400 dark:text-primary-600"></i>
-                        </div>
-                        <div class="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-primary-500 border-2 border-white dark:border-slate-900 flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                            <i class="fa-solid fa-camera text-[8px] text-white"></i>
-                        </div>
-                        <input type="file" id="profile-pic-input" accept="image/*" class="hidden" onchange="handleProfilePicUpload(event)">
-                    </div>
-                    <!-- Greeting Text -->
-                    <div class="min-w-0">
-                        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Selamat Datang</p>
-                        <h1 class="text-xl font-extrabold text-slate-900 dark:text-white truncate" id="dashboard-greeting">Hi, Hanif 👋</h1>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" id="dashboard-title-sub">Urus kewangan anda dengan bijak.</p>
-                    </div>
-                </div>
-                <!-- Dashboard Title (right side) -->
-                <div class="text-right shrink-0 hidden sm:block">
-                    <p id="dashboard-main-title" class="text-sm font-bold text-primary-600 dark:text-primary-400 truncate max-w-[180px]">Dashboard Kewangan</p>
-                    <p class="text-[11px] text-slate-400 dark:text-slate-500" id="dash-current-date"></p>
-                </div>
-            </div>
-
             <!-- Filter Bar -->
             <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div class="flex items-center gap-3">
@@ -802,39 +801,13 @@
 
         <!-- ==================== TAB 6: SETTINGS ==================== -->
         <section id="pane-settings" class="tab-pane hidden space-y-6">
-            <!-- Edit Dashboard Title Card -->
-            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
-                <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
-                    <div class="p-2 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 rounded-lg">
-                        <i class="fa-solid fa-pen-to-square text-base"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-slate-900 dark:text-slate-100">Edit Tajuk Dashboard</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Tajuk yang diubah akan dikemas kini pada Dashboard Utama secara automatik.</p>
-                    </div>
-                </div>
-                <div class="space-y-3 max-w-md">
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Tajuk Dashboard</label>
-                        <input type="text" id="settings-dashboard-title" maxlength="60" placeholder="Cth: Dashboard Kewangan Keluarga" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm font-semibold focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Sub-tajuk / Keterangan</label>
-                        <input type="text" id="settings-dashboard-subtitle" maxlength="80" placeholder="Cth: Urus kewangan anda dengan bijak." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                    </div>
-                    <button onclick="saveDashboardTitle()" class="flex items-center gap-2 px-5 h-10 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold shadow-md shadow-primary-600/20 transition-all">
-                        <i class="fa-solid fa-floppy-disk text-xs"></i> Simpan &amp; Kemaskini
-                    </button>
-                </div>
-            </div>
-
             <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
                 <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
                     <div class="p-2 bg-primary-50 dark:bg-primary-950/50 text-primary-600 dark:text-primary-400 rounded-lg">
                         <i class="fa-solid fa-gear text-lg"></i>
                     </div>
                     <div>
-                        <h2 class="font-bold text-slate-900 dark:text-slate-100">Tetapan Paparan &amp; Aplikasi</h2>
+                        <h2 class="font-bold text-slate-900 dark:text-slate-100">Tetapan Paparan & Aplikasi</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400">Sesuaikan aplikasi UrusDuit mengikut gaya kegemaran anda.</p>
                     </div>
                 </div>
@@ -1492,7 +1465,6 @@
             loadDatabase();
             syncWithGoogleSheet();
             renderColorPalette();
-            loadDashboardPersonalisation();
         };
 
         // FETCH DATA
@@ -2762,83 +2734,134 @@
                 showToast('Rekod Dipadam', 'Rekod kesihatan telah dibuang.', 'info');
             });
         }
-
-        // ==================== DASHBOARD TITLE & GREETING ====================
-
-        function loadDashboardPersonalisation() {
-            const savedTitle    = localStorage.getItem('dashboardTitle')    || 'Dashboard Kewangan';
-            const savedSubtitle = localStorage.getItem('dashboardSubtitle') || 'Urus kewangan anda dengan bijak.';
-            applyDashboardTitle(savedTitle, savedSubtitle);
-
-            const tInput = document.getElementById('settings-dashboard-title');
-            const sInput = document.getElementById('settings-dashboard-subtitle');
-            if (tInput) tInput.value = savedTitle;
-            if (sInput) sInput.value = savedSubtitle;
-
-            const datEl = document.getElementById('dash-current-date');
-            if (datEl) {
-                const now = new Date();
-                datEl.innerText = now.toLocaleDateString('ms-MY', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-            }
-
-            const savedPic = localStorage.getItem('profilePicData');
-            if (savedPic) applyProfilePic(savedPic);
-        }
-
-        function applyDashboardTitle(title, subtitle) {
-            const el    = document.getElementById('dashboard-main-title');
-            const subEl = document.getElementById('dashboard-title-sub');
-            if (el)    el.innerText    = title;
-            if (subEl) subEl.innerText = subtitle;
-        }
-
-        function saveDashboardTitle() {
-            const title    = (document.getElementById('settings-dashboard-title').value    || '').trim();
-            const subtitle = (document.getElementById('settings-dashboard-subtitle').value || '').trim();
-            if (!title) { showToast('Sila isi tajuk', 'Medan tajuk tidak boleh kosong.', 'error'); return; }
-            localStorage.setItem('dashboardTitle',    title);
-            localStorage.setItem('dashboardSubtitle', subtitle || 'Urus kewangan anda dengan bijak.');
-            applyDashboardTitle(title, subtitle || 'Urus kewangan anda dengan bijak.');
-            showToast('Tajuk Dikemaskini', `Dashboard kini bertajuk "${title}".`, 'success');
-        }
-
-        // ==================== PROFILE PICTURE ====================
-
-        function handleProfilePicUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            if (!file.type.startsWith('image/')) { showToast('Fail Tidak Sah', 'Sila pilih fail imej (JPG, PNG, WebP).', 'error'); return; }
-            if (file.size > 2 * 1024 * 1024) { showToast('Fail Terlalu Besar', 'Saiz gambar tidak boleh melebihi 2MB.', 'error'); return; }
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const max = 200;
-                    const scale = Math.min(max / img.width, max / img.height, 1);
-                    canvas.width  = Math.round(img.width  * scale);
-                    canvas.height = Math.round(img.height * scale);
-                    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-                    const compressed = canvas.toDataURL('image/jpeg', 0.82);
-                    localStorage.setItem('profilePicData', compressed);
-                    applyProfilePic(compressed);
-                    showToast('Gambar Dikemas kini', 'Gambar profil berjaya dimuatnaik.', 'success');
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-            event.target.value = '';
-        }
-
-        function applyProfilePic(dataUrl) {
-            const img  = document.getElementById('profile-pic-img');
-            const icon = document.getElementById('profile-pic-icon');
-            if (img && icon) {
-                img.src = dataUrl;
-                img.classList.remove('hidden');
-                icon.classList.add('hidden');
-            }
-        }
     </script>
+
+    <!-- ==================== PWA: Service Worker + Install Prompt ==================== -->
+    <script>
+    // ── Service Worker Registration ──────────────────────────────────────────
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js', { scope: './' })
+                .then(reg => {
+                    console.log('[PWA] Service Worker registered:', reg.scope);
+
+                    // Check for updates every 60 minutes
+                    setInterval(() => reg.update(), 60 * 60 * 1000);
+
+                    reg.addEventListener('updatefound', () => {
+                        const newWorker = reg.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                showPwaUpdateBanner();
+                            }
+                        });
+                    });
+                })
+                .catch(err => console.warn('[PWA] SW registration failed:', err));
+        });
+    }
+
+    // ── Install Prompt (Add to Home Screen) ──────────────────────────────────
+    let _pwaInstallEvent = null;
+
+    window.addEventListener('beforeinstallprompt', e => {
+        e.preventDefault();
+        _pwaInstallEvent = e;
+        showPwaInstallBanner();
+    });
+
+    window.addEventListener('appinstalled', () => {
+        _pwaInstallEvent = null;
+        hidePwaInstallBanner();
+        if (typeof showToast === 'function') {
+            showToast('UrusDuit Dipasang! 🎉', 'Aplikasi telah berjaya dipasang pada peranti anda.', 'success');
+        }
+    });
+
+    function showPwaInstallBanner() {
+        const el = document.getElementById('pwa-install-banner');
+        if (el) el.classList.remove('hidden');
+    }
+
+    function hidePwaInstallBanner() {
+        const el = document.getElementById('pwa-install-banner');
+        if (el) el.classList.add('hidden');
+        localStorage.setItem('pwa-install-dismissed', Date.now());
+    }
+
+    function triggerPwaInstall() {
+        if (_pwaInstallEvent) {
+            _pwaInstallEvent.prompt();
+            _pwaInstallEvent.userChoice.then(choice => {
+                if (choice.outcome === 'accepted') {
+                    _pwaInstallEvent = null;
+                    hidePwaInstallBanner();
+                }
+            });
+        }
+    }
+
+    function showPwaUpdateBanner() {
+        const el = document.getElementById('pwa-update-banner');
+        if (el) el.classList.remove('hidden');
+    }
+
+    function applyPwaUpdate() {
+        if (navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+        }
+        window.location.reload();
+    }
+
+    // Don't show install banner if dismissed within 7 days
+    document.addEventListener('DOMContentLoaded', () => {
+        const dismissed = parseInt(localStorage.getItem('pwa-install-dismissed') || '0');
+        const sevenDays = 7 * 24 * 60 * 60 * 1000;
+        if (Date.now() - dismissed < sevenDays) {
+            hidePwaInstallBanner();
+        }
+    });
+    </script>
+
+    <!-- PWA Install Banner (bottom of screen) -->
+    <div id="pwa-install-banner"
+         class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl shadow-black/10 dark:shadow-black/30 px-4 py-3 max-w-sm w-[calc(100%-2rem)]"
+         style="animation: slideUp .3s ease;">
+        <img src="icons/icon-96x96.png" alt="UrusDuit" class="h-10 w-10 rounded-xl shrink-0">
+        <div class="flex-1 min-w-0">
+            <p class="text-sm font-bold text-slate-800 dark:text-slate-100">Pasang UrusDuit</p>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400">Akses lebih pantas dari skrin utama</p>
+        </div>
+        <button onclick="triggerPwaInstall()"
+                class="shrink-0 px-3 h-9 rounded-xl bg-green-600 hover:bg-green-700 text-white text-xs font-bold transition-colors shadow-sm">
+            Pasang
+        </button>
+        <button onclick="hidePwaInstallBanner()"
+                class="shrink-0 h-9 w-9 flex items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
+    <!-- PWA Update Banner -->
+    <div id="pwa-update-banner"
+         class="hidden fixed top-20 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-blue-600 text-white rounded-2xl shadow-xl px-4 py-3 max-w-sm w-[calc(100%-2rem)]">
+        <i class="fa-solid fa-arrow-rotate-right shrink-0"></i>
+        <p class="text-sm font-semibold flex-1">Versi baharu tersedia!</p>
+        <button onclick="applyPwaUpdate()"
+                class="shrink-0 px-3 h-8 rounded-xl bg-white/20 hover:bg-white/30 text-white text-xs font-bold transition-colors">
+            Kemaskini
+        </button>
+        <button onclick="document.getElementById('pwa-update-banner').classList.add('hidden')"
+                class="shrink-0 h-8 w-8 flex items-center justify-center rounded-xl hover:bg-white/20 transition-colors">
+            <i class="fa-solid fa-xmark text-xs"></i>
+        </button>
+    </div>
+
+    <style>
+        @keyframes slideUp { from { opacity:0; transform:translateX(-50%) translateY(16px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
+        /* Safe area inset for notch phones */
+        #pwa-install-banner { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+        body { padding-bottom: env(safe-area-inset-bottom); }
+    </style>
 </body>
 </html>
