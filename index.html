@@ -672,6 +672,22 @@
                 <div id="simp-goal-cards-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
             </div>
 
+            <!-- Rekod Pengeluaran Simpanan -->
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
+                    <div class="p-1.5 bg-rose-50 dark:bg-rose-950/40 rounded-lg">
+                        <i class="fa-solid fa-money-bill-transfer text-rose-500 text-sm"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-slate-900 dark:text-slate-100">Rekod &amp; Catatan Pengeluaran Simpanan</h3>
+                        <p class="text-[11px] text-slate-400">Sejarah pengeluaran beserta sebab / catatan</p>
+                    </div>
+                </div>
+                <div id="simp-withdrawal-list" class="p-4 space-y-2 max-h-72 overflow-y-auto">
+                    <!-- Dynamic withdrawal records injected here -->
+                </div>
+            </div>
+
             <!-- Simpanan Table -->
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
                 <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
@@ -1199,8 +1215,14 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Keluar (RM)</label>
-                        <input type="number" id="simp-keluar" step="0.01" required placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
+                        <input type="number" id="simp-keluar" step="0.01" required placeholder="0.00" oninput="toggleSimpananCatatanField()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none">
                     </div>
+                </div>
+                <div id="simp-catatan-wrapper" class="hidden">
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">
+                        <i class="fa-solid fa-note-sticky text-rose-500 mr-1"></i> Catatan / Sebab Pengeluaran
+                    </label>
+                    <textarea id="simp-catatan" rows="2" placeholder="Cth: Bayar yuran sekolah, kecemasan perubatan..." class="w-full bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-rose-400 outline-none text-slate-800 dark:text-slate-100 resize-none"></textarea>
                 </div>
                 <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-3">
                     <button type="button" onclick="closeSimpananModal()" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-500 hover:bg-slate-100 transition-colors">Batal</button>
@@ -1655,7 +1677,7 @@
             const rows = parseCSVToArray(csvText); const simpList = [];
             if (rows.length < 2) return [];
             const headers = rows[0].map(h => h.toLowerCase().trim());
-            const bIdx=headers.findIndex(h=>h.includes('bulan')), tIdx=headers.findIndex(h=>h.includes('tahun')), kIdx=headers.findIndex(h=>h.includes('kategori')), nIdx=headers.findIndex(h=>h.includes('nama')), aIdx=headers.findIndex(h=>h.includes('anggaran')), sIdx=headers.findIndex(h=>h.includes('status')), mIdx=headers.findIndex(h=>h.includes('masuk')), outIdx=headers.findIndex(h=>h.includes('keluar')), jIdx=headers.findIndex(h=>h.includes('jumlah'));
+            const bIdx=headers.findIndex(h=>h.includes('bulan')), tIdx=headers.findIndex(h=>h.includes('tahun')), kIdx=headers.findIndex(h=>h.includes('kategori')), nIdx=headers.findIndex(h=>h.includes('nama')), aIdx=headers.findIndex(h=>h.includes('anggaran')), sIdx=headers.findIndex(h=>h.includes('status')), mIdx=headers.findIndex(h=>h.includes('masuk')), outIdx=headers.findIndex(h=>h.includes('keluar')), jIdx=headers.findIndex(h=>h.includes('jumlah')), cIdx=headers.findIndex(h=>h.includes('catatan'));
             for (let i = 1; i < rows.length; i++) {
                 const r = rows[i]; if (r.length < Math.max(bIdx, tIdx, aIdx)) continue;
                 simpList.push({
@@ -1668,7 +1690,8 @@
                     status: r[sIdx] ? r[sIdx].trim() : 'Tidak',
                     masuk: parseFloat((r[mIdx] || '').replace(/[^\d.\-]/g, '')) || 0,
                     keluar: parseFloat((r[outIdx] || '').replace(/[^\d.\-]/g, '')) || 0,
-                    jumlah: parseFloat((r[jIdx] || '').replace(/[^\d.\-]/g, '')) || 0
+                    jumlah: parseFloat((r[jIdx] || '').replace(/[^\d.\-]/g, '')) || 0,
+                    catatan: cIdx >= 0 && r[cIdx] ? r[cIdx].trim() : ''
                 });
             }
             return simpList;
@@ -2154,8 +2177,52 @@
             if (!filtered.length && !baki) return tbody.innerHTML = `<tr><td colspan="8" class="py-12 text-center text-slate-400 text-sm">Tiada rekod</td></tr>`;
             let h = '';
             if (baki !== 0) h += `<tr class="bg-blue-50/50"><td class="py-3 px-4 font-semibold text-slate-500 italic" colspan="4">Baki Bawa Ke Hadapan</td><td colspan="2"></td><td class="py-3 px-4 text-right font-bold text-blue-600">RM ${baki.toFixed(2)}</td><td></td></tr>`;
-            h += filtered.map(i => `<tr class="border-b border-slate-100 dark:border-slate-800"><td class="py-4 px-4 font-bold">${i.bulan} ${i.tahun}</td><td class="py-4 px-4"><div class="text-xs text-slate-500">${i.kategori}</div><div class="font-semibold">${i.namaItem}</div></td><td class="py-4 px-4 text-right">RM ${i.anggaran.toFixed(2)}</td><td class="text-center">${i.status==='Simpan'?'<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">Simpan</span>':'<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800">Tidak</span>'}</td><td class="text-right text-emerald-600">RM ${i.masuk.toFixed(2)}</td><td class="text-right text-rose-500">RM ${i.keluar.toFixed(2)}</td><td class="text-right font-black">RM ${i.jumlah.toFixed(2)}</td><td class="text-center"><button onclick="editSimpananItem(${i.id})" class="h-8 w-8 text-blue-600"><i class="fa-solid fa-pen"></i></button> <button onclick="deleteSimpananItem(${i.id})" class="h-8 w-8 text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>`).join('');
+            h += filtered.map(i => `<tr class="border-b border-slate-100 dark:border-slate-800"><td class="py-4 px-4 font-bold">${i.bulan} ${i.tahun}</td><td class="py-4 px-4"><div class="text-xs text-slate-500">${i.kategori}</div><div class="font-semibold">${i.namaItem}</div></td><td class="py-4 px-4 text-right">RM ${i.anggaran.toFixed(2)}</td><td class="text-center">${i.status==='Simpan'?'<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">Simpan</span>':'<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800">Tidak</span>'}</td><td class="text-right text-emerald-600">RM ${i.masuk.toFixed(2)}</td><td class="text-right text-rose-500">RM ${i.keluar.toFixed(2)}</td><td class="text-right font-black">RM ${i.jumlah.toFixed(2)}</td><td class="text-center"><button onclick="editSimpananItem(${i.id})" class="h-8 w-8 text-blue-600"><i class="fa-solid fa-pen"></i></button> <button onclick="deleteSimpananItem(${i.id})" class="h-8 w-8 text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>${i.catatan ? `<tr class="border-b border-slate-100 dark:border-slate-800 bg-rose-50/30 dark:bg-rose-950/10"><td colspan="8" class="px-4 pb-3 pt-0 text-[11px] text-rose-600 dark:text-rose-400 italic"><i class="fa-solid fa-note-sticky mr-1"></i>${i.catatan}</td></tr>` : ''}`).join('');
             tbody.innerHTML = h;
+            renderSimpananWithdrawalList(filtered);
+        }
+
+        // Panel "Rekod & Catatan Pengeluaran Simpanan" — senarai khas semua pengeluaran (keluar > 0)
+        function renderSimpananWithdrawalList(filtered) {
+            const wrap = document.getElementById('simp-withdrawal-list');
+            if (!wrap) return;
+            const withdrawals = filtered
+                .filter(i => i.keluar > 0)
+                .sort((a, b) => {
+                    const ai = calendarBulanList.indexOf(a.bulan), bi = calendarBulanList.indexOf(b.bulan);
+                    if (a.tahun !== b.tahun) return b.tahun - a.tahun;
+                    return bi - ai;
+                });
+
+            if (withdrawals.length === 0) {
+                wrap.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">Tiada rekod pengeluaran dalam tempoh ditapis.</p>`;
+                return;
+            }
+
+            wrap.innerHTML = withdrawals.map(i => `
+                <div class="flex items-start gap-3 p-3 rounded-xl border border-rose-100 dark:border-rose-900/30 bg-rose-50/40 dark:bg-rose-950/10">
+                    <div class="h-9 w-9 rounded-lg bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400 flex items-center justify-center text-sm shrink-0">
+                        <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between gap-2">
+                            <p class="text-xs font-bold text-slate-800 dark:text-slate-100">${i.namaItem} <span class="font-normal text-slate-400">· ${i.bulan} ${i.tahun}</span></p>
+                            <span class="text-xs font-black text-rose-600 dark:text-rose-400 shrink-0">- RM ${i.keluar.toFixed(2)}</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">${i.catatan ? i.catatan : '<span class="italic text-slate-400">Tiada catatan sebab pengeluaran</span>'}</p>
+                    </div>
+                    <button onclick="editSimpananItem(${i.id})" class="h-7 w-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-primary-600 hover:bg-white dark:hover:bg-slate-800 transition-colors shrink-0" title="Edit catatan">
+                        <i class="fa-solid fa-pen text-xs"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Papar / sembunyi medan catatan bergantung sama ada ada nilai Keluar
+        function toggleSimpananCatatanField() {
+            const keluarVal = parseFloat(document.getElementById('simp-keluar').value) || 0;
+            const wrapper = document.getElementById('simp-catatan-wrapper');
+            if (wrapper) wrapper.classList.toggle('hidden', keluarVal <= 0);
         }
         async function copyPreviousMonthSimpanan() {
             const cb = document.getElementById('simp-filter-bulan-tamat').value, ct = document.getElementById('simp-filter-tahun').value;
@@ -2174,13 +2241,15 @@
         }
         function openSimpananModal(act, id=null) {
             document.getElementById('form-simpanan').reset(); document.getElementById('simpanan-id').value = '';
+            document.getElementById('simp-catatan-wrapper').classList.add('hidden');
             if (id) {
                 const i = simpananDatabase.find(x => x.id === id);
                 if (i) {
                     document.getElementById('simpanan-id').value = i.id;
-                    ['bulan','tahun','kategori','namaItem','anggaran','status','masuk','keluar'].forEach(k => { 
-                        if(document.getElementById(`simp-${k}`)) document.getElementById(`simp-${k}`).value = i[k]; 
+                    ['bulan','tahun','kategori','namaItem','anggaran','status','masuk','keluar','catatan'].forEach(k => { 
+                        if(document.getElementById(`simp-${k}`)) document.getElementById(`simp-${k}`).value = i[k] || ''; 
                     });
+                    toggleSimpananCatatanField();
                 }
             }
             document.getElementById('modal-simpanan').classList.remove('hidden');
@@ -2188,7 +2257,7 @@
         function closeSimpananModal() { document.getElementById('modal-simpanan').classList.add('hidden'); }
         async function saveSimpananForm(e) {
             e.preventDefault(); const id = document.getElementById('simpanan-id').value;
-            const pl = { bulan: document.getElementById('simp-bulan').value, tahun: parseInt(document.getElementById('simp-tahun').value), kategori: document.getElementById('simp-kategori').value, namaItem: document.getElementById('simp-namaItem').value, anggaran: parseFloat(document.getElementById('simp-anggaran').value)||0, status: document.getElementById('simp-status').value, masuk: parseFloat(document.getElementById('simp-masuk').value)||0, keluar: parseFloat(document.getElementById('simp-keluar').value)||0 };
+            const pl = { bulan: document.getElementById('simp-bulan').value, tahun: parseInt(document.getElementById('simp-tahun').value), kategori: document.getElementById('simp-kategori').value, namaItem: document.getElementById('simp-namaItem').value, anggaran: parseFloat(document.getElementById('simp-anggaran').value)||0, status: document.getElementById('simp-status').value, masuk: parseFloat(document.getElementById('simp-masuk').value)||0, keluar: parseFloat(document.getElementById('simp-keluar').value)||0, catatan: (document.getElementById('simp-catatan').value || '').trim() };
             pl.jumlah = pl.masuk - pl.keluar;
             const ex = id ? simpananDatabase.find(x => x.id == id) : null;
             if (ex) { Object.assign(ex, pl); if (ex.sheetRow) await pushDataToSheet("UPDATE_SIMPANAN", {sheetRow: ex.sheetRow, ...pl}); } 
