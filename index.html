@@ -13,6 +13,7 @@
     
     <!-- Chart.js for data visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     
     <!-- Tailwind CSS with custom branding config -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -506,6 +507,22 @@
                 <div class="bg-slate-800 dark:bg-slate-800 p-4 rounded-2xl border border-slate-700 dark:border-slate-700 shadow-sm col-span-1 md:col-span-1">
                     <span class="text-[10px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider mb-1 block">Jumlah Sebenar (Semua)</span>
                     <h3 class="text-lg font-black text-white" id="cat-card-sebenar">RM 0.00</h3>
+                </div>
+            </div>
+
+            <!-- Monthly Actual vs Estimated Expense Chart -->
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-2 bg-primary-50 dark:bg-primary-950/50 text-primary-600 dark:text-primary-400 rounded-lg">
+                        <i class="fa-solid fa-chart-column"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 dark:text-slate-100">Carta Bulanan Perbelanjaan Sebenar</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Perbandingan jumlah sebenar (RM) mengikut bulan berbanding anggaran kos.</p>
+                    </div>
+                </div>
+                <div class="relative" style="height: 380px;">
+                    <canvas id="monthlyExpenseChart"></canvas>
                 </div>
             </div>
 
@@ -1444,6 +1461,8 @@
         let currentTab = 'dashboard';
         let categoryChartInstance = null;
         let summaryChartInstance = null;
+        let monthlyExpenseChartInstance = null;
+        if (window.ChartDataLabels) { Chart.register(ChartDataLabels); Chart.defaults.set('plugins.datalabels', { display: false }); }
         let isGoogleSheetConnected = false;
 
         const allowedColors = ["#FFB8B8", "#EEF495", "#750000", "#756C00", "#CBF495", "#9DF495", "#127500", "#00754E", "#006875", "#0034A3", "#600075", "#95F4C9", "#95EEF4", "#95CFF4", "#C3BEF8", "#E4BEF8", "#F8BEEF", "#F495AE", "#FFFFFF", "#CFCFCF"];
@@ -1489,6 +1508,7 @@
                 if (currentTab === 'dashboard') renderDashboard();
                 // Redraw health charts with updated dark/light colours
                 if (healthDatabase.length >= 2) renderHealthCharts(healthDatabase);
+                if (currentTab === 'category') renderMonthlyExpenseChart();
             });
 
             loadCalendarNotes();
@@ -1997,6 +2017,84 @@
             const tbody = document.getElementById('budget-table-body');
             if (filtered.length === 0) tbody.innerHTML = `<tr><td colspan="7" class="py-12 text-center text-slate-400 text-sm">Tiada item bajet ditemui</td></tr>`;
             else tbody.innerHTML = filtered.map(i => `<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20 border-b border-slate-100 dark:border-slate-800"><td class="py-4 px-6 font-semibold">${i.bulan} ${i.tahun}</td><td class="py-4 px-6 text-xs"><span class="px-2.5 py-1 rounded-md font-bold text-white shadow-sm" style="background-color: ${CATEGORY_COLORS[i.kategori] || '#64748b'}">${i.kategori}</span></td><td class="py-4 px-6">${i.namaItem}</td><td class="py-4 px-6 text-right">RM ${i.anggaranKos.toFixed(2)}</td><td class="py-4 px-6 text-right font-bold text-emerald-600 dark:text-emerald-400">RM ${i.jumlahSebenar.toFixed(2)}</td><td class="py-4 px-6 text-center">${i.status === 'Selesai' ? `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">Selesai</span>` : `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800">Belum</span>`}</td><td class="py-4 px-6 text-center"><button onclick="editBudgetItem(${i.id})" class="h-8 w-8 text-blue-600"><i class="fa-solid fa-pen"></i></button> <button onclick="deleteBudgetItem(${i.id})" class="h-8 w-8 text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>`).join('');
+            renderMonthlyExpenseChart();
+        }
+        function renderMonthlyExpenseChart() {
+            const canvas = document.getElementById('monthlyExpenseChart');
+            if (!canvas) return;
+            const sCat = document.getElementById('cat-filter').value, fTahun = document.getElementById('cat-filter-tahun').value;
+            const data = budgetDatabase.filter(i => (sCat === 'Semua' || i.kategori === sCat) && (fTahun === 'Semua' || String(i.tahun) === fTahun));
+            const monthMap = {};
+            data.forEach(i => {
+                const key = fTahun === 'Semua' ? `${i.bulan} ${i.tahun}` : i.bulan;
+                if (!monthMap[key]) monthMap[key] = { label: fTahun === 'Semua' ? `${i.bulan} ${i.tahun}` : i.bulan, sebenar: 0, anggaran: 0, order: calendarBulanList.indexOf(i.bulan), tahun: i.tahun };
+                monthMap[key].sebenar += i.jumlahSebenar;
+                monthMap[key].anggaran += i.anggaranKos;
+            });
+            const keys = Object.keys(monthMap).sort((a, b) => {
+                const A = monthMap[a], B = monthMap[b];
+                if (A.tahun !== B.tahun) return A.tahun - B.tahun;
+                return A.order - B.order;
+            });
+            const labels = keys.map(k => monthMap[k].label);
+            const sebenarVals = keys.map(k => Math.round(monthMap[k].sebenar * 100) / 100);
+            const anggaranVals = keys.map(k => Math.round(monthMap[k].anggaran * 100) / 100);
+            const isDark = document.documentElement.classList.contains('dark');
+            const labelColor = isDark ? '#e2e8f0' : '#1e293b';
+
+            if (monthlyExpenseChartInstance) monthlyExpenseChartInstance.destroy();
+            const ctx = canvas.getContext('2d');
+            monthlyExpenseChartInstance = new Chart(ctx, {
+                data: {
+                    labels: labels.length ? labels : ['Tiada Data'],
+                    datasets: [
+                        {
+                            type: 'bar',
+                            label: 'Jumlah Sebenar (RM)',
+                            data: sebenarVals,
+                            backgroundColor: '#16a34a',
+                            borderRadius: 6,
+                            order: 2,
+                            datalabels: {
+                                display: true, anchor: 'end', align: 'top', rotation: -90,
+                                color: labelColor, font: { size: 10, weight: 'bold' },
+                                formatter: v => v ? `RM ${v.toLocaleString('en-MY', {minimumFractionDigits: 2})}` : ''
+                            }
+                        },
+                        {
+                            type: 'line',
+                            label: 'Anggaran Kos (Benchmark RM)',
+                            data: anggaranVals,
+                            borderColor: '#f59e0b',
+                            backgroundColor: '#f59e0b',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#f59e0b',
+                            order: 1,
+                            datalabels: {
+                                display: true, anchor: 'end', align: 'bottom', rotation: -90,
+                                color: '#f59e0b', font: { size: 10, weight: 'bold' },
+                                formatter: v => v ? `RM ${v.toLocaleString('en-MY', {minimumFractionDigits: 2})}` : ''
+                            }
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    layout: { padding: { top: 30, bottom: 10 } },
+                    plugins: {
+                        legend: { position: 'top', align: 'start', labels: { color: labelColor, usePointStyle: true, padding: 16 } },
+                        tooltip: {
+                            callbacks: { label: ctx => `${ctx.dataset.label}: RM ${ctx.parsed.y.toLocaleString('en-MY', {minimumFractionDigits: 2})}` }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: labelColor } },
+                        y: { beginAtZero: true, ticks: { color: labelColor, callback: v => `RM ${v.toLocaleString('en-MY')}` }, grid: { color: isDark ? '#1e293b' : '#e2e8f0' } }
+                    }
+                }
+            });
         }
         async function copyPreviousMonthBudget() {
             const cBul = document.getElementById('cat-filter-bulan').value, cTah = document.getElementById('cat-filter-tahun').value;
