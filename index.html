@@ -2073,7 +2073,7 @@
                             pointBackgroundColor: '#f59e0b',
                             order: 1,
                             datalabels: {
-                                display: true, anchor: 'end', align: 'bottom', rotation: -90,
+                                display: true, anchor: 'end', align: 'top', offset: 4, rotation: 0,
                                 color: '#f59e0b', font: { size: 10, weight: 'bold' },
                                 formatter: v => v ? `RM ${v.toLocaleString('en-MY', {minimumFractionDigits: 2})}` : ''
                             }
@@ -2084,7 +2084,7 @@
                     responsive: true, maintainAspectRatio: false,
                     layout: { padding: { top: 30, bottom: 10 } },
                     plugins: {
-                        legend: { position: 'top', align: 'start', labels: { color: labelColor, usePointStyle: true, padding: 16 } },
+                        legend: { position: 'top', align: 'start', labels: { color: labelColor, usePointStyle: true, padding: 16 }, padding: { bottom: 28 } },
                         tooltip: {
                             callbacks: { label: ctx => `${ctx.dataset.label}: RM ${ctx.parsed.y.toLocaleString('en-MY', {minimumFractionDigits: 2})}` }
                         }
