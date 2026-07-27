@@ -959,6 +959,38 @@
                 <div id="maint-schedule-list" class="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 min-h-[80px]"></div>
             </div>
 
+            <!-- Cost Trend & Asset Type Breakdown Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-primary-50 dark:bg-primary-950/50 text-primary-600 dark:text-primary-400 rounded-lg">
+                            <i class="fa-solid fa-chart-column"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 dark:text-slate-100">Trend Kos Servis</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Jumlah kos penyelenggaraan (RM) mengikut bulan.</p>
+                        </div>
+                    </div>
+                    <div class="relative" style="height: 320px;">
+                        <canvas id="maintCostChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-primary-50 dark:bg-primary-950/50 text-primary-600 dark:text-primary-400 rounded-lg">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 dark:text-slate-100">Pecahan Jenis Aset</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Peratus kos ikut jenis aset.</p>
+                        </div>
+                    </div>
+                    <div class="relative" style="height: 320px;">
+                        <canvas id="maintAssetTypeDonut"></canvas>
+                    </div>
+                </div>
+            </div>
+
             <!-- REKOD SERVIS LENGKAP -->
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800">
@@ -1645,6 +1677,8 @@
         let dashboardTrendChartInstance = null;
         let dashboardTrendMonthsView = 6;
         let commitmentGaugeChartInstance = null;
+        let maintCostChartInstance = null;
+        let maintAssetTypeDonutInstance = null;
         let monthlyExpenseChartInstance = null;
         if (window.ChartDataLabels) { Chart.register(ChartDataLabels); Chart.defaults.set('plugins.datalabels', { display: false }); }
         let isGoogleSheetConnected = false;
@@ -1667,6 +1701,7 @@
             'Komitmen': '📄', 'Keperluan': '🛒', 'Kehendak': '❤️', 'Hutang': '💳',
             'Kenderaan': '🚗', 'Simpanan': '🐷', 'Utiliti': '⚡', 'Lain-lain': '➕'
         };
+        const ASSET_TYPE_EMOJI = { 'Kenderaan': '🚗', 'Peralatan': '⚙️' };
 
         // ==================== CALENDAR GLOBALS ====================
         let calendarViewDate = new Date();
@@ -1697,6 +1732,7 @@
                 // Redraw health charts with updated dark/light colours
                 if (healthDatabase.length >= 2) renderHealthCharts(healthDatabase);
                 if (currentTab === 'category') renderCategoryView();
+                if (currentTab === 'maintenance') renderMaintenanceView();
             });
 
             loadCalendarNotes();
@@ -2935,6 +2971,74 @@
             return 'Selesai';
         }
         function formatMaintDate(ds) { return ds ? ds.split('-').reverse().join('/') : '-'; }
+        function renderMaintenanceCostChart(db) {
+            const canvas = document.getElementById('maintCostChart');
+            if (!canvas) return;
+            const monthMap = {};
+            db.forEach(i => {
+                if (!i.tarikhServis || !i.kos) return;
+                const d = new Date(i.tarikhServis);
+                if (isNaN(d)) return;
+                const key = `${d.getFullYear()}-${d.getMonth()}`;
+                if (!monthMap[key]) monthMap[key] = { label: `${calendarBulanList[d.getMonth()].slice(0,3)} ${d.getFullYear()}`, tahun: d.getFullYear(), monthIdx: d.getMonth(), total: 0 };
+                monthMap[key].total += i.kos;
+            });
+            const keys = Object.keys(monthMap).sort((a, b) => {
+                const A = monthMap[a], B = monthMap[b];
+                return A.tahun !== B.tahun ? A.tahun - B.tahun : A.monthIdx - B.monthIdx;
+            }).slice(-12);
+            const labels = keys.map(k => monthMap[k].label);
+            const values = keys.map(k => Math.round(monthMap[k].total * 100) / 100);
+            const isDark = document.documentElement.classList.contains('dark');
+            const labelColor = isDark ? '#e2e8f0' : '#1e293b';
+
+            if (maintCostChartInstance) maintCostChartInstance.destroy();
+            const ctx = canvas.getContext('2d');
+            maintCostChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: { labels: labels.length ? labels : ['Tiada Data'], datasets: [{ label: 'Kos Servis (RM)', data: values, backgroundColor: '#8b5cf6', borderRadius: 6 }] },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', align: 'start', labels: { color: labelColor, usePointStyle: true, padding: 16 } },
+                        datalabels: { display: false },
+                        tooltip: { callbacks: { label: ctx => `Kos: RM ${ctx.parsed.y.toLocaleString('en-MY', {minimumFractionDigits: 2})}` } }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: labelColor } },
+                        y: { beginAtZero: true, ticks: { color: labelColor, callback: v => `RM ${v.toLocaleString('en-MY')}` }, grid: { color: isDark ? '#1e293b' : '#e2e8f0' } }
+                    }
+                }
+            });
+        }
+        function renderMaintenanceAssetTypeDonut(db) {
+            const canvas = document.getElementById('maintAssetTypeDonut');
+            if (!canvas) return;
+            const totals = {};
+            db.forEach(i => { if (i.kos) totals[i.jenisAset] = (totals[i.jenisAset] || 0) + i.kos; });
+            const labels = Object.keys(totals).filter(k => totals[k] > 0);
+            const values = labels.map(k => Math.round(totals[k] * 100) / 100);
+            const palette = { 'Kenderaan': '#06b6d4', 'Peralatan': '#8b5cf6' };
+            const colors = labels.map(k => palette[k] || '#64748b');
+            const isDark = document.documentElement.classList.contains('dark');
+            const labelColor = isDark ? '#e2e8f0' : '#1e293b';
+            const grandTotal = values.reduce((a, b) => a + b, 0);
+
+            if (maintAssetTypeDonutInstance) maintAssetTypeDonutInstance.destroy();
+            const ctx = canvas.getContext('2d');
+            maintAssetTypeDonutInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: { labels: labels.length ? labels.map(l => `${ASSET_TYPE_EMOJI[l] || ''} ${l}`) : ['Tiada Data'], datasets: [{ data: values.length ? values : [1], backgroundColor: labels.length ? colors : ['#e2e8f0'], borderWidth: 2, borderColor: isDark ? '#0f172a' : '#ffffff' }] },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '65%',
+                    plugins: {
+                        legend: { position: 'right', labels: { color: labelColor, usePointStyle: true, padding: 12, font: { size: 11 } } },
+                        datalabels: { display: false },
+                        tooltip: { callbacks: { label: ctx => { if (!labels.length) return 'Tiada data'; const pct = grandTotal > 0 ? ((ctx.parsed / grandTotal) * 100).toFixed(1) : 0; return `${ctx.label}: RM ${ctx.parsed.toLocaleString('en-MY', {minimumFractionDigits: 2})} (${pct}%)`; } } }
+                    }
+                }
+            });
+        }
         function renderMaintenanceView() {
             const db = maintenanceDatabase, ty = new Date().getFullYear();
             let u30=0, od=0, ky=0;
@@ -2971,7 +3075,27 @@
             }
 
             const sch = db.filter(i=>i.tarikhSeterusnya).map(i=>({ ...i, days: Math.ceil((new Date(i.tarikhSeterusnya)-new Date().setHours(0,0,0,0))/86400000) })).filter(i=>i.days<=60).sort((a,b)=>a.days-b.days);
-            document.getElementById('maint-schedule-list').innerHTML = !sch.length ? `<p class="col-span-full text-center text-sm py-4">Tiada servis terdekat.</p>` : sch.map(i => `<div class="flex items-start gap-3 p-3.5 rounded-xl border ${i.days<0?'border-rose-200':i.days<=7?'border-amber-200':'border-slate-100'} bg-slate-50/50"><div class="flex-1 min-w-0"><p class="text-xs font-bold truncate">${i.namaAset}</p><p class="text-[11px] truncate">${i.jenisServis}</p></div><span class="text-[10px] font-bold px-2 py-1 rounded-lg ${i.days<0?'bg-rose-100 text-rose-600':i.days<=7?'bg-amber-100 text-amber-700':'bg-blue-50 text-blue-600'}">${i.days<0?`Terlewat ${Math.abs(i.days)} hari`:i.days===0?'Hari Ini!':`${i.days} hari lagi`}</span></div>`).join('');
+            document.getElementById('maint-schedule-list').innerHTML = !sch.length ? `<p class="col-span-full text-center text-sm py-4">Tiada servis terdekat.</p>` : sch.map(i => {
+                const urgency = i.days<0 ? 'rose' : i.days<=7 ? 'amber' : i.days<=30 ? 'blue' : 'emerald';
+                const pct = Math.max(0, Math.min(100, Math.round((1 - (i.days / 60)) * 100)));
+                const emoji = ASSET_TYPE_EMOJI[i.jenisAset] || '🔧';
+                return `<div class="flex flex-col gap-2 p-3.5 rounded-xl border ${i.days<0?'border-rose-200':i.days<=7?'border-amber-200':'border-slate-100'} bg-slate-50/50 dark:bg-slate-800/30 dark:border-slate-700">
+                    <div class="flex items-start gap-2">
+                        <span class="text-lg leading-none shrink-0">${emoji}</span>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-bold truncate">${i.namaAset}</p>
+                            <p class="text-[11px] truncate text-slate-500 dark:text-slate-400">${i.jenisServis}</p>
+                        </div>
+                        <span class="text-[10px] font-bold px-2 py-1 rounded-lg shrink-0 bg-${urgency}-100 text-${urgency}-600 dark:bg-${urgency}-950/40 dark:text-${urgency}-400">${i.days<0?`Terlewat ${Math.abs(i.days)} hari`:i.days===0?'Hari Ini!':`${i.days} hari lagi`}</span>
+                    </div>
+                    <div class="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                        <div class="h-full rounded-full bg-${urgency}-500" style="width: ${pct}%"></div>
+                    </div>
+                </div>`;
+            }).join('');
+
+            renderMaintenanceCostChart(db);
+            renderMaintenanceAssetTypeDonut(db);
 
             const aS = document.getElementById('maint-filter-aset'), cA = aS.value;
             aS.innerHTML = '<option value="Semua">Semua Aset</option>' + [...new Set(db.map(i=>i.namaAset))].sort().map(a=>`<option value="${a}" ${a===cA?'selected':''}>${a}</option>`).join('');
