@@ -453,6 +453,12 @@
                 </div>
                 
                 <div class="flex flex-wrap items-center gap-3">
+                    <div class="w-full sm:w-40">
+                        <div class="relative">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                            <input type="text" id="cat-search" oninput="renderCategoryView()" placeholder="Cari nama item..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-8 pr-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
+                        </div>
+                    </div>
                     <div class="w-full sm:w-32">
                         <select id="cat-filter-bulan" onchange="renderCategoryView()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
                             <option value="Semua">Semua Bulan</option><option value="Januari">Januari</option><option value="Februari">Februari</option><option value="Mac">Mac</option><option value="April">April</option><option value="Mei">Mei</option><option value="Jun">Jun</option><option value="Julai">Julai</option><option value="Ogos">Ogos</option><option value="September">September</option><option value="Oktober">Oktober</option><option value="November">November</option><option value="Disember">Disember</option>
@@ -469,6 +475,9 @@
                         </select>
                     </div>
                     <div class="flex gap-2 w-full sm:w-auto">
+                        <button onclick="exportCategoryCSV()" title="Eksport data yang ditapis ke CSV" class="flex-1 sm:flex-none px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-emerald-600/10 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-file-export"></i> <span class="hidden sm:inline">Eksport</span>
+                        </button>
                         <button onclick="copyPreviousMonthBudget()" class="flex-1 sm:flex-none px-4 py-2 text-sm bg-slate-600 hover:bg-slate-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-slate-600/10 flex items-center justify-center gap-2">
                             <i class="fa-solid fa-copy"></i> Salin Lepas
                         </button>
@@ -476,6 +485,17 @@
                             <i class="fa-solid fa-plus"></i> Tambah Item
                         </button>
                     </div>
+                </div>
+            </div>
+
+            <!-- Overdue Reminder Banner -->
+            <div id="cat-overdue-banner" class="hidden relative overflow-hidden bg-gradient-to-r from-rose-600 to-orange-500 p-4 rounded-2xl shadow-lg shadow-rose-600/20 items-start gap-3 fade-in-up">
+                <div class="h-9 w-9 shrink-0 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div class="min-w-0">
+                    <span class="text-[10px] font-bold text-white/80 uppercase tracking-wider block mb-0.5">Peringatan</span>
+                    <p id="cat-overdue-text" class="text-sm font-semibold text-white leading-snug"></p>
                 </div>
             </div>
 
@@ -562,19 +582,35 @@
             </div>
 
 
-            <!-- Monthly Actual vs Estimated Expense Chart -->
-            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="p-2 bg-primary-50 dark:bg-primary-950/50 text-primary-600 dark:text-primary-400 rounded-lg">
-                        <i class="fa-solid fa-chart-column"></i>
+            <!-- Monthly Actual vs Estimated Expense Chart + Category Breakdown Donut -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-primary-50 dark:bg-primary-950/50 text-primary-600 dark:text-primary-400 rounded-lg">
+                            <i class="fa-solid fa-chart-column"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 dark:text-slate-100">Carta Bulanan Perbelanjaan Sebenar</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Perbandingan jumlah sebenar (RM) mengikut bulan berbanding anggaran kos.</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="font-bold text-slate-900 dark:text-slate-100">Carta Bulanan Perbelanjaan Sebenar</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Perbandingan jumlah sebenar (RM) mengikut bulan berbanding anggaran kos.</p>
+                    <div class="relative" style="height: 380px;">
+                        <canvas id="monthlyExpenseChart"></canvas>
                     </div>
                 </div>
-                <div class="relative" style="height: 380px;">
-                    <canvas id="monthlyExpenseChart"></canvas>
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-primary-50 dark:bg-primary-950/50 text-primary-600 dark:text-primary-400 rounded-lg">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 dark:text-slate-100">Pecahan Kategori</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Peratus perbelanjaan sebenar ikut kategori.</p>
+                        </div>
+                    </div>
+                    <div class="relative" style="height: 380px;">
+                        <canvas id="categoryDonutChart"></canvas>
+                    </div>
                 </div>
             </div>
 
@@ -1560,7 +1596,7 @@
                 if (currentTab === 'dashboard') renderDashboard();
                 // Redraw health charts with updated dark/light colours
                 if (healthDatabase.length >= 2) renderHealthCharts(healthDatabase);
-                if (currentTab === 'category') renderMonthlyExpenseChart();
+                if (currentTab === 'category') renderCategoryView();
             });
 
             loadCalendarNotes();
@@ -2056,7 +2092,8 @@
         }
         function renderCategoryView() {
             const sCat = document.getElementById('cat-filter').value, fBulan = document.getElementById('cat-filter-bulan').value, fTahun = document.getElementById('cat-filter-tahun').value;
-            const filtered = budgetDatabase.filter(i => (sCat === 'Semua' || i.kategori === sCat) && (fBulan === 'Semua' || i.bulan === fBulan) && (fTahun === 'Semua' || String(i.tahun) === fTahun));
+            const searchEl = document.getElementById('cat-search'), qSearch = searchEl ? searchEl.value.trim().toLowerCase() : '';
+            const filtered = budgetDatabase.filter(i => (sCat === 'Semua' || i.kategori === sCat) && (fBulan === 'Semua' || i.bulan === fBulan) && (fTahun === 'Semua' || String(i.tahun) === fTahun) && (!qSearch || i.namaItem.toLowerCase().includes(qSearch)));
             const catTotals = { 'Komitmen': 0, 'Keperluan': 0, 'Kehendak': 0, 'Hutang': 0, 'Kenderaan': 0, 'Simpanan': 0, 'Utiliti': 0, 'Lain-lain': 0 };
             const catAnggaran = { 'Komitmen': 0, 'Keperluan': 0, 'Kehendak': 0, 'Hutang': 0, 'Kenderaan': 0, 'Simpanan': 0, 'Utiliti': 0, 'Lain-lain': 0 };
             let tSebenar = 0, tAnggaran = 0;
@@ -2117,10 +2154,80 @@
                 }
             }
 
+            // Peringatan item lepas tarikh yang belum selesai
+            const overdueBanner = document.getElementById('cat-overdue-banner'), overdueText = document.getElementById('cat-overdue-text');
+            if (overdueBanner && overdueText) {
+                const now = new Date(), curMonthIdx = now.getMonth(), curYear = now.getFullYear();
+                const overdueItems = budgetDatabase.filter(i => {
+                    if (i.status === 'Selesai') return false;
+                    const mIdx = calendarBulanList.indexOf(i.bulan);
+                    if (mIdx === -1) return false;
+                    return (i.tahun < curYear) || (i.tahun === curYear && mIdx < curMonthIdx);
+                });
+                if (overdueItems.length > 0) {
+                    overdueText.innerText = `${overdueItems.length} item bajet dari bulan sebelumnya masih berstatus "Belum Selesai". Sila semak dan kemas kini.`;
+                    overdueBanner.classList.remove('hidden'); overdueBanner.classList.add('flex');
+                } else {
+                    overdueBanner.classList.add('hidden'); overdueBanner.classList.remove('flex');
+                }
+            }
+
             const tbody = document.getElementById('budget-table-body');
             if (filtered.length === 0) tbody.innerHTML = `<tr><td colspan="7" class="py-12 text-center text-slate-400 text-sm">Tiada item bajet ditemui</td></tr>`;
             else tbody.innerHTML = filtered.map(i => `<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20 border-b border-slate-100 dark:border-slate-800"><td class="py-4 px-6 font-semibold">${i.bulan} ${i.tahun}</td><td class="py-4 px-6 text-xs"><span class="px-2.5 py-1 rounded-md font-bold text-white shadow-sm" style="background-color: ${CATEGORY_COLORS[i.kategori] || '#64748b'}">${i.kategori}</span></td><td class="py-4 px-6">${i.namaItem}</td><td class="py-4 px-6 text-right">RM ${i.anggaranKos.toFixed(2)}</td><td class="py-4 px-6 text-right font-bold text-emerald-600 dark:text-emerald-400">RM ${i.jumlahSebenar.toFixed(2)}</td><td class="py-4 px-6 text-center">${i.status === 'Selesai' ? `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">Selesai</span>` : `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800">Belum</span>`}</td><td class="py-4 px-6 text-center"><button onclick="editBudgetItem(${i.id})" class="h-8 w-8 text-blue-600"><i class="fa-solid fa-pen"></i></button> <button onclick="deleteBudgetItem(${i.id})" class="h-8 w-8 text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>`).join('');
             renderMonthlyExpenseChart();
+            renderCategoryDonutChart(filtered);
+        }
+        function exportCategoryCSV() {
+            const sCat = document.getElementById('cat-filter').value, fBulan = document.getElementById('cat-filter-bulan').value, fTahun = document.getElementById('cat-filter-tahun').value;
+            const searchEl = document.getElementById('cat-search'), qSearch = searchEl ? searchEl.value.trim().toLowerCase() : '';
+            const filtered = budgetDatabase.filter(i => (sCat === 'Semua' || i.kategori === sCat) && (fBulan === 'Semua' || i.bulan === fBulan) && (fTahun === 'Semua' || String(i.tahun) === fTahun) && (!qSearch || i.namaItem.toLowerCase().includes(qSearch)));
+            if (filtered.length === 0) { showToast('Eksport Gagal', 'Tiada data untuk dieksport', 'error'); return; }
+            const header = ['Bulan', 'Tahun', 'Kategori', 'Nama Item', 'Anggaran Kos (RM)', 'Jumlah Sebenar (RM)', 'Status'];
+            const rows = filtered.map(i => [i.bulan, i.tahun, i.kategori, i.namaItem, i.anggaranKos.toFixed(2), i.jumlahSebenar.toFixed(2), i.status]);
+            const csv = [header, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = `bajet_kategori_${new Date().toISOString().slice(0, 10)}.csv`;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            if (typeof showToast === 'function') showToast('Berjaya', 'Eksport CSV berjaya', 'success');
+        }
+        let categoryDonutChartInstance = null;
+        function renderCategoryDonutChart(filtered) {
+            const canvas = document.getElementById('categoryDonutChart');
+            if (!canvas) return;
+            const totals = {};
+            filtered.forEach(i => { totals[i.kategori] = (totals[i.kategori] || 0) + i.jumlahSebenar; });
+            const labels = Object.keys(totals).filter(k => totals[k] > 0);
+            const values = labels.map(k => Math.round(totals[k] * 100) / 100);
+            const colors = labels.map(k => CATEGORY_COLORS[k] || '#64748b');
+            const isDark = document.documentElement.classList.contains('dark');
+            const labelColor = isDark ? '#e2e8f0' : '#1e293b';
+            if (categoryDonutChartInstance) categoryDonutChartInstance.destroy();
+            const ctx = canvas.getContext('2d');
+            const grandTotal = values.reduce((a, b) => a + b, 0);
+            categoryDonutChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: { labels: labels.length ? labels : ['Tiada Data'], datasets: [{ data: values.length ? values : [1], backgroundColor: labels.length ? colors : ['#e2e8f0'], borderWidth: 2, borderColor: isDark ? '#0f172a' : '#ffffff' }] },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '65%',
+                    plugins: {
+                        legend: { position: 'right', labels: { color: labelColor, usePointStyle: true, padding: 12, font: { size: 11 } } },
+                        datalabels: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => {
+                                    if (!labels.length) return 'Tiada data';
+                                    const pct = grandTotal > 0 ? ((ctx.parsed / grandTotal) * 100).toFixed(1) : 0;
+                                    return `${ctx.label}: RM ${ctx.parsed.toLocaleString('en-MY', {minimumFractionDigits: 2})} (${pct}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
         }
         function renderMonthlyExpenseChart() {
             const canvas = document.getElementById('monthlyExpenseChart');
