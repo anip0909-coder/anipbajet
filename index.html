@@ -247,6 +247,17 @@
                 </div>
             </div>
 
+            <!-- Auto Insight & Projection Banner -->
+            <div id="dash-insight-banner" class="relative overflow-hidden bg-gradient-to-r from-primary-600 via-primary-500 to-emerald-500 p-4 sm:p-5 rounded-2xl shadow-lg shadow-primary-600/20 flex items-start gap-3 fade-in-up">
+                <div class="h-9 w-9 shrink-0 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <div class="min-w-0">
+                    <span class="text-[10px] font-bold text-white/80 uppercase tracking-wider block mb-0.5">Insight &amp; Ramalan Automatik</span>
+                    <p id="dash-insight-text" class="text-sm font-semibold text-white leading-snug">Sedang menganalisis data kewangan anda...</p>
+                </div>
+            </div>
+
             <!-- Metric Cards (4 Grid) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-gradient-to-br from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
@@ -363,6 +374,23 @@
                             <div class="space-y-3" id="category-legend-list"></div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Trend Chart: Pendapatan vs Perbelanjaan -->
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-100 dark:border-slate-800 pb-3 flex-wrap gap-2">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-primary-500"></i>
+                        <h3 class="font-bold text-slate-900 dark:text-slate-100">Trend Pendapatan vs Perbelanjaan</h3>
+                    </div>
+                    <div class="flex bg-slate-100 dark:bg-slate-800 rounded-lg p-1 gap-1">
+                        <button id="dash-trend-btn-6" onclick="renderDashboardTrendChart(6)" class="px-3 py-1 text-xs font-bold rounded-md bg-white dark:bg-slate-700 text-primary-600 dark:text-primary-400 shadow-sm">6 Bulan</button>
+                        <button id="dash-trend-btn-12" onclick="renderDashboardTrendChart(12)" class="px-3 py-1 text-xs font-bold rounded-md text-slate-500 dark:text-slate-400">12 Bulan</button>
+                    </div>
+                </div>
+                <div class="relative" style="height: 300px;">
+                    <canvas id="dashboardTrendChart"></canvas>
                 </div>
             </div>
 
@@ -1566,6 +1594,8 @@
         let currentTab = 'dashboard';
         let categoryChartInstance = null;
         let summaryChartInstance = null;
+        let dashboardTrendChartInstance = null;
+        let dashboardTrendMonthsView = 6;
         let monthlyExpenseChartInstance = null;
         if (window.ChartDataLabels) { Chart.register(ChartDataLabels); Chart.defaults.set('plugins.datalabels', { display: false }); }
         let isGoogleSheetConnected = false;
@@ -2128,6 +2158,90 @@
                 }
             }
         }
+        function renderDashboardTrendChart(monthsCount) {
+            dashboardTrendMonthsView = monthsCount;
+            const btn6 = document.getElementById('dash-trend-btn-6'), btn12 = document.getElementById('dash-trend-btn-12');
+            const activeCls = "px-3 py-1 text-xs font-bold rounded-md bg-white dark:bg-slate-700 text-primary-600 dark:text-primary-400 shadow-sm";
+            const inactiveCls = "px-3 py-1 text-xs font-bold rounded-md text-slate-500 dark:text-slate-400";
+            if (btn6) btn6.className = monthsCount === 6 ? activeCls : inactiveCls;
+            if (btn12) btn12.className = monthsCount === 12 ? activeCls : inactiveCls;
+
+            const canvas = document.getElementById('dashboardTrendChart');
+            if (!canvas) return;
+            const monthKeys = getChronologicalMonthKeys().slice(-monthsCount);
+            const labels = monthKeys.map(k => `${k.bulan.slice(0, 3)} ${String(k.tahun).slice(2)}`);
+            const metrics = monthKeys.map(k => getMonthlyMetric(k.bulan, k.tahun));
+            const incomeVals = metrics.map(m => Math.round(m.income * 100) / 100);
+            const expenseVals = metrics.map(m => Math.round(m.expense * 100) / 100);
+            const isDark = document.documentElement.classList.contains('dark');
+            const labelColor = isDark ? '#e2e8f0' : '#1e293b';
+
+            if (dashboardTrendChartInstance) dashboardTrendChartInstance.destroy();
+            const ctx = canvas.getContext('2d');
+            dashboardTrendChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels.length ? labels : ['Tiada Data'],
+                    datasets: [
+                        { label: 'Pendapatan (RM)', data: incomeVals, borderColor: '#3b82f6', backgroundColor: '#3b82f622', borderWidth: 2, tension: 0.3, fill: true, pointRadius: 3 },
+                        { label: 'Perbelanjaan (RM)', data: expenseVals, borderColor: '#f43f5e', backgroundColor: '#f43f5e22', borderWidth: 2, tension: 0.3, fill: true, pointRadius: 3 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', align: 'start', labels: { color: labelColor, usePointStyle: true, padding: 16 } },
+                        datalabels: { display: false },
+                        tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: RM ${ctx.parsed.y.toLocaleString('en-MY', {minimumFractionDigits: 2})}` } }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: labelColor } },
+                        y: { beginAtZero: true, ticks: { color: labelColor, callback: v => `RM ${v.toLocaleString('en-MY')}` }, grid: { color: isDark ? '#1e293b' : '#e2e8f0' } }
+                    }
+                }
+            });
+        }
+        function daysInMonth(tahun, monthIdx) { return new Date(tahun, monthIdx + 1, 0).getDate(); }
+        function updateDashboardInsight(fb, totalIncome, totalExpenses, monthlyBalance, fBulan, fTahun) {
+            const el = document.getElementById('dash-insight-text');
+            if (!el) return;
+            if (fb.length === 0 && totalIncome === 0) { el.innerText = 'Tiada data untuk tapisan semasa. Cuba tukar bulan atau tahun.'; return; }
+
+            const allKeys = getChronologicalMonthKeys();
+            let curIdx = allKeys.length - 1;
+            if (fBulan !== 'Semua' && fTahun !== 'Semua') {
+                curIdx = allKeys.findIndex(k => k.bulan === fBulan && k.tahun === parseInt(fTahun));
+            }
+            const priorKeys = curIdx > 0 ? allKeys.slice(Math.max(0, curIdx - 3), curIdx) : [];
+            const priorAvgExpense = priorKeys.length ? priorKeys.reduce((s, k) => s + getMonthlyMetric(k.bulan, k.tahun).expense, 0) / priorKeys.length : 0;
+
+            let msg = '';
+            if (priorAvgExpense > 0) {
+                const diffPct = ((totalExpenses - priorAvgExpense) / priorAvgExpense) * 100;
+                if (diffPct >= 10) msg = `Perbelanjaan anda ${Math.abs(diffPct).toFixed(0)}% lebih tinggi berbanding purata ${priorKeys.length} bulan lepas.`;
+                else if (diffPct <= -10) msg = `Perbelanjaan anda ${Math.abs(diffPct).toFixed(0)}% lebih rendah berbanding purata ${priorKeys.length} bulan lepas — bagus!`;
+                else msg = `Perbelanjaan anda hampir setara dengan purata ${priorKeys.length} bulan lepas.`;
+            } else if (monthlyBalance < 0) {
+                msg = `Perbelanjaan melebihi pendapatan sebanyak RM ${Math.abs(monthlyBalance).toLocaleString('en-MY', {minimumFractionDigits: 2})}.`;
+            } else {
+                msg = `Baki semasa: RM ${monthlyBalance.toLocaleString('en-MY', {minimumFractionDigits: 2})}.`;
+            }
+
+            // Unjuran ringkas jika bulan/tahun yang dipilih ialah bulan semasa
+            const now = new Date();
+            if (fBulan !== 'Semua' && fTahun !== 'Semua') {
+                const mIdx = calendarBulanList.indexOf(fBulan), yr = parseInt(fTahun);
+                if (mIdx === now.getMonth() && yr === now.getFullYear()) {
+                    const totalDays = daysInMonth(yr, mIdx), progress = now.getDate() / totalDays;
+                    if (progress > 0.1 && progress < 1) {
+                        const projectedExpense = totalExpenses / progress;
+                        const projectedBalance = totalIncome - projectedExpense;
+                        msg += ` Unjuran baki akhir bulan: RM ${projectedBalance.toLocaleString('en-MY', {minimumFractionDigits: 2})} (anggaran berdasarkan corak semasa).`;
+                    }
+                }
+            }
+            el.innerText = msg;
+        }
         function renderDashboard() {
             const fBulan = document.getElementById('dash-filter-bulan').value, fTahun = document.getElementById('dash-filter-tahun').value;
             document.getElementById('chart-filtered-by').innerText = `Tapis: ${fBulan} ${fTahun}`;
@@ -2147,6 +2261,8 @@
             balEl.className = monthlyBalance < 0 ? "text-2xl font-black text-rose-500" : "text-2xl font-black text-emerald-500 dark:text-emerald-400";
 
             updateDashboardGreetingAndStatus(monthlyBalance, fb.length > 0 || fi.length > 0);
+            updateDashboardInsight(fb, totalIncome, totalExpenses, monthlyBalance, fBulan, fTahun);
+            renderDashboardTrendChart(dashboardTrendMonthsView);
 
             // Trend berbanding bulan sebelumnya (hanya jika bulan & tahun tertentu dipilih)
             if (fBulan !== 'Semua' && fTahun !== 'Semua') {
