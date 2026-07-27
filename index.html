@@ -83,7 +83,7 @@
                 </div>
                 <div class="min-w-0">
                     <span class="text-base font-extrabold tracking-tight bg-gradient-to-r from-primary-600 to-emerald-500 dark:from-primary-400 dark:to-emerald-300 bg-clip-text text-transparent block">UrusDuit</span>
-                    <span class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider block">Urus &amp; Rekod Kewangan</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider block">Urus Wang, Urus Hidup</span>
                 </div>
             </div>
 
@@ -1181,7 +1181,7 @@
                 <div>
                     <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Kategori</label>
                     <select id="budget-kategori" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100">
-                        <option value="Komitmen">Komitmen</option><option value="Keperluan">Keperluan</option><option value="Kehendak">Kehendak</option><option value="Hutang">Hutang</option><option value="Kenderaan">Kenderaan</option><option value="Simpanan">Simpanan</option><option value="Utiliti">Utiliti</option><option value="Lain-lain">Lain-lain</option>
+                        <option value="Komitmen">📄 Komitmen</option><option value="Keperluan">🛒 Keperluan</option><option value="Kehendak">❤️ Kehendak</option><option value="Hutang">💳 Hutang</option><option value="Kenderaan">🚗 Kenderaan</option><option value="Simpanan">🐷 Simpanan</option><option value="Utiliti">⚡ Utiliti</option><option value="Lain-lain">➕ Lain-lain</option>
                     </select>
                 </div>
                 <div>
@@ -1566,6 +1566,10 @@
         const CATEGORY_COLORS = {
             'Komitmen': '#f59e0b', 'Keperluan': '#10b981', 'Kehendak': '#f43f5e', 'Hutang': '#dc2626',
             'Kenderaan': '#06b6d4', 'Simpanan': '#3b82f6', 'Utiliti': '#8b5cf6', 'Lain-lain': '#64748b'
+        };
+        const CATEGORY_EMOJI = {
+            'Komitmen': '📄', 'Keperluan': '🛒', 'Kehendak': '❤️', 'Hutang': '💳',
+            'Kenderaan': '🚗', 'Simpanan': '🐷', 'Utiliti': '⚡', 'Lain-lain': '➕'
         };
 
         // ==================== CALENDAR GLOBALS ====================
@@ -2076,7 +2080,7 @@
             
             renderSummaryChart(totalIncome, totalExpenses, monthlyBalance);
             renderCategoryChart(cats, amts);
-            document.getElementById('category-legend-list').innerHTML = cats.length === 0 ? `<div class="text-center text-sm text-slate-400 py-6">Tiada Rekod Pengeluaran Sebenar</div>` : cats.map((cat, i) => `<div class="flex justify-between text-xs p-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-lg"><span class="flex items-center gap-2 font-medium"><span class="w-3 h-3 rounded-full" style="background-color: ${CATEGORY_COLORS[cat]||'#64748b'}"></span>${cat}</span><span class="font-extrabold">RM ${amts[i].toLocaleString('en-MY', {minimumFractionDigits: 2})} <span class="text-slate-400 font-medium ml-1">(${(amts[i]/gTotal*100).toFixed(1)}%)</span></span></div>`).join('');
+            document.getElementById('category-legend-list').innerHTML = cats.length === 0 ? `<div class="text-center text-sm text-slate-400 py-6">Tiada Rekod Pengeluaran Sebenar</div>` : cats.map((cat, i) => `<div class="flex justify-between text-xs p-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-lg"><span class="flex items-center gap-2 font-medium"><span class="w-3 h-3 rounded-full" style="background-color: ${CATEGORY_COLORS[cat]||'#64748b'}"></span>${CATEGORY_EMOJI[cat] || ''} ${cat}</span><span class="font-extrabold">RM ${amts[i].toLocaleString('en-MY', {minimumFractionDigits: 2})} <span class="text-slate-400 font-medium ml-1">(${(amts[i]/gTotal*100).toFixed(1)}%)</span></span></div>`).join('');
 
             const coms = fb.filter(i => i.kategori === 'Komitmen');
             const pCount = coms.filter(i => i.status === 'Selesai').length, uCount = coms.length - pCount;
@@ -2088,7 +2092,7 @@
 
         // CATEGORY TAB
         function populateCategoryFilterDropdown() {
-            document.getElementById('cat-filter').innerHTML = '<option value="Semua">Semua Kategori</option>' + ['Komitmen', 'Keperluan', 'Kehendak', 'Hutang', 'Kenderaan', 'Simpanan', 'Utiliti', 'Lain-lain'].map(c => `<option value="${c}">${c}</option>`).join('');
+            document.getElementById('cat-filter').innerHTML = '<option value="Semua">Semua Kategori</option>' + ['Komitmen', 'Keperluan', 'Kehendak', 'Hutang', 'Kenderaan', 'Simpanan', 'Utiliti', 'Lain-lain'].map(c => `<option value="${c}">${CATEGORY_EMOJI[c] || ''} ${c}</option>`).join('');
         }
         function renderCategoryView() {
             const sCat = document.getElementById('cat-filter').value, fBulan = document.getElementById('cat-filter-bulan').value, fTahun = document.getElementById('cat-filter-tahun').value;
@@ -2174,7 +2178,7 @@
 
             const tbody = document.getElementById('budget-table-body');
             if (filtered.length === 0) tbody.innerHTML = `<tr><td colspan="7" class="py-12 text-center text-slate-400 text-sm">Tiada item bajet ditemui</td></tr>`;
-            else tbody.innerHTML = filtered.map(i => `<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20 border-b border-slate-100 dark:border-slate-800"><td class="py-4 px-6 font-semibold">${i.bulan} ${i.tahun}</td><td class="py-4 px-6 text-xs"><span class="px-2.5 py-1 rounded-md font-bold text-white shadow-sm" style="background-color: ${CATEGORY_COLORS[i.kategori] || '#64748b'}">${i.kategori}</span></td><td class="py-4 px-6">${i.namaItem}</td><td class="py-4 px-6 text-right">RM ${i.anggaranKos.toFixed(2)}</td><td class="py-4 px-6 text-right font-bold text-emerald-600 dark:text-emerald-400">RM ${i.jumlahSebenar.toFixed(2)}</td><td class="py-4 px-6 text-center">${i.status === 'Selesai' ? `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">Selesai</span>` : `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800">Belum</span>`}</td><td class="py-4 px-6 text-center"><button onclick="editBudgetItem(${i.id})" class="h-8 w-8 text-blue-600"><i class="fa-solid fa-pen"></i></button> <button onclick="deleteBudgetItem(${i.id})" class="h-8 w-8 text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>`).join('');
+            else tbody.innerHTML = filtered.map(i => `<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20 border-b border-slate-100 dark:border-slate-800"><td class="py-4 px-6 font-semibold">${i.bulan} ${i.tahun}</td><td class="py-4 px-6 text-xs"><span class="px-2.5 py-1 rounded-md font-bold text-white shadow-sm" style="background-color: ${CATEGORY_COLORS[i.kategori] || '#64748b'}">${CATEGORY_EMOJI[i.kategori] || ''} ${i.kategori}</span></td><td class="py-4 px-6">${i.namaItem}</td><td class="py-4 px-6 text-right">RM ${i.anggaranKos.toFixed(2)}</td><td class="py-4 px-6 text-right font-bold text-emerald-600 dark:text-emerald-400">RM ${i.jumlahSebenar.toFixed(2)}</td><td class="py-4 px-6 text-center">${i.status === 'Selesai' ? `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">Selesai</span>` : `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800">Belum</span>`}</td><td class="py-4 px-6 text-center"><button onclick="editBudgetItem(${i.id})" class="h-8 w-8 text-blue-600"><i class="fa-solid fa-pen"></i></button> <button onclick="deleteBudgetItem(${i.id})" class="h-8 w-8 text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>`).join('');
             renderMonthlyExpenseChart();
             renderCategoryDonutChart(filtered);
         }
