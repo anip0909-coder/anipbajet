@@ -211,7 +211,10 @@
                     <!-- Greeting Text -->
                     <div class="min-w-0">
                         <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider" id="dashboard-time-greeting">Selamat Datang</p>
-                        <h1 class="text-xl font-extrabold text-slate-900 dark:text-white truncate" id="dashboard-greeting">Hi, Hanif 👋</h1>
+                        <h1 class="text-xl font-extrabold text-slate-900 dark:text-white truncate flex items-center gap-2">
+                            <span>Hi, Hanif 👋</span>
+                            <span id="dashboard-greeting-mood" class="text-lg"></span>
+                        </h1>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" id="dashboard-title-sub">Urus kewangan anda dengan bijak.</p>
                         <p class="text-xs font-semibold mt-1 flex items-center gap-1.5" id="dashboard-status-msg"></p>
                     </div>
@@ -261,7 +264,7 @@
 
             <!-- Metric Cards (4 Grid) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-gradient-to-br from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
+                <div class="fade-in-up bg-gradient-to-br from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
                     <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-300">
                         <i class="fa-solid fa-scale-balanced text-9xl"></i>
                     </div>
@@ -279,7 +282,7 @@
                     <svg id="card-monthly-balance-spark" class="w-full h-6 mt-1.5"></svg>
                 </div>
 
-                <div class="bg-gradient-to-br from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
+                <div class="fade-in-up bg-gradient-to-br from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
                     <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-300">
                         <i class="fa-solid fa-circle-arrow-up text-9xl"></i>
                     </div>
@@ -297,7 +300,7 @@
                     <svg id="card-total-income-spark" class="w-full h-6 mt-1.5"></svg>
                 </div>
 
-                <div class="bg-gradient-to-br from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
+                <div class="fade-in-up bg-gradient-to-br from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
                     <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-300">
                         <i class="fa-solid fa-shield-halved text-9xl"></i>
                     </div>
@@ -315,7 +318,7 @@
                     <svg id="card-commitments-spark" class="w-full h-6 mt-1.5"></svg>
                 </div>
 
-                <div class="bg-gradient-to-br from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
+                <div class="fade-in-up bg-gradient-to-br from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
                     <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-300">
                         <i class="fa-solid fa-circle-arrow-down text-9xl"></i>
                     </div>
@@ -2167,15 +2170,22 @@
                 const h = new Date().getHours();
                 timeEl.innerText = h < 12 ? 'Selamat Pagi' : h < 15 ? 'Selamat Tengah Hari' : h < 19 ? 'Selamat Petang' : 'Selamat Malam';
             }
+            const moodEl = document.getElementById('dashboard-greeting-mood');
+            if (moodEl) {
+                if (!hasData) { moodEl.innerText = ''; }
+                else if (monthlyBalance < 0) { moodEl.innerText = '😟'; }
+                else if (monthlyBalance === 0) { moodEl.innerText = '😐'; }
+                else { moodEl.innerText = '😊'; }
+            }
             const statusEl = document.getElementById('dashboard-status-msg');
             if (statusEl) {
                 if (!hasData) { statusEl.innerHTML = ''; }
                 else if (monthlyBalance < 0) {
-                    statusEl.innerHTML = `<span class="text-rose-500">😟 Perbelanjaan melebihi pendapatan bulan ini.</span>`;
+                    statusEl.innerHTML = `<span class="text-rose-500">Perbelanjaan melebihi pendapatan bulan ini.</span>`;
                 } else if (monthlyBalance === 0) {
-                    statusEl.innerHTML = `<span class="text-amber-500">😐 Baki tepat pada sifar — berhati-hati.</span>`;
+                    statusEl.innerHTML = `<span class="text-amber-500">Baki tepat pada sifar — berhati-hati.</span>`;
                 } else {
-                    statusEl.innerHTML = `<span class="text-emerald-500">😊 Kewangan anda stabil bulan ini — baki positif!</span>`;
+                    statusEl.innerHTML = `<span class="text-emerald-500">Kewangan anda stabil bulan ini — baki positif!</span>`;
                 }
             }
         }
