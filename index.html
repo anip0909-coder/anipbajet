@@ -41,6 +41,19 @@
         .tab-transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .glass-panel { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in-up { animation: fadeInUp 0.4s ease-out both; }
+        .grid .fade-in-up:nth-child(1) { animation-delay: 0.02s; }
+        .grid .fade-in-up:nth-child(2) { animation-delay: 0.06s; }
+        .grid .fade-in-up:nth-child(3) { animation-delay: 0.10s; }
+        .grid .fade-in-up:nth-child(4) { animation-delay: 0.14s; }
+        .grid .fade-in-up:nth-child(5) { animation-delay: 0.18s; }
+        .grid .fade-in-up:nth-child(6) { animation-delay: 0.22s; }
+        .grid .fade-in-up:nth-child(7) { animation-delay: 0.26s; }
+        .grid .fade-in-up:nth-child(8) { animation-delay: 0.30s; }
+        .grid .fade-in-up:nth-child(9) { animation-delay: 0.34s; }
+        .grid .fade-in-up:nth-child(10) { animation-delay: 0.38s; }
+
         /* Sidebar mobile: hidden off-screen by default on small screens */
         @media (max-width: 1023px) {
             #sidebar { position: fixed; top: 0; left: 0; height: 100%; z-index: 30; transform: translateX(-100%); }
@@ -466,49 +479,88 @@
                 </div>
             </div>
 
+            <!-- Auto Insight Banner -->
+            <div id="cat-insight-banner" class="relative overflow-hidden bg-gradient-to-r from-primary-600 via-primary-500 to-emerald-500 p-4 sm:p-5 rounded-2xl shadow-lg shadow-primary-600/20 flex items-start gap-3 fade-in-up">
+                <div class="h-9 w-9 shrink-0 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <div class="min-w-0">
+                    <span class="text-[10px] font-bold text-white/80 uppercase tracking-wider block mb-0.5">Insight Automatik</span>
+                    <p id="cat-insight-text" class="text-sm font-semibold text-white leading-snug">Sedang menganalisis data perbelanjaan anda...</p>
+                </div>
+            </div>
+
             <!-- Category Metric Cards -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4">
-                <div class="bg-amber-50 dark:bg-amber-950/20 p-4 rounded-2xl border border-amber-200 dark:border-amber-900/50">
-                    <span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-1 block">Komitmen</span>
+                <div class="fade-in-up relative overflow-hidden bg-gradient-to-br from-amber-50 to-amber-100/60 dark:from-amber-950/30 dark:to-amber-900/10 p-4 rounded-2xl border border-amber-200 dark:border-amber-900/50 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider block"><i class="fa-solid fa-file-invoice mr-1"></i>Komitmen</span>
+                        <span id="cat-badge-komitmen" class="text-[10px]"></span>
+                    </div>
                     <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-komitmen">RM 0.00</h3>
                 </div>
-                <div class="bg-emerald-50 dark:bg-emerald-950/20 p-4 rounded-2xl border border-emerald-200 dark:border-emerald-900/50">
-                    <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-1 block">Keperluan</span>
+                <div class="fade-in-up relative overflow-hidden bg-gradient-to-br from-emerald-50 to-emerald-100/60 dark:from-emerald-950/30 dark:to-emerald-900/10 p-4 rounded-2xl border border-emerald-200 dark:border-emerald-900/50 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block"><i class="fa-solid fa-basket-shopping mr-1"></i>Keperluan</span>
+                        <span id="cat-badge-keperluan" class="text-[10px]"></span>
+                    </div>
                     <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-keperluan">RM 0.00</h3>
                 </div>
-                <div class="bg-rose-50 dark:bg-rose-950/20 p-4 rounded-2xl border border-rose-200 dark:border-rose-900/50">
-                    <span class="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider mb-1 block">Kehendak</span>
+                <div class="fade-in-up relative overflow-hidden bg-gradient-to-br from-rose-50 to-rose-100/60 dark:from-rose-950/30 dark:to-rose-900/10 p-4 rounded-2xl border border-rose-200 dark:border-rose-900/50 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider block"><i class="fa-solid fa-heart mr-1"></i>Kehendak</span>
+                        <span id="cat-badge-kehendak" class="text-[10px]"></span>
+                    </div>
                     <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-kehendak">RM 0.00</h3>
                 </div>
-                <div class="bg-red-50 dark:bg-red-950/20 p-4 rounded-2xl border border-red-200 dark:border-red-900/50">
-                    <span class="text-[10px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider mb-1 block">Hutang</span>
+                <div class="fade-in-up relative overflow-hidden bg-gradient-to-br from-red-50 to-red-100/60 dark:from-red-950/30 dark:to-red-900/10 p-4 rounded-2xl border border-red-200 dark:border-red-900/50 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[10px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider block"><i class="fa-solid fa-hand-holding-dollar mr-1"></i>Hutang</span>
+                        <span id="cat-badge-hutang" class="text-[10px]"></span>
+                    </div>
                     <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-hutang">RM 0.00</h3>
                 </div>
-                <div class="bg-cyan-50 dark:bg-cyan-950/20 p-4 rounded-2xl border border-cyan-200 dark:border-cyan-900/50">
-                    <span class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider mb-1 block">Kenderaan</span>
+                <div class="fade-in-up relative overflow-hidden bg-gradient-to-br from-cyan-50 to-cyan-100/60 dark:from-cyan-950/30 dark:to-cyan-900/10 p-4 rounded-2xl border border-cyan-200 dark:border-cyan-900/50 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider block"><i class="fa-solid fa-car mr-1"></i>Kenderaan</span>
+                        <span id="cat-badge-kenderaan" class="text-[10px]"></span>
+                    </div>
                     <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-kenderaan">RM 0.00</h3>
                 </div>
-                <div class="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-2xl border border-blue-200 dark:border-blue-900/50">
-                    <span class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1 block">Simpanan</span>
+                <div class="fade-in-up relative overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100/60 dark:from-blue-950/30 dark:to-blue-900/10 p-4 rounded-2xl border border-blue-200 dark:border-blue-900/50 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider block"><i class="fa-solid fa-piggy-bank mr-1"></i>Simpanan</span>
+                        <span id="cat-badge-simpanan" class="text-[10px]"></span>
+                    </div>
                     <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-simpanan">RM 0.00</h3>
                 </div>
-                <div class="bg-purple-50 dark:bg-purple-950/20 p-4 rounded-2xl border border-purple-200 dark:border-purple-900/50">
-                    <span class="text-[10px] font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider mb-1 block">Utiliti</span>
+                <div class="fade-in-up relative overflow-hidden bg-gradient-to-br from-purple-50 to-purple-100/60 dark:from-purple-950/30 dark:to-purple-900/10 p-4 rounded-2xl border border-purple-200 dark:border-purple-900/50 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[10px] font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider block"><i class="fa-solid fa-bolt mr-1"></i>Utiliti</span>
+                        <span id="cat-badge-utiliti" class="text-[10px]"></span>
+                    </div>
                     <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-utiliti">RM 0.00</h3>
                 </div>
-                <div class="bg-slate-100 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
-                    <span class="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 block">Lain-lain</span>
+                <div class="fade-in-up relative overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200/60 dark:from-slate-800/50 dark:to-slate-800/20 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider block"><i class="fa-solid fa-ellipsis mr-1"></i>Lain-lain</span>
+                        <span id="cat-badge-lain" class="text-[10px]"></span>
+                    </div>
                     <h3 class="text-lg font-black text-slate-900 dark:text-white" id="cat-card-lain">RM 0.00</h3>
                 </div>
-                <div class="bg-slate-800 dark:bg-slate-800 p-4 rounded-2xl border border-slate-700 dark:border-slate-700 shadow-sm col-span-1 md:col-span-1">
+                <div class="fade-in-up relative overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 dark:from-slate-800 dark:to-slate-950 p-4 rounded-2xl border border-slate-700 dark:border-slate-700 shadow-sm col-span-1 md:col-span-1">
                     <span class="text-[10px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider mb-1 block">Anggaran Kos (Semua)</span>
                     <h3 class="text-lg font-black text-white" id="cat-card-anggaran-keseluruhan">RM 0.00</h3>
                 </div>
-                <div class="bg-slate-800 dark:bg-slate-800 p-4 rounded-2xl border border-slate-700 dark:border-slate-700 shadow-sm col-span-1 md:col-span-1">
-                    <span class="text-[10px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider mb-1 block">Jumlah Sebenar (Semua)</span>
+                <div class="fade-in-up relative overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 dark:from-slate-800 dark:to-slate-950 p-4 rounded-2xl border border-slate-700 dark:border-slate-700 shadow-sm col-span-1 md:col-span-1">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[10px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider block">Jumlah Sebenar (Semua)</span>
+                        <span id="cat-trend-arrow" class="text-[10px] font-bold"></span>
+                    </div>
                     <h3 class="text-lg font-black text-white" id="cat-card-sebenar">RM 0.00</h3>
                 </div>
             </div>
+
 
             <!-- Monthly Actual vs Estimated Expense Chart -->
             <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
@@ -2006,14 +2058,65 @@
             const sCat = document.getElementById('cat-filter').value, fBulan = document.getElementById('cat-filter-bulan').value, fTahun = document.getElementById('cat-filter-tahun').value;
             const filtered = budgetDatabase.filter(i => (sCat === 'Semua' || i.kategori === sCat) && (fBulan === 'Semua' || i.bulan === fBulan) && (fTahun === 'Semua' || String(i.tahun) === fTahun));
             const catTotals = { 'Komitmen': 0, 'Keperluan': 0, 'Kehendak': 0, 'Hutang': 0, 'Kenderaan': 0, 'Simpanan': 0, 'Utiliti': 0, 'Lain-lain': 0 };
+            const catAnggaran = { 'Komitmen': 0, 'Keperluan': 0, 'Kehendak': 0, 'Hutang': 0, 'Kenderaan': 0, 'Simpanan': 0, 'Utiliti': 0, 'Lain-lain': 0 };
             let tSebenar = 0, tAnggaran = 0;
-            filtered.forEach(i => { catTotals[i.kategori] = (catTotals[i.kategori] || 0) + i.jumlahSebenar; tSebenar += i.jumlahSebenar; tAnggaran += i.anggaranKos; });
+            filtered.forEach(i => { catTotals[i.kategori] = (catTotals[i.kategori] || 0) + i.jumlahSebenar; catAnggaran[i.kategori] = (catAnggaran[i.kategori] || 0) + i.anggaranKos; tSebenar += i.jumlahSebenar; tAnggaran += i.anggaranKos; });
             ['komitmen','keperluan','kehendak','hutang','kenderaan','simpanan','utiliti','lain'].forEach(k => {
-                document.getElementById(`cat-card-${k}`).innerText = `RM ${catTotals[k === 'lain' ? 'Lain-lain' : k.charAt(0).toUpperCase() + k.slice(1)].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+                const catName = k === 'lain' ? 'Lain-lain' : k.charAt(0).toUpperCase() + k.slice(1);
+                document.getElementById(`cat-card-${k}`).innerText = `RM ${catTotals[catName].toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
+                const badgeEl = document.getElementById(`cat-badge-${k}`);
+                if (badgeEl) {
+                    const bud = catAnggaran[catName];
+                    if (bud > 0) {
+                        const pct = (catTotals[catName] / bud) * 100;
+                        const dot = pct >= 100 ? '🔴' : pct >= 80 ? '🟡' : '🟢';
+                        badgeEl.innerHTML = `${dot} <span class="font-bold text-slate-500 dark:text-slate-400">${Math.round(pct)}%</span>`;
+                    } else { badgeEl.innerHTML = ''; }
+                }
             });
             document.getElementById('cat-card-anggaran-keseluruhan').innerText = `RM ${tAnggaran.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('cat-card-sebenar').innerText = `RM ${tSebenar.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             document.getElementById('cat-item-count').innerText = `Menunjukkan ${filtered.length} rekod`;
+
+            // Trend arrow: bandingkan dengan bulan sebelumnya (hanya jika bulan & tahun tertentu dipilih)
+            const trendEl = document.getElementById('cat-trend-arrow');
+            if (trendEl) {
+                if (fBulan !== 'Semua' && fTahun !== 'Semua') {
+                    let mIdx = calendarBulanList.indexOf(fBulan), yr = parseInt(fTahun);
+                    let prevBulan, prevTahun;
+                    if (mIdx <= 0) { prevBulan = calendarBulanList[calendarBulanList.length - 1]; prevTahun = yr - 1; }
+                    else { prevBulan = calendarBulanList[mIdx - 1]; prevTahun = yr; }
+                    const prevTotal = budgetDatabase.filter(i => (sCat === 'Semua' || i.kategori === sCat) && i.bulan === prevBulan && i.tahun === prevTahun).reduce((s, i) => s + i.jumlahSebenar, 0);
+                    if (prevTotal > 0) {
+                        const diffPct = ((tSebenar - prevTotal) / prevTotal) * 100;
+                        trendEl.innerHTML = diffPct >= 0 ? `<span class="text-rose-400"><i class="fa-solid fa-arrow-up"></i> ${Math.abs(diffPct).toFixed(0)}%</span>` : `<span class="text-emerald-400"><i class="fa-solid fa-arrow-down"></i> ${Math.abs(diffPct).toFixed(0)}%</span>`;
+                    } else { trendEl.innerHTML = ''; }
+                } else { trendEl.innerHTML = ''; }
+            }
+
+            // Insight automatik
+            const insightEl = document.getElementById('cat-insight-text');
+            if (insightEl) {
+                let overspend = null;
+                Object.keys(catTotals).forEach(cat => {
+                    const bud = catAnggaran[cat];
+                    if (bud > 0 && catTotals[cat] > bud) {
+                        const lebih = catTotals[cat] - bud;
+                        if (!overspend || lebih > overspend.lebih) overspend = { cat, lebih };
+                    }
+                });
+                if (filtered.length === 0) {
+                    insightEl.innerText = 'Tiada data untuk tapisan semasa. Cuba tukar bulan, tahun atau kategori.';
+                } else if (overspend) {
+                    insightEl.innerText = `Kategori ${overspend.cat} telah melebihi anggaran sebanyak RM ${overspend.lebih.toLocaleString('en-MY', {minimumFractionDigits: 2})}.`;
+                } else if (tAnggaran > 0) {
+                    const sisa = tAnggaran - tSebenar;
+                    insightEl.innerText = `Perbelanjaan masih dalam kawalan — baki anggaran RM ${sisa.toLocaleString('en-MY', {minimumFractionDigits: 2})} (${Math.round((tSebenar / tAnggaran) * 100)}% digunakan).`;
+                } else {
+                    insightEl.innerText = `Jumlah perbelanjaan sebenar setakat ini: RM ${tSebenar.toLocaleString('en-MY', {minimumFractionDigits: 2})}.`;
+                }
+            }
+
             const tbody = document.getElementById('budget-table-body');
             if (filtered.length === 0) tbody.innerHTML = `<tr><td colspan="7" class="py-12 text-center text-slate-400 text-sm">Tiada item bajet ditemui</td></tr>`;
             else tbody.innerHTML = filtered.map(i => `<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20 border-b border-slate-100 dark:border-slate-800"><td class="py-4 px-6 font-semibold">${i.bulan} ${i.tahun}</td><td class="py-4 px-6 text-xs"><span class="px-2.5 py-1 rounded-md font-bold text-white shadow-sm" style="background-color: ${CATEGORY_COLORS[i.kategori] || '#64748b'}">${i.kategori}</span></td><td class="py-4 px-6">${i.namaItem}</td><td class="py-4 px-6 text-right">RM ${i.anggaranKos.toFixed(2)}</td><td class="py-4 px-6 text-right font-bold text-emerald-600 dark:text-emerald-400">RM ${i.jumlahSebenar.toFixed(2)}</td><td class="py-4 px-6 text-center">${i.status === 'Selesai' ? `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">Selesai</span>` : `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800">Belum</span>`}</td><td class="py-4 px-6 text-center"><button onclick="editBudgetItem(${i.id})" class="h-8 w-8 text-blue-600"><i class="fa-solid fa-pen"></i></button> <button onclick="deleteBudgetItem(${i.id})" class="h-8 w-8 text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>`).join('');
