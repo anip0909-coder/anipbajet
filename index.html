@@ -209,9 +209,10 @@
                     </div>
                     <!-- Greeting Text -->
                     <div class="min-w-0">
-                        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Selamat Datang</p>
+                        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider" id="dashboard-time-greeting">Selamat Datang</p>
                         <h1 class="text-xl font-extrabold text-slate-900 dark:text-white truncate" id="dashboard-greeting">Hi, Hanif 👋</h1>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" id="dashboard-title-sub">Urus kewangan anda dengan bijak.</p>
+                        <p class="text-xs font-semibold mt-1 flex items-center gap-1.5" id="dashboard-status-msg"></p>
                     </div>
                 </div>
                 <!-- Dashboard Title (right side) -->
@@ -259,7 +260,11 @@
                         </div>
                     </div>
                     <h3 class="text-2xl font-black text-slate-900 dark:text-white" id="card-monthly-balance">RM 0.00</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" id="card-monthly-balance-sub">Pendapatan - Perbelanjaan Sebenar</p>
+                    <div class="flex items-center justify-between mt-1 gap-2">
+                        <p class="text-xs text-slate-500 dark:text-slate-400" id="card-monthly-balance-sub">Pendapatan - Perbelanjaan Sebenar</p>
+                        <span class="text-xs font-bold shrink-0" id="card-monthly-balance-trend"></span>
+                    </div>
+                    <svg id="card-monthly-balance-spark" class="w-full h-6 mt-1.5"></svg>
                 </div>
 
                 <div class="bg-gradient-to-br from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
@@ -273,7 +278,11 @@
                         </div>
                     </div>
                     <h3 class="text-2xl font-black text-slate-900 dark:text-white" id="card-total-income">RM 0.00</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" id="card-total-income-sub">Baki Bersih Diterima</p>
+                    <div class="flex items-center justify-between mt-1 gap-2">
+                        <p class="text-xs text-slate-500 dark:text-slate-400" id="card-total-income-sub">Baki Bersih Diterima</p>
+                        <span class="text-xs font-bold shrink-0" id="card-total-income-trend"></span>
+                    </div>
+                    <svg id="card-total-income-spark" class="w-full h-6 mt-1.5"></svg>
                 </div>
 
                 <div class="bg-gradient-to-br from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
@@ -287,7 +296,11 @@
                         </div>
                     </div>
                     <h3 class="text-2xl font-black text-slate-900 dark:text-white" id="card-commitments">RM 0.00</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" id="card-commitments-sub">Anggaran Komitmen Bulanan</p>
+                    <div class="flex items-center justify-between mt-1 gap-2">
+                        <p class="text-xs text-slate-500 dark:text-slate-400" id="card-commitments-sub">Anggaran Komitmen Bulanan</p>
+                        <span class="text-xs font-bold shrink-0" id="card-commitments-trend"></span>
+                    </div>
+                    <svg id="card-commitments-spark" class="w-full h-6 mt-1.5"></svg>
                 </div>
 
                 <div class="bg-gradient-to-br from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
@@ -301,7 +314,11 @@
                         </div>
                     </div>
                     <h3 class="text-2xl font-black text-slate-900 dark:text-white" id="card-expenses">RM 0.00</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" id="card-expenses-sub">Belanja Sebenar Selesai</p>
+                    <div class="flex items-center justify-between mt-1 gap-2">
+                        <p class="text-xs text-slate-500 dark:text-slate-400" id="card-expenses-sub">Belanja Sebenar Selesai</p>
+                        <span class="text-xs font-bold shrink-0" id="card-expenses-trend"></span>
+                    </div>
+                    <svg id="card-expenses-spark" class="w-full h-6 mt-1.5"></svg>
                 </div>
             </div>
 
@@ -2056,6 +2073,61 @@
             });
         }
 
+        function getMonthlyMetric(bulan, tahun) {
+            const inc = incomeDatabase.filter(i => i.bulan === bulan && i.tahun === tahun).reduce((s, i) => s + i.pendapatanBersih, 0);
+            const exp = budgetDatabase.filter(i => i.bulan === bulan && i.tahun === tahun).reduce((s, i) => s + i.jumlahSebenar, 0);
+            const com = budgetDatabase.filter(i => i.bulan === bulan && i.tahun === tahun && i.kategori === 'Komitmen').reduce((s, i) => s + i.anggaranKos, 0);
+            return { income: inc, expense: exp, commit: com, balance: inc - exp };
+        }
+        function getChronologicalMonthKeys() {
+            const keys = new Set();
+            budgetDatabase.forEach(i => keys.add(`${i.tahun}|${i.bulan}`));
+            incomeDatabase.forEach(i => keys.add(`${i.tahun}|${i.bulan}`));
+            return Array.from(keys).map(k => { const [y, b] = k.split('|'); return { tahun: parseInt(y), bulan: b, idx: calendarBulanList.indexOf(b) }; })
+                .sort((a, b) => a.tahun !== b.tahun ? a.tahun - b.tahun : a.idx - b.idx);
+        }
+        function renderCardSparkline(svgId, values, color) {
+            const svg = document.getElementById(svgId);
+            if (!svg) return;
+            if (values.length < 2) { svg.innerHTML = ''; return; }
+            const w = 200, h = 24, pad = 2;
+            const min = Math.min(...values), max = Math.max(...values), range = (max - min) || 1;
+            const pts = values.map((v, i) => {
+                const x = pad + (i / (values.length - 1)) * (w - pad * 2);
+                const y = h - pad - ((v - min) / range) * (h - pad * 2);
+                return `${x.toFixed(1)},${y.toFixed(1)}`;
+            }).join(' ');
+            svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+            svg.setAttribute('preserveAspectRatio', 'none');
+            svg.innerHTML = `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>`;
+        }
+        function renderTrendBadge(elId, currentVal, prevVal, invert = false) {
+            const el = document.getElementById(elId);
+            if (!el) return;
+            if (prevVal === null || prevVal === undefined || prevVal === 0) { el.innerHTML = ''; return; }
+            const diffPct = ((currentVal - prevVal) / Math.abs(prevVal)) * 100;
+            const isUp = diffPct >= 0;
+            const goodColor = invert ? (isUp ? 'text-rose-500' : 'text-emerald-500') : (isUp ? 'text-emerald-500' : 'text-rose-500');
+            el.innerHTML = `<span class="${goodColor}"><i class="fa-solid fa-arrow-${isUp ? 'up' : 'down'}"></i> ${Math.abs(diffPct).toFixed(0)}%</span>`;
+        }
+        function updateDashboardGreetingAndStatus(monthlyBalance, hasData) {
+            const timeEl = document.getElementById('dashboard-time-greeting');
+            if (timeEl) {
+                const h = new Date().getHours();
+                timeEl.innerText = h < 12 ? 'Selamat Pagi' : h < 15 ? 'Selamat Tengah Hari' : h < 19 ? 'Selamat Petang' : 'Selamat Malam';
+            }
+            const statusEl = document.getElementById('dashboard-status-msg');
+            if (statusEl) {
+                if (!hasData) { statusEl.innerHTML = ''; }
+                else if (monthlyBalance < 0) {
+                    statusEl.innerHTML = `<span class="text-rose-500">😟 Perbelanjaan melebihi pendapatan bulan ini.</span>`;
+                } else if (monthlyBalance === 0) {
+                    statusEl.innerHTML = `<span class="text-amber-500">😐 Baki tepat pada sifar — berhati-hati.</span>`;
+                } else {
+                    statusEl.innerHTML = `<span class="text-emerald-500">😊 Kewangan anda stabil bulan ini — baki positif!</span>`;
+                }
+            }
+        }
         function renderDashboard() {
             const fBulan = document.getElementById('dash-filter-bulan').value, fTahun = document.getElementById('dash-filter-tahun').value;
             document.getElementById('chart-filtered-by').innerText = `Tapis: ${fBulan} ${fTahun}`;
@@ -2073,6 +2145,34 @@
             const balEl = document.getElementById('card-monthly-balance');
             balEl.innerText = `RM ${monthlyBalance.toLocaleString('en-MY', {minimumFractionDigits: 2})}`;
             balEl.className = monthlyBalance < 0 ? "text-2xl font-black text-rose-500" : "text-2xl font-black text-emerald-500 dark:text-emerald-400";
+
+            updateDashboardGreetingAndStatus(monthlyBalance, fb.length > 0 || fi.length > 0);
+
+            // Trend berbanding bulan sebelumnya (hanya jika bulan & tahun tertentu dipilih)
+            if (fBulan !== 'Semua' && fTahun !== 'Semua') {
+                let mIdx = calendarBulanList.indexOf(fBulan), yr = parseInt(fTahun), prevBulan, prevTahun;
+                if (mIdx <= 0) { prevBulan = calendarBulanList[calendarBulanList.length - 1]; prevTahun = yr - 1; }
+                else { prevBulan = calendarBulanList[mIdx - 1]; prevTahun = yr; }
+                const prev = getMonthlyMetric(prevBulan, prevTahun);
+                renderTrendBadge('card-monthly-balance-trend', monthlyBalance, prev.balance, false);
+                renderTrendBadge('card-total-income-trend', totalIncome, prev.income, false);
+                renderTrendBadge('card-commitments-trend', totalCommitments, prev.commit, true);
+                renderTrendBadge('card-expenses-trend', totalExpenses, prev.expense, true);
+            } else {
+                ['card-monthly-balance-trend', 'card-total-income-trend', 'card-commitments-trend', 'card-expenses-trend'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
+            }
+
+            // Sparkline trend 6 bulan terkini
+            const monthKeys = getChronologicalMonthKeys().slice(-6);
+            if (monthKeys.length >= 2) {
+                const metrics = monthKeys.map(k => getMonthlyMetric(k.bulan, k.tahun));
+                renderCardSparkline('card-monthly-balance-spark', metrics.map(m => m.balance), '#10b981');
+                renderCardSparkline('card-total-income-spark', metrics.map(m => m.income), '#3b82f6');
+                renderCardSparkline('card-commitments-spark', metrics.map(m => m.commit), '#f59e0b');
+                renderCardSparkline('card-expenses-spark', metrics.map(m => m.expense), '#f43f5e');
+            } else {
+                ['card-monthly-balance-spark', 'card-total-income-spark', 'card-commitments-spark', 'card-expenses-spark'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
+            }
 
             const categorySums = {};
             fb.forEach(i => { if (i.jumlahSebenar > 0) categorySums[i.kategori] = (categorySums[i.kategori] || 0) + i.jumlahSebenar; });
