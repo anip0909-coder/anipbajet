@@ -948,7 +948,7 @@
                             <i class="fa-solid fa-calendar-check text-amber-500 text-sm"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-sm text-slate-900 dark:text-slate-100">Jadual Servis Seterusnya</h3>
+                            <h3 class="font-bold text-sm text-slate-900 dark:text-slate-100 flex items-center gap-2">Jadual Servis Seterusnya <span id="maint-schedule-badge" class="hidden h-5 min-w-5 px-1.5 rounded-full bg-rose-500 text-white text-[10px] font-bold items-center justify-center">0</span></h3>
                             <p class="text-[11px] text-slate-400">Servis yang akan datang dalam tempoh 60 hari</p>
                         </div>
                     </div>
@@ -1001,9 +1001,12 @@
                         </div>
                         <div class="flex flex-wrap gap-2">
                             <select id="maint-filter-aset" onchange="renderMaintenanceView()" class="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary-500 outline-none"><option value="Semua">Semua Aset</option></select>
-                            <select id="maint-filter-jenis" onchange="renderMaintenanceView()" class="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary-500 outline-none"><option value="Semua">Semua Jenis</option><option value="Kenderaan">Kenderaan</option><option value="Peralatan">Peralatan</option></select>
-                            <select id="maint-filter-status" onchange="renderMaintenanceView()" class="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary-500 outline-none"><option value="Semua">Semua Status</option><option value="Selesai">Selesai</option><option value="Akan Datang">Akan Datang</option><option value="Tertunggak">Tertunggak</option></select>
+                            <select id="maint-filter-jenis" onchange="renderMaintenanceView()" class="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary-500 outline-none"><option value="Semua">Semua Jenis</option><option value="Kenderaan">🚗 Kenderaan</option><option value="Peralatan">⚙️ Peralatan</option></select>
+                            <select id="maint-filter-status" onchange="renderMaintenanceView()" class="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary-500 outline-none"><option value="Semua">Semua Status</option><option value="Selesai">✅ Selesai</option><option value="Akan Datang">⏳ Akan Datang</option><option value="Tertunggak">⚠️ Tertunggak</option></select>
                             <input type="text" id="maint-filter-cari" oninput="renderMaintenanceView()" placeholder="Cari aset / servis..." class="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary-500 outline-none w-40">
+                            <button onclick="exportMaintenanceCSV()" title="Eksport rekod servis ke CSV" class="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition-all shadow-sm">
+                                <i class="fa-solid fa-file-export"></i> Eksport
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1015,6 +1018,7 @@
                                 <th class="px-4 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Jenis Servis</th>
                                 <th class="px-4 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Tarikh Servis</th>
                                 <th class="px-4 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Servis Seterusnya</th>
+                                <th class="px-4 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Jarak Masa</th>
                                 <th class="px-4 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">KM / Jam</th>
                                 <th class="px-4 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Kos (RM)</th>
                                 <th class="px-4 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Status</th>
@@ -1476,7 +1480,7 @@
                     </div>
                     <div class="space-y-1.5">
                         <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Jenis Aset <span class="text-rose-500">*</span></label>
-                        <select id="maint-jenisAset" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100"><option value="Kenderaan">Kenderaan</option><option value="Peralatan">Peralatan</option></select>
+                        <select id="maint-jenisAset" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none text-slate-800 dark:text-slate-100"><option value="Kenderaan">🚗 Kenderaan</option><option value="Peralatan">⚙️ Peralatan</option></select>
                     </div>
                     <div class="space-y-1.5">
                         <label class="text-xs font-bold text-slate-600 dark:text-slate-300">Jenis Servis <span class="text-rose-500">*</span></label>
@@ -3047,6 +3051,11 @@
 
             const overdueWrap = document.getElementById('maint-card-overdue-wrap');
             if (overdueWrap) { if (od > 0) overdueWrap.classList.add('pulse-warn'); else overdueWrap.classList.remove('pulse-warn'); }
+            const scheduleBadge = document.getElementById('maint-schedule-badge');
+            if (scheduleBadge) {
+                if (od > 0) { scheduleBadge.innerText = od; scheduleBadge.classList.remove('hidden'); scheduleBadge.classList.add('flex'); }
+                else { scheduleBadge.classList.add('hidden'); scheduleBadge.classList.remove('flex'); }
+            }
 
             // Insight automatik servis
             const insightEl = document.getElementById('maint-insight-text');
@@ -3107,10 +3116,33 @@
             if (!fdb.length) { tb.innerHTML = ''; em.classList.remove('hidden'); } else {
                 em.classList.add('hidden');
                 tb.innerHTML = fdb.map(i => {
-                    const st=getMaintenanceAutoStatus(i), stc=st==='Tertunggak'?'bg-rose-100 text-rose-700':st==='Akan Datang'?'bg-amber-100 text-amber-700':'bg-emerald-100 text-emerald-700';
-                    return `<tr class="border-b border-slate-100"><td class="px-4 py-3"><div class="font-semibold text-sm">${i.namaAset}</div><span class="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded">${i.jenisAset}</span></td><td class="px-4 py-3 text-sm">${i.jenisServis} ${i.bengkel?`<br><span class="text-[10px] text-slate-400">${i.bengkel}</span>`:''}</td><td class="px-4 py-3 text-sm">${formatMaintDate(i.tarikhServis)}</td><td class="px-4 py-3 text-sm">${formatMaintDate(i.tarikhSeterusnya)}</td><td class="px-4 py-3 text-sm">${i.km||'-'}</td><td class="px-4 py-3 text-sm font-semibold">${i.kos>0?`RM ${i.kos.toFixed(2)}`:'-'}</td><td class="px-4 py-3"><span class="text-[10px] font-bold px-2 py-1 rounded-lg ${stc}">${st}</span></td><td class="px-4 py-3 text-center"><button onclick="openMaintenanceModal(${i.id})" class="h-7 w-7 text-blue-600"><i class="fa-solid fa-pen"></i></button> <button onclick="deleteMaintenanceItem(${i.id})" class="h-7 w-7 text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+                    const st=getMaintenanceAutoStatus(i);
+                    const stc=st==='Tertunggak'?'bg-rose-100 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400':st==='Akan Datang'?'bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400':'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400';
+                    const sti=st==='Tertunggak'?'fa-triangle-exclamation':st==='Akan Datang'?'fa-clock':'fa-circle-check';
+                    const assetEmoji = ASSET_TYPE_EMOJI[i.jenisAset] || '🔧';
+                    let jarakMasa = '-';
+                    if (i.tarikhSeterusnya) {
+                        const days = Math.ceil((new Date(i.tarikhSeterusnya) - new Date().setHours(0,0,0,0)) / 86400000);
+                        jarakMasa = days < 0 ? `<span class="text-rose-600 dark:text-rose-400 font-semibold">Terlewat ${Math.abs(days)} hari</span>` : days === 0 ? `<span class="text-amber-600 dark:text-amber-400 font-semibold">Hari Ini</span>` : `<span class="text-slate-500 dark:text-slate-400">${days} hari lagi</span>`;
+                    }
+                    return `<tr class="border-b border-slate-100 dark:border-slate-800"><td class="px-4 py-3"><div class="font-semibold text-sm">${assetEmoji} ${i.namaAset}</div><span class="text-[10px] bg-slate-100 dark:bg-slate-800 dark:text-slate-300 px-1.5 py-0.5 rounded">${i.jenisAset}</span></td><td class="px-4 py-3 text-sm">${i.jenisServis} ${i.bengkel?`<br><span class="text-[10px] text-slate-400">${i.bengkel}</span>`:''}</td><td class="px-4 py-3 text-sm">${formatMaintDate(i.tarikhServis)}</td><td class="px-4 py-3 text-sm">${formatMaintDate(i.tarikhSeterusnya)}</td><td class="px-4 py-3 text-xs">${jarakMasa}</td><td class="px-4 py-3 text-sm">${i.km||'-'}</td><td class="px-4 py-3 text-sm font-semibold">${i.kos>0?`RM ${i.kos.toFixed(2)}`:'-'}</td><td class="px-4 py-3"><span class="text-[10px] font-bold px-2 py-1 rounded-lg ${stc} inline-flex items-center gap-1"><i class="fa-solid ${sti}"></i>${st}</span></td><td class="px-4 py-3 text-center"><button onclick="openMaintenanceModal(${i.id})" class="h-7 w-7 text-blue-600"><i class="fa-solid fa-pen"></i></button> <button onclick="deleteMaintenanceItem(${i.id})" class="h-7 w-7 text-rose-600"><i class="fa-solid fa-trash"></i></button></td></tr>`;
                 }).join('');
             }
+        }
+        function exportMaintenanceCSV() {
+            const aS = document.getElementById('maint-filter-aset'), fA=aS.value, fJ=document.getElementById('maint-filter-jenis').value, fS=document.getElementById('maint-filter-status').value, fC=(document.getElementById('maint-filter-cari').value||'').toLowerCase();
+            const fdb = maintenanceDatabase.filter(i => (fA==='Semua'||i.namaAset===fA)&&(fJ==='Semua'||i.jenisAset===fJ)&&(fS==='Semua'||getMaintenanceAutoStatus(i)===fS)&&(!fC||i.namaAset.toLowerCase().includes(fC)||i.jenisServis.toLowerCase().includes(fC))).sort((a,b)=>(b.tarikhServis||'').localeCompare(a.tarikhServis||''));
+            if (fdb.length === 0) { showToast('Eksport Gagal', 'Tiada data untuk dieksport', 'error'); return; }
+            const header = ['Nama Aset', 'Jenis Aset', 'Jenis Servis', 'Bengkel', 'Tarikh Servis', 'Servis Seterusnya', 'KM/Jam', 'Kos (RM)', 'Status'];
+            const rows = fdb.map(i => [i.namaAset, i.jenisAset, i.jenisServis, i.bengkel || '', formatMaintDate(i.tarikhServis), formatMaintDate(i.tarikhSeterusnya), i.km || '', (i.kos || 0).toFixed(2), getMaintenanceAutoStatus(i)]);
+            const csv = [header, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = `rekod_servis_${new Date().toISOString().slice(0, 10)}.csv`;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            if (typeof showToast === 'function') showToast('Berjaya', 'Eksport CSV berjaya', 'success');
         }
 
         function openMaintenanceModal(id=null) {
